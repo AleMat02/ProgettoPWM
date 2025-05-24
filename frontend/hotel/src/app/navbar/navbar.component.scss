@@ -1,26 +1,17 @@
 ion-header {
   position: fixed;
   top: 0;
-  left: 80px;    // Larghezza sidebar collassata
+  left: 80px;
   right: 0;
-  z-index: 500;  // Z-index inferiore alla sidebar
-  
+  transition: left 0.3s ease;
+  z-index: 500;
+
+  &.expanded {
+    left: 250px; // Match sidebar expanded width
+  }
+
   ion-toolbar {
     --background: #ffffff;
     --color: rgb(0, 0, 0);
   }
-}
-
-.lollo.expanded{
-    width: 100;
-    height: 100;
-    position: relative;
-    animation-name: 'lollone';
-    animation-duration: 1s;
-    animation-fill-mode: both;
-}
-
-@keyframes lollone {
-    from {left: 0px}
-    to {left: 180px}
 }

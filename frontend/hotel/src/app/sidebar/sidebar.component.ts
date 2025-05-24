@@ -6,6 +6,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { homeOutline } from 'ionicons/icons';
+import { LayoutService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,17 +15,15 @@ import { homeOutline } from 'ionicons/icons';
   imports: [IonList, IonItem, IonIcon],
 })
 export class SidebarComponent {
-  isExpanded = false;
-
-  constructor() {
+  constructor(private layoutService: LayoutService) {
     addIcons({ homeOutline });
   }
 
   expand() {
-    this.isExpanded = true;
+    this.layoutService.setSidebarState(true)
   }
 
   collapse() {
-    this.isExpanded = false;
+    this.layoutService.setSidebarState(false)
   }
 }

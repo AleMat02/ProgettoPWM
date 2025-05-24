@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { Subscription } from 'rxjs';
+import { LayoutService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,10 +9,19 @@ import { IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
   styleUrls: ['./navbar.component.scss'],
   imports: [IonHeader, IonToolbar, IonTitle]
 })
-export class NavbarComponent  implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+  isExpanded = false;
+  private subscription!: Subscription;
 
-  constructor() { }
+  constructor(private layoutService: LayoutService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscription = this.layoutService.sidebarState$.subscribe(
+      state => this.isExpanded = state
+    );
+  }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
