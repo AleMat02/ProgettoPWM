@@ -5,7 +5,7 @@ import {
   IonList,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { homeOutline } from 'ionicons/icons';
+import { homeOutline, peopleOutline } from 'ionicons/icons';
 import { LayoutService } from '../shared/shared.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { LayoutService } from '../shared/shared.service';
 })
 export class SidebarComponent {
   constructor(private layoutService: LayoutService) {
-    addIcons({ homeOutline });
+    addIcons({ homeOutline, peopleOutline });
   }
 
   expand() {

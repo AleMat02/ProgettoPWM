@@ -1,13 +1,13 @@
 ion-header {
   position: fixed;
   top: 0;
-  left: 80px;
+  left: 60px;
   right: 0;
   transition: left 0.3s ease;
   z-index: 500;
 
   &.expanded {
-    left: 250px; // Match sidebar expanded width
+    left: 250px; // Stessa width della sidebar espansa
   }
 
   ion-toolbar {

@@ -3,7 +3,7 @@
     left: 0; // Allineato a sinistra
     top: 0; // Allineato in alto
     height: 100vh; // Altezza intera viewport
-    width: 80px; // Larghezza iniziale (collassata)
+    width: 60px; // Larghezza iniziale (collassata) //TODO: Il problema di farla partire collassata è che se clicco un elemento si riapre con l'animazione
     background-color: #2c3e50; // Colore di sfondo
     transition: all 0.3s ease; // Transizione animata
     z-index: 1000; // Sovrapposizione sopra altri elementi
@@ -26,12 +26,12 @@
     .menu-items {
         padding: 20px 0; // Spaziatura interna
 
-
         ion-item {
             --background: #2c3e50; // Sfondo trasparente (variabile Ionic)
             --color: #ecf0f1; // Colore testo (variabile Ionic)
-            --padding-start: 20px; // Padding sinistro (variabile Ionic)
-            height: 60px; // Altezza elementi menu
+            margin: 0;
+            padding-top: 0;
+            padding-bottom: 0;
 
             ion-icon {
                 font-size: 24px; // Dimensione icone
