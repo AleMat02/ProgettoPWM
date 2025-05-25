@@ -1,18 +1,21 @@
 ion-header {
   position: fixed;
   top: 0;
-  left: 60px;
+  left: var(--sidebar-width-collapsed);
   right: 0;
-  transition: left 0.3s ease;
-  z-index: 500;
-  box-shadow: none;
+  height: var(--navbar-height); // Esplicita l'altezza
+  transition: left var(--sidebar-transition-duration) ease;
+  z-index: 999; // Leggermente inferiore alla sidebar se si sovrappongono
+  box-shadow: none; // Come da tuo codice
+  margin-bottom: var(--navbar-height);
 
   &.expanded {
-    left: 250px; // Stessa width della sidebar espansa
+    left: var(--sidebar-width-expanded);
   }
 
   ion-toolbar {
     --background: #527fcd;
+    min-height: var(--navbar-height); // Assicura che la toolbar riempia l'header
     align-content: center;
   }
 }
@@ -39,13 +42,12 @@ ion-breadcrumbs {
 
     // Effetto "alone" (background) al passaggio del mouse
     &:hover::part(native) {
-      // var(--ion-color-primary-rgb) dà i valori RGB del tuo colore primario.
-      background-color: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
+      background-color: #6392e4;
     }
 
     // Effetto "alone" quando è attivo (cliccato)
     &:active::part(native) {
-      background-color: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.15);
+      background-color: #74a3f3;
     }
 
     ion-label {

@@ -1,4 +1,4 @@
-<div class="sidebar" (mouseenter)="expand()" (mouseleave)="collapse()">
+<div class="sidebar" [class.expanded]="isSidebarExpanded" (mouseenter)="toggleSidebar()" (mouseleave)="toggleSidebar()">
   <div class="menu-items">
     <ion-list lines="none"> <!-- Lista Ionic senza bordi -->
 
@@ -18,7 +18,7 @@
         routerLinkActive="active"
       >
         <ion-icon name="people-outline"></ion-icon>
-        <span class="menu-item-text">Users</span>
+        <span class="menu-item-text">Utenti</span>
       </ion-item>
 
     </ion-list>

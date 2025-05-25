@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' }) //TODO: Refactorizzare in sidebar.service.ts
+@Injectable({ providedIn: 'root' })
 export class LayoutService {
-  private sidebarState = new Subject<boolean>();
+  private sidebarState = new BehaviorSubject<boolean>(false); // Inizializza con lo stato collassato (false)
   sidebarState$ = this.sidebarState.asObservable();
 
   setSidebarState(isExpanded: boolean) {
     this.sidebarState.next(isExpanded);
+  }
+
+  toggleSidebar() {
+    this.sidebarState.next(!this.sidebarState.value);
   }
 }
