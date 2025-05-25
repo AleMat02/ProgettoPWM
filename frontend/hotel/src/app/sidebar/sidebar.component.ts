@@ -16,12 +16,6 @@ export class SidebarComponent {
     addIcons({ homeOutline, peopleOutline });
   }
 
-  navigateIfNeeded(route: string, event: Event): void {
-    if (this.router.url === route) {
-      event.preventDefault(); // Blocca la navigazione
-    }
-  }
-
   expand() {
     this.layoutService.setSidebarState(true)
   }

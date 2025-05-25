@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
@@ -9,7 +9,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, NavbarComponent]
+  imports: [IonContent, CommonModule, FormsModule]
 })
 export class UsersPage implements OnInit {
 

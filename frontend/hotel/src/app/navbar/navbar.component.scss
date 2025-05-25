@@ -5,13 +5,59 @@ ion-header {
   right: 0;
   transition: left 0.3s ease;
   z-index: 500;
+  box-shadow: none;
 
   &.expanded {
     left: 250px; // Stessa width della sidebar espansa
   }
 
   ion-toolbar {
-    --background: #ffffff;
-    --color: rgb(0, 0, 0);
+    --background: #527fcd;
+    align-content: center;
+  }
+}
+
+ion-breadcrumbs {
+
+  // Seleziona tutte le ion-breadcrumb TRANNE l'ultima
+  ion-breadcrumb:not(:last-child) {
+
+    // 1. Cursore a puntatore
+    cursor: pointer;
+
+    // Stilizza la parte 'native' (il contenitore interno)
+    &::part(native) {
+      // Transizione per un effetto morbido
+      transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+      // Arrotondo gli angoli
+      border-radius: 4px;
+      // Aggiungo un po' di padding interno per dare spazio all'alone
+      padding: 4px 8px;
+      // Sposta leggermente per compensare il padding e non distruggere l'allineamento
+      margin-left: 3px;
+    }
+
+    // Effetto "alone" (background) al passaggio del mouse
+    &:hover::part(native) {
+      // var(--ion-color-primary-rgb) dà i valori RGB del tuo colore primario.
+      background-color: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
+    }
+
+    // Effetto "alone" quando è attivo (cliccato)
+    &:active::part(native) {
+      background-color: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.15);
+    }
+
+    ion-label {
+      color: #ecf0f1;
+    }
+  }
+
+  ion-breadcrumb::part(separator) {
+    color: #ecf0f1;
+  }
+
+  ion-label {
+    color: white;
   }
 }
