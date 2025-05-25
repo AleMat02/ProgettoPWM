@@ -1,10 +1,26 @@
 <div class="sidebar" (mouseenter)="expand()" (mouseleave)="collapse()">
   <div class="menu-items">
     <ion-list lines="none"> <!-- Lista Ionic senza bordi -->
-      <ion-item button routerLink="/dashboard" routerDirection="root">
+
+      <ion-item 
+        button 
+        [routerLink]="['/dashboard']" 
+        routerLinkActive="active" 
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <ion-icon name="home-outline"></ion-icon>
         <span class="menu-item-text">Dashboard</span>
       </ion-item>
+
+      <ion-item 
+        button 
+        [routerLink]="['/users']" 
+        routerLinkActive="active"
+      >
+        <ion-icon name="people-outline"></ion-icon>
+        <span class="menu-item-text">Users</span>
+      </ion-item>
+
     </ion-list>
   </div>
 </div>
