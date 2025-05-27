@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { IonContent, IonInput, IonItem, IonButton} from '@ionic/angular/standalone';
+import { ApiService } from '../services/api.service';
+
+
+
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, NavbarComponent]
+  imports: [IonContent, CommonModule, FormsModule, IonInput, IonItem, IonButton ]
 })
 export class UsersPage implements OnInit {
 
