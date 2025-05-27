@@ -42,10 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
       mergeMap(route => route.data), // route.data è Observable<Data>
       // Evita emissioni multiple se i breadcrumbs non cambiano
       distinctUntilChanged((prev, curr) => JSON.stringify(prev['breadcrumbs']) === JSON.stringify(curr['breadcrumbs']))
-    ).subscribe((eventData: Data) => { // eventData è l'oggetto Data della rotta
+    ).subscribe((eventData: Data) => {
       this.navbarService.setBreadcrumbs(eventData['breadcrumbs'] || []);
-      // Potresti anche voler impostare il titolo qui se lo prendi dalla rotta
-      // if (eventData['title']) { this.navbarService.setTitle(eventData['title']); }
     });
   }
 
