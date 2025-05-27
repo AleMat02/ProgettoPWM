@@ -2,43 +2,20 @@
   <div class="menu-items">
     <ion-list lines="none"> <!-- Lista Ionic senza bordi -->
 
-      <ion-item 
-        button 
-        [routerLink]="['/dashboard']" 
-        routerLinkActive="active" 
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
+      <ion-item button [routerLink]="['/dashboard']" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
         <ion-icon name="home-outline"></ion-icon>
         <span class="menu-item-text">Dashboard</span>
       </ion-item>
 
-      <ion-item 
-        button 
-        [routerLink]="['/rooms']" 
-        routerLinkActive="active"
-      >
+      <ion-item button [routerLink]="['/rooms']" routerLinkActive="active">
         <ion-icon name="bed-outline"></ion-icon>
-        <span class="menu-item-text">Rooms</span>
+        <span class="menu-item-text">Stanze</span>
       </ion-item>
 
-      <ion-item 
-        button 
-        [routerLink]="['/nearby-hotels']" 
-        routerLinkActive="active"
-      >
+      <ion-item button [routerLink]="['/nearby-hotels']" routerLinkActive="active">
         <ion-icon name="compass-outline"></ion-icon>
-        <span class="menu-item-text">Nearby hotels</span>
-      </ion-item>
-
-
-
-      <ion-item 
-        button 
-        [routerLink]="['/users']" 
-        routerLinkActive="active"
-      >
-        <ion-icon name="people-outline"></ion-icon>
-        <span class="menu-item-text">Utenti</span>
+        <span class="menu-item-text">Hotel nelle vicinanze</span>
       </ion-item>
 
     </ion-list>

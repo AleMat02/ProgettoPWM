@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [
-
-  
+export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
   {
     path: 'dashboard',
     loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage),
@@ -10,26 +8,27 @@ export const routes: Routes = [
       title: 'Dashboard',
       breadcrumbs: [{ label: 'Dashboard', url: '/dashboard' }]
     }
-    loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage)
-  },  
-  {
-    path: 'nearby-hotels',
-    loadComponent: () => import('./nearby-hotels/nearby-hotels.page').then( m => m.NearbyHotelsPage)
   },
   {
-    path: 'users',
-    loadComponent: () => import('./users/users.page').then(m => m.UsersPage),
+    path: 'rooms',
+    loadComponent: () => import('./rooms/rooms.page').then(m => m.RoomsPage),
     data: {
-      title: 'Utenti',
+      title: 'Stanze',
       breadcrumbs: [
-        { label: 'Dashboard', url: '/dashboard' },
-        { label: 'Utenti', url: '/users' }
+        // { label: 'Dashboard', url: '/dashboard' }, esempio: se aggiunto visualizzerei Dashboard / Utenti
+        { label: 'Stanze', url: '/rooms' }
       ]
     }
   },
   {
-    path: 'rooms',
-    loadComponent: () => import('./rooms/rooms.page').then(m => m.RoomsPage)
+    path: 'nearby-hotels',
+    loadComponent: () => import('./nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
+    data: {
+      title: 'Hotel nelle vicinanze',
+      breadcrumbs: [
+        { label: 'Hotel nelle vicinanze', url: '/nearby-hotels' }
+      ]
+    }
   },
   {
     path: '',
