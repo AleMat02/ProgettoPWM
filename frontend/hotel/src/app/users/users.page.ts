@@ -4,9 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonInput, IonItem, IonButton} from '@ionic/angular/standalone';
 import { ApiService } from '../services/api.service';
 
-
-
-
 @Component({
   selector: 'app-users',
   templateUrl: './users.page.html',
