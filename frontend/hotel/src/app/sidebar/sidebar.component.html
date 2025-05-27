@@ -14,6 +14,26 @@
 
       <ion-item 
         button 
+        [routerLink]="['/rooms']" 
+        routerLinkActive="active"
+      >
+        <ion-icon name="bed-outline"></ion-icon>
+        <span class="menu-item-text">Rooms</span>
+      </ion-item>
+
+      <ion-item 
+        button 
+        [routerLink]="['/nearby-hotels']" 
+        routerLinkActive="active"
+      >
+        <ion-icon name="compass-outline"></ion-icon>
+        <span class="menu-item-text">Nearby hotels</span>
+      </ion-item>
+
+
+
+      <ion-item 
+        button 
         [routerLink]="['/users']" 
         routerLinkActive="active"
       >

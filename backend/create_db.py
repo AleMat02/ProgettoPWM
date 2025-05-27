@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime
 
 def create_database():
-    conn = sqlite3.connect('hotel.db')
+    conn = sqlite3.connect('database/hotel.db')
     cursor = conn.cursor()
 
     # Tabella utenti

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonIcon, IonItem, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { homeOutline, peopleOutline, menuOutline } from 'ionicons/icons'; // Aggiungi menuOutline se usi il bottone toggle
+import { bedOutline, compassOutline, homeOutline, peopleOutline, menuOutline } from 'ionicons/icons';
 import { LayoutService } from '../shared/shared.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,12 +12,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['sidebar.component.scss'],
   imports: [IonList, IonItem, IonIcon, RouterLink, RouterLinkActive /* IonButton se lo usi */],
 })
+
 export class SidebarComponent implements OnInit, OnDestroy {
   isSidebarExpanded = false; // Stato locale sincronizzato con LayoutService
   private layoutSubscription!: Subscription;
 
   constructor(private layoutService: LayoutService, private router: Router) {
-    addIcons({ homeOutline, peopleOutline, menuOutline });
+    addIcons({ homeOutline, peopleOutline, menuOutline, compassOutline, bedOutline });
+
   }
 
   ngOnInit() {

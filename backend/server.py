@@ -7,7 +7,7 @@ from flask_cors import CORS
 import utils
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["*"])
 secret_key = os.urandom(24)
 app.secret_key = secret_key
 DATABASE = 'database/hotel.db'
@@ -55,19 +55,33 @@ def login():
         session['role'] = user['role']
         return jsonify({
             "status": "success",
+            "message": "Login effettuato con successo",
             "data": {
                 "id": user['id'],
                 "username": user['username'],
                 "role": user['role'],
-                "full_name": user['full_name']
-            }
-        })
+                "full_name": user['full_name'],
+                "email": user['email'],
+                "phone": user['phone']
+            },
+        }), 200
     else:
         return jsonify({
             "status": "error",
             "code": "INVALID_CREDENTIALS",
             "message": "Username o password errati"
         }), 401
+        
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    """
+    Effettua il logout dell'utente
+    """
+    session.clear()
+    return jsonify({
+        "status": "success",
+        "message": "Logout effettuato con successo"
+    })
 
 @app.route("/api/register", methods=["POST"])
 def register_user():
@@ -93,12 +107,23 @@ def register_user():
     full_name = data.get("full_name")
     email = data.get("email")
     phone = data.get("phone")
-    
-    
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        
+        # Verifica se l'username è già in uso   
+        existing_user = cursor.execute(
+            "SELECT * FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+        if existing_user:
+            return utils.error_response(message="Username già in uso") 
+
+        existing_email = cursor.execute(
+            "SELECT * FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+        if existing_email:
+            return utils.error_response(message="Email già in uso")       
         # 1. Inserisci utente
         cursor.execute(
             "INSERT INTO users (username, password, role, full_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)",
@@ -106,17 +131,65 @@ def register_user():
         )
 
         conn.commit()
-        return utils.success_response(data={"user_id": username}, message="Registrazione avvenuta con successo")
+        return utils.success_response(data={"user_id": data}, message="Registrazione avvenuta con successo")
     except (sqlite3.IntegrityError, ValueError) as e:
         if conn:
             conn.rollback()
         print(f"Errore registrazione: {e}")
-        return None
+        return utils.error_response(message="Registrazione fallita")
     finally:
         if conn:
             conn.close()
 
-
+@app.route('/api/create_hotel', methods=['POST'])
+@role_required(['admin'])
+def create_hotel():
+    """
+    Crea un hotel di esempio per testare le funzionalità
+    """
+    data= request.get_json()
+    if data is None:
+        return utils.error_response("Dati non validi o mancanti") 
+    
+    name= data.get('name', 'Hotel Test')
+    address= data.get('address', 'Via Roma 1')
+    city= data.get('city', 'Roma')
+    latitude= data.get('latitude', 41.9028)
+    longitude= data.get('longitude', 12.4964)
+    description= data.get('description', 'Hotel di test per il progetto')
+    
+    
+    conn = get_db_connection()
+    try:
+        
+        # Verifica se l'hotel esiste già
+        existing_hotel = conn.execute(
+            'SELECT * FROM hotels WHERE name = ? AND address = ? AND city = ?',
+            (name, address, city)
+        ).fetchone()
+        if existing_hotel:
+            return jsonify({
+                "status": "error",
+                "code": "DUPLICATE_HOTEL",
+                "message": "Hotel già esistente"
+            }), 409
+        
+        conn.execute('''
+        INSERT INTO hotels (name, address, city, latitude, longitude, description)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ''', (name, address, city, latitude, longitude, description))
+        conn.commit()
+        return jsonify({
+            "status": "success",
+            "message": "Hotel creato con successo"
+        }), 201
+    except sqlite3.IntegrityError as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Errore creazione hotel: {str(e)}"
+        }), 409
+    finally:
+        conn.close()
 
 @app.route('/api/get_rooms', methods=['GET'])
 @role_required(['admin', 'reception'])
