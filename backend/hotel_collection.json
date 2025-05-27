@@ -1,0 +1,323 @@
+{
+  "info": {
+    "name": "Hotel Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\",\n  \"role\": \"guest\",\n  \"full_name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Create Hotel (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grand Hotel\",\n  \"address\": \"Via Roma 1\",\n  \"city\": \"Roma\",\n  \"latitude\": 41.9028,\n  \"longitude\": 12.4964,\n  \"description\": \"Hotel di lusso nel centro di Roma\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/create_hotel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "create_hotel"]
+            }
+          }
+        },
+        {
+          "name": "Get Nearby Hotels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/hotels/nearby?lat=41.9028&lng=12.4964&radius=5",
+              "host": ["{{base_url}}"],
+              "path": ["api", "hotels", "nearby"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "41.9028"
+                },
+                {
+                  "key": "lng",
+                  "value": "12.4964"
+                },
+                {
+                  "key": "radius",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "Get All Rooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/get_rooms",
+              "host": ["{{base_url}}"],
+              "path": ["api", "get_rooms"]
+            }
+          }
+        },
+        {
+          "name": "Add Room (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_number\": \"101\",\n  \"room_type\": \"double\",\n  \"capacity\": 2,\n  \"price_per_night\": 150,\n  \"hotel_id\": 1,\n  \"description\": \"Camera doppia con vista\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/add_rooms",
+              "host": ["{{base_url}}"],
+              "path": ["api", "add_rooms"]
+            }
+          }
+        },
+        {
+          "name": "Delete Room (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rooms/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rooms", "1"]
+            }
+          }
+        },
+        {
+          "name": "Check Room Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rooms/1/availability?check_in=2023-12-01&check_out=2023-12-05",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rooms", "1", "availability"],
+              "query": [
+                {
+                  "key": "check_in",
+                  "value": "2023-12-01"
+                },
+                {
+                  "key": "check_out",
+                  "value": "2023-12-05"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Available Rooms in Hotel",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/hotels/1/available-rooms?check_in=2023-12-01&check_out=2023-12-05&room_type=double&min_capacity=2",
+              "host": ["{{base_url}}"],
+              "path": ["api", "hotels", "1", "available-rooms"],
+              "query": [
+                {
+                  "key": "check_in",
+                  "value": "2023-12-01"
+                },
+                {
+                  "key": "check_out",
+                  "value": "2023-12-05"
+                },
+                {
+                  "key": "room_type",
+                  "value": "double"
+                },
+                {
+                  "key": "min_capacity",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking (Guest)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_id\": 1,\n  \"check_in\": \"2023-12-01\",\n  \"check_out\": \"2023-12-05\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "Process Booking (Reception/Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"approve\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bookings/1/process",
+              "host": ["{{base_url}}"],
+              "path": ["api", "bookings", "1", "process"]
+            }
+          }
+        },
+        {
+          "name": "Get User Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Bookings (Reception/Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/bookings/pending?hotel_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "bookings", "pending"],
+              "query": [
+                {
+                  "key": "hotel_id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "auth_token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  }
+}
