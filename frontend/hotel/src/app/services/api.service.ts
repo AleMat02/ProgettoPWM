@@ -8,9 +8,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password });
-  }
 
   // Metodo per ottenere le prenotazioni dell'utente
   getUserBookings(): Observable<any> {

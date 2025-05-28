@@ -9,6 +9,17 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
       breadcrumbs: [{ label: 'Dashboard', url: '/dashboard' }]
     }
   },
+  
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
+
+  {
+    path: 'users',
+    loadComponent: () => import('./users/users.page').then( m => m.UsersPage)
+  },
+
   {
     path: 'rooms',
     loadComponent: () => import('./rooms/rooms.page').then(m => m.RoomsPage),
@@ -38,6 +49,6 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
   {
     path: '**',
     redirectTo: 'dashboard'
-  }
+  },
 
 ];

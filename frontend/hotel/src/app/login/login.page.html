@@ -1,0 +1,16 @@
+<ion-content [fullscreen]="false">
+  <div class="flex-container">  
+    <div class="login-box">
+      <div class="login-title">Accedi al tuo account</div>
+      <ion-item>
+        <ion-input [(ngModel)]="email" placeholder="username" ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="password" [(ngModel)]="password" placeholder="password" />
+      </ion-item>
+      <ion-button class="login-btn" expand="block" size="full" fill="clear" (click)="login()">Login</ion-button> 
+      <ion-button class="signup-btn" expand="block" size="full" fill="clear">Sign up!</ion-button>
+    </div>
+
+  </div>
+</ion-content>
