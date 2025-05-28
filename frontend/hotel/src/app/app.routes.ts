@@ -46,9 +46,14 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
     redirectTo: 'dashboard',
     pathMatch: 'full'
   },
+
+  {
+    path: 'register',
+    loadComponent: () => import('./register/register.page').then( m => m.RegisterPage)
+  },
+
   {
     path: '**',
     redirectTo: 'dashboard'
-  },
-
+  }
 ];
