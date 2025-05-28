@@ -26,7 +26,7 @@ export class RoomsPage implements OnInit {
       },
       error: async (err: any) => {
         console.error("Errore durante il recupero delle stanze: ", err);
-        //this.loading = false;
+        this.loading = false;
       }
     })
   }
