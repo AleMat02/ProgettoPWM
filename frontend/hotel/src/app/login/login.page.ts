@@ -25,8 +25,12 @@ export class LoginPage implements OnInit {
     this.loginService.login(this.email, this.password).subscribe({
       next: (data) => {
         console.log("Login effettuato con successo.");
-        // Salva il token o un flag di login
-        localStorage.setItem('token', data.token); // Assicurati che il backend restituisca un token
+        console.log(data);
+        // Salva i dati utente in localStorage
+        localStorage.setItem('user', JSON.stringify(data));
+        
+        //viasua per verificare che i dati siano stati salvati correttamente
+        console.log(localStorage.getItem('user'));
         // Gestisci il successo del login, ad esempio reindirizza l'utente a un'altra pagina
       },
       error: (err: any) => {
@@ -34,6 +38,16 @@ export class LoginPage implements OnInit {
       }
     });
   }
+
+
+  logut() {
+    // Rimuovi i dati utente da localStorage
+    localStorage.removeItem('user');
+    console.log("Logout effettuato con successo.");
+    // Gestisci il logout, ad esempio reindirizza l'utente alla pagina di login
+  }
+
+
 
 
 }
