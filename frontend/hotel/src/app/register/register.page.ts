@@ -9,7 +9,7 @@ interface RegisterData {
   password: string,
   email: string,
   phone: string,
-  full_name: string,
+  full_name: string, //* Non è in camelCase altrimenti non va bene per il back
   role: UserRole
 }
 
@@ -39,16 +39,16 @@ export class RegisterPage {
     email: "",
     phone: "",
     full_name: '',
-    role: UserRole.GUEST //Di default, i nuovi utenti creati sono guests
+    role: UserRole.Guest //Di default, i nuovi utenti creati sono guests
   }
 
   register() {
     this.registerService.register(this.registerData.username, this.registerData.password, this.registerData.role, this.registerData.full_name, this.registerData.phone, this.registerData.email).subscribe({
       next: (res: any) => {
-        console.log(res.message); //TODO: Questo console.log deve diventare un alert
+        console.log(res.message); //TODO: Questo console.log deve diventare un alert, ed anche quello in err
         //TODO: reindirizza l'utente a un'altra pagina
       },
-      error: (err: any) => {
+      error: (err: any) => { //Forse al posto di any si può mettere Error?
         console.error("Errore durante la registrazione: ", err);
       }
     });

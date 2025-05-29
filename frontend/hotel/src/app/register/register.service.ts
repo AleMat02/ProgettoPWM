@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export enum UserRole {
-  ADMIN = "admin",
-  RECEPTIONIST = "receptionist",
-  GUEST = "guest"
+  Admin = "admin",
+  Receptionist = "receptionist",
+  Guest = "guest"
 }
 
 @Injectable({
