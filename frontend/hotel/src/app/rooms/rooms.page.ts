@@ -22,11 +22,11 @@ export class RoomsPage implements OnInit {
         console.log("Stanze recuperate con successo.");
         this.rooms = data;
         this.loading = false;
-        //console.log(data)
+        console.log(data)
       },
       error: async (err: any) => {
         console.error("Errore durante il recupero delle stanze: ", err);
-        //this.loading = false;
+        this.loading = false;
       }
     })
   }

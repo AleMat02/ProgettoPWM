@@ -12,3 +12,12 @@ ion-col {
 // ion-col {
 //   border: 1px solid #ECEEEF;
 // }
+
+ion-spinner {
+  width: 10rem;
+  height: 10rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
