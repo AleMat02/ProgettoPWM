@@ -1,8 +1,8 @@
 <ion-content [fullscreen]="false">
   <div class="flex-container">
     <div class="register-box">
-      <div class="register-title">Crea un nuovo account</div>
-
+      <div class="register-title">Crea un nuovo account</div> <!--TODO: Aggiungere alert di avvenuta creazione o cose del genere, svuotare la form o in caso portare su un'altra pagina-->
+      <!--TODO: Inoltre bisogna migliorare i form aggiungendo la validazione-->
       <ion-item>
         <ion-input [(ngModel)]="registerData.username" placeholder="Username"></ion-input>
       </ion-item>
@@ -19,8 +19,9 @@
         <ion-input [(ngModel)]="registerData.email" placeholder="Email"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-select [(ngModel)]="registerData.role" interface="popover" placeholder="Role">
-          <ion-select-option value="user">User</ion-select-option>
+        <ion-select [(ngModel)]="registerData.role" interface="popover" placeholder="Role" value="guest">
+          <ion-select-option value="guest">Guest</ion-select-option> <!--TODO: Sarebbe meglio ciclare UserRole con un for-loop-->
+          <ion-select-option value="receptionist">Receptionist</ion-select-option>
           <ion-select-option value="admin">Admin</ion-select-option>
         </ion-select>
       </ion-item>

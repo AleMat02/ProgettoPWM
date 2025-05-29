@@ -2,22 +2,24 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
+export enum UserRole {
+  ADMIN = "admin",
+  RECEPTIONIST = "receptionist",
+  GUEST = "guest"
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
-  apiUrl = "http://localhost:5000/api/register"; // Cambia se il backend è su un altro host/porta
+  apiUrl = "http://localhost:5000/api/register";
+  
   constructor(private http: HttpClient) { }
 
-
-
-
-
-  
   register(
     username: string,
     password: string,
-    role: "admin" | "user",
+    role: UserRole,
     full_name: string,
     phone: string,
     email: string

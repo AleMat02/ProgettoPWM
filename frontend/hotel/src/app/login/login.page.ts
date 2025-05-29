@@ -12,7 +12,7 @@ import { Router, RouterLink } from '@angular/router';
   standalone: true,
   imports: [ IonContent, CommonModule, FormsModule, IonInput, IonItem, IonButton, RouterLink]
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit { //TODO: Fare refactoring con Capacitor/preferences. Bisogna aggiungere le interfacce per le (altre) varie cose
 
   email: string = '';
   password: string = '';
@@ -24,15 +24,15 @@ export class LoginPage implements OnInit {
 
   login() {
     this.loginService.login(this.email, this.password).subscribe({
-      next: (data) => {
+      next: (res) => {
         console.log("Login effettuato con successo.");
-        console.log(data);
+        console.log(res);
         // Salva i dati utente in localStorage
-        localStorage.setItem('user', JSON.stringify(data));
+        localStorage.setItem('user', JSON.stringify(res));
         
         //viasua per verificare che i dati siano stati salvati correttamente
         console.log(localStorage.getItem('user'));
-        // Gestisci il successo del login, ad esempio reindirizza l'utente a un'altra pagina
+        //TODO: Gestisci il successo del login, ad esempio reindirizza l'utente a un'altra pagina
       },
       error: (err: any) => {
         console.error("Errore durante il login: ", err);

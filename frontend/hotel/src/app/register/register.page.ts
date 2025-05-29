@@ -1,16 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonList } from '@ionic/angular/standalone';
-import { RegisterService } from './register.service';
+import { IonContent, IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonList } from '@ionic/angular/standalone';
+import { RegisterService, UserRole } from './register.service';
 
+interface RegisterData {
+  username: string,
+  password: string,
+  email: string,
+  phone: string,
+  full_name: string,
+  role: UserRole
+}
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [ 
+  imports: [
     IonInput,
     IonItem,
     IonContent,
@@ -21,34 +29,29 @@ import { RegisterService } from './register.service';
     FormsModule
   ]
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage {
 
   constructor(private registerService: RegisterService) { }
 
-  ngOnInit() {
-  }
-
-  registerData = {
+  registerData: RegisterData = {
     username: '',
     password: '',
     email: "",
     phone: "",
     full_name: '',
-    role: 'user' as 'admin' | 'user'
+    role: UserRole.GUEST //Di default, i nuovi utenti creati sono guests
   }
 
   register() {
-    this.registerService.register(this.registerData.email, this.registerData.password,this.registerData.role, this.registerData.full_name, this.registerData.phone, this.registerData.email).subscribe({
-      next: (data) => {
-        console.log("Registrazione effettuata con successo.");
-        console.log(data);
-  
+    this.registerService.register(this.registerData.username, this.registerData.password, this.registerData.role, this.registerData.full_name, this.registerData.phone, this.registerData.email).subscribe({
+      next: (res: any) => {
+        console.log(res.message); //TODO: Questo console.log deve diventare un alert
+        //TODO: reindirizza l'utente a un'altra pagina
       },
       error: (err: any) => {
         console.error("Errore durante la registrazione: ", err);
       }
     });
   }
-
 
 }
