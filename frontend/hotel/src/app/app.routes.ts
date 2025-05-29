@@ -26,7 +26,7 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
         // { label: 'Dashboard', url: '/dashboard' }, esempio: se aggiunto visualizzerei Dashboard / Utenti
         { label: 'Stanze', url: '/rooms' }
       ]
-    }
+    } //TODO: Aggiungere children di rooms (addRooms)
   },
   {
     path: 'nearby-hotels',
