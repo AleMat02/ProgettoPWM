@@ -7,7 +7,7 @@
       </ion-item>
       <ion-item>
         <ion-select [(ngModel)]="addRoomData.room_type" interface="popover" placeholder="Tipo di stanza" value="double">
-          <ion-select-option value="double">Doppia</ion-select-option> <!--TODO: Usare for-lop-->
+          <ion-select-option value="double">Doppia</ion-select-option>
           <ion-select-option value="?????">????</ion-select-option>
           <ion-select-option value="??????">?????</ion-select-option>
         </ion-select>
@@ -22,7 +22,7 @@
         <ion-input [(ngModel)]="addRoomData.hotel_id" type="number" placeholder="ID dell' Hotel di appartenenza"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input [(ngModel)]="addRoomData.description" placeholder="Descrizione"></ion-input> <!--TODO: Sia qui che negli altri form, ci sarà una proprietà di ionic per mettere cose required o meno-->
+        <ion-input [(ngModel)]="addRoomData.description" placeholder="Descrizione"></ion-input>
       </ion-item>
       <ion-button expand="block" (click)="addRoom()" fill="clear">Crea stanza</ion-button>
     </div>

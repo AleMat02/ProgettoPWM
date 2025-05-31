@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage), //TODO: Da non loggati, se si prova ad accedere a /personnel/ si manda ad una pagina custom di Unauthorized. Altrimenti, per accedere a funzioni guests da non loggati, si rimanda a quella di login
+    loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage),
     data: {
       title: 'Dashboard',
       breadcrumbs: [{ label: 'Dashboard', url: '/dashboard' }]
@@ -11,7 +11,7 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
   },
   {
     path: 'register',
-    loadComponent: () => import('./register/register.page').then(m => m.RegisterPage) //TODO: siccome non c'è un metodo nel back per visualizzare tutti gli utenti ed aggiungerli se non con la register, penso che vada integrata anche la navbar. Per la login volendo possiamo togliere sidebar e navbar
+    loadComponent: () => import('./register/register.page').then(m => m.RegisterPage)
   },
   {
     path: 'login',
@@ -26,7 +26,7 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
         // { label: 'Dashboard', url: '/dashboard' }, esempio: se aggiunto visualizzerei Dashboard / Utenti
         { label: 'Stanze', url: '/rooms' }
       ]
-    } //TODO: Aggiungere children di rooms (addRooms)
+    }
   },
   {
     path: 'nearby-hotels',
