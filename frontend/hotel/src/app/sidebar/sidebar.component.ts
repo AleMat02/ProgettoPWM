@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonIcon, IonItem, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { bedOutline, compassOutline, homeOutline, peopleOutline, menuOutline } from 'ionicons/icons';
+import { bedOutline, compassOutline, homeOutline, peopleOutline, menuOutline,logOutOutline, calendarOutline} from 'ionicons/icons';
 import { LayoutService } from '../shared/shared.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -17,8 +17,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isSidebarExpanded = false; // Stato locale sincronizzato con LayoutService
   private layoutSubscription!: Subscription;
 
+  role: string = '';
+  isGuest: boolean = false; // Inizialmente impostato a false, cambia in base al ruolo
+
   constructor(private layoutService: LayoutService, private router: Router) {
-    addIcons({ homeOutline, peopleOutline, menuOutline, compassOutline, bedOutline });
+    addIcons({ homeOutline, peopleOutline, menuOutline, compassOutline, bedOutline, logOutOutline, calendarOutline});
 
   }
 
@@ -26,7 +29,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.layoutSubscription = this.layoutService.sidebarState$.subscribe(
       state => (this.isSidebarExpanded = state)
     );
+
+    Preferences.get({ key: 'userData' }).then((result) => {
+        if (result.value) {
+          const userData = JSON.parse(result.value).data;
+          this.role = userData.role;
+          console.log('Ruolo utente:', this.role);
+          if(this.role === 'guest') {
+            this.isGuest =  true;
+          }
+        }
+      })
+      .catch((err) => {
+        console.error('Errore durante il recupero dei dati utente: ', err);
+      });
   }
+  
 
   toggleSidebar() {
     this.layoutService.toggleSidebar();
