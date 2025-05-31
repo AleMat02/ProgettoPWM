@@ -11,6 +11,7 @@
   overflow-x: hidden;
   display: flex; // Per organizzare contenuto interno se necessario
   flex-direction: column; // Esempio
+  justify-content: flex-start; // Cambia in flex-end se vuoi tutto in basso, ma meglio lasciare così
 
   &.expanded { // Questa classe sarà gestita da Angular tramite [class.expanded]
     width: var(--sidebar-width-expanded);
@@ -49,6 +50,21 @@
         min-width: 24px;
         color: #ecf0f1;
       }
+    }
+  }
+
+  .logout-section {
+    margin-top: auto; // Spinge la sezione logout in fondo
+    padding: 0 0 24px 0; // Solo padding-bottom per distanziare dal bordo
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // Assicurati che il bottone sia centrato e occupi la larghezza desiderata
+    ion-button {
+      margin-top: 0; // Rimosso il margine superiore per posizionarlo in basso
+      width: 80%;
+      // Personalizza qui i tuoi stili per il pulsante logout
     }
   }
 
