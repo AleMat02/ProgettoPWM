@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonGrid, IonRow, IonCol, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonGrid, IonRow, IonCol, IonSpinner, IonItem } from '@ionic/angular/standalone';
+import { RouterLink } from '@angular/router';
 import { RoomsService } from './rooms.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { RoomsService } from './rooms.service';
   templateUrl: './rooms.page.html',
   styleUrls: ['./rooms.page.scss'],
   standalone: true,
-  imports: [IonGrid, IonContent, IonGrid, IonRow, IonCol, IonSpinner, CommonModule, FormsModule]
+  imports: [IonItem, IonGrid, IonContent, IonGrid, IonRow, IonCol, IonSpinner, CommonModule, FormsModule, RouterLink]
 })
 export class RoomsPage implements OnInit {
   rooms: any;

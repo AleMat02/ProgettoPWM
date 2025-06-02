@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonBreadcrumb, IonBreadcrumbs, IonLabel } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonBreadcrumb, IonBreadcrumbs, IonLabel } from '@ionic/angular/standalone';
 import { Observable, Subscription } from 'rxjs';
-import { LayoutService } from '../shared/shared.service';
 import { Breadcrumb, NavbarService } from './navbar.service';
 import { RouterModule } from '@angular/router';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,23 +22,23 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isExpanded = false;
-  private subscription!: Subscription;
+  private sidebarSub!: Subscription;
 
   title$: Observable<string>;
   breadcrumbs$: Observable<Breadcrumb[]>;
 
-  constructor(private layoutService: LayoutService, private navbarService: NavbarService) {
+  constructor(private sidebarService: SidebarService, private navbarService: NavbarService) {
     this.title$ = this.navbarService.currentTitle$;
     this.breadcrumbs$ = this.navbarService.currentBreadcrumbs$;
   }
 
   ngOnInit() {
-    this.subscription = this.layoutService.sidebarState$.subscribe(
+    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       state => this.isExpanded = state
     );
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.sidebarSub.unsubscribe();
   }
 }

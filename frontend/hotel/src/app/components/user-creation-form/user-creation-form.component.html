@@ -1,0 +1,77 @@
+<ion-title>{{formTitleText}}</ion-title>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <ion-item [class.invalid-item]="isFieldInvalid('username')">
+    <ion-label position="floating">Username</ion-label>
+    <ion-input formControlName="username"></ion-input>
+    @if(isFieldInvalid("username"))
+    {
+    <ion-text color="danger">{{getErrorMessage("username")}}</ion-text>
+    }
+  </ion-item>
+
+  <ion-item [class.invalid-item]="isFieldInvalid('password')">
+    <ion-label position="floating">Password</ion-label>
+    <ion-input formControlName="password" type="password"></ion-input>
+    @if(isFieldInvalid("password"))
+    {
+    <ion-text>{{getErrorMessage("password")}}</ion-text>
+    }
+  </ion-item>
+
+  <ion-item [class.item-invalid]="isFieldInvalid('confirmPassword')">
+    <ion-label position="floating">Conferma Password</ion-label>
+    <ion-input formControlName="confirmPassword" type="password"></ion-input>
+  </ion-item>
+  @if(isFieldInvalid("confirmPassword"))
+  {
+  <ion-text>{{getErrorMessage("confirmPassword")}}</ion-text>
+  }
+
+  <ion-item [class.invalid-item]="isFieldInvalid('full_name')">
+    <ion-label position="floating">Nome e cognome</ion-label>
+    <ion-input formControlName="full_name"></ion-input>
+    @if(isFieldInvalid("full_name"))
+    {
+    <ion-text>{{getErrorMessage("full_name")}}</ion-text>
+    }
+  </ion-item>
+
+  <ion-item [class.invalid-item]="isFieldInvalid('phone')">
+    <ion-label position="floating">Numero di cellulare</ion-label>
+    <ion-input formControlName="phone" type="tel"></ion-input>
+    @if(isFieldInvalid("phone"))
+    {
+    <ion-text>{{getErrorMessage("phone")}}</ion-text>
+    }
+  </ion-item>
+
+  <ion-item [class.invalid-item]="isFieldInvalid('email')">
+    <ion-label position="floating">Email</ion-label>
+    <ion-input formControlName="email"></ion-input>
+    @if(isFieldInvalid("email"))
+    {
+    <ion-text>{{getErrorMessage("email")}}</ion-text>
+    }
+  </ion-item>
+
+  @if(showRoleSelection)
+  {
+  <ion-item [class.invalid-item]="isFieldInvalid('role')">
+    <ion-label position="floating">Ruolo</ion-label>
+    <ion-select formControlName="role" interface="popover" value="guest">
+      @for(role of roles; track role)
+      {
+      <ion-select-option [value]="role">{{role | titlecase}}</ion-select-option>
+      }
+    </ion-select>
+    @if(isFieldInvalid("role"))
+    {
+    <ion-text>{{getErrorMessage("role")}}</ion-text>
+    }
+  </ion-item>
+  }
+
+  <ion-button type="submit" expand="block" [disabled]="userForm.invalid">
+    {{ submitButtonText }}
+  </ion-button>
+</form>

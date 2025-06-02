@@ -1,36 +1,54 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
+export const routes: Routes = [
   {
-    path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage),
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.page').then(m => m.RegisterPage)
+  },
+  {
+    path: 'personnel/dashboard',
+    loadComponent: () => import('./pages/personnel/dashboard/dashboard.page').then(m => m.DashboardPage),
     data: {
       title: 'Dashboard',
-      breadcrumbs: [{ label: 'Dashboard', url: '/dashboard' }]
+      breadcrumbs: [{ label: 'Dashboard', url: 'personnel/dashboard' }]
     }
   },
   {
-    path: 'register',
-    loadComponent: () => import('./register/register.page').then(m => m.RegisterPage)
+    path: 'personnel/add-user',
+    loadComponent: () => import('./pages/personnel/add-user/add-user.page').then(m => m.AddUserPage),
+        data: {
+      title: 'Crea Utente',
+      breadcrumbs: [{ label: 'Crea Utente', url: 'personnel/add-user'}]
+    }
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then(m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
-    path: 'rooms',
-    loadComponent: () => import('./rooms/rooms.page').then(m => m.RoomsPage),
+    path: 'personnel/rooms',
+    loadComponent: () => import('./pages/rooms/rooms.page').then(m => m.RoomsPage),
     data: {
       title: 'Stanze',
       breadcrumbs: [
-        // { label: 'Dashboard', url: '/dashboard' }, esempio: se aggiunto visualizzerei Dashboard / Utenti
-        { label: 'Stanze', url: '/rooms' }
+        { label: 'Stanze', url: 'personnel/rooms' }
       ]
     }
   },
   {
-    path: 'nearby-hotels',
-    loadComponent: () => import('./nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
+    path: 'personnel/rooms/add', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
+    loadComponent: () => import('./pages/rooms/add-rooms/add-rooms.page').then(m => m.AddRoomsPage),
+    data: {
+      title: 'Crea Stanza',
+      breadcrumbs: [
+        { label: 'Stanze', url: 'personnel/rooms' },
+        { label: 'Crea Stanza', url: '/add' }
+      ]
+    }
+  },
+  {
+    path: 'nearby-hotels', //Sarà personnel?
+    loadComponent: () => import('./pages/personnel/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
     data: {
       title: 'Hotel nelle vicinanze',
       breadcrumbs: [
@@ -40,11 +58,11 @@ export const routes: Routes = [ //TODO: Fare refactoring con la parte /personnel
   },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'personnel/dashboard', //in futuro manderà alla landing page, forse rimarrà ''
     pathMatch: 'full'
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: 'personnel/dashboard'
   }
 ];

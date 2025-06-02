@@ -10,10 +10,10 @@ import {
   logOutOutline,
   calendarOutline,
 } from 'ionicons/icons';
-import { LayoutService } from '../shared/shared.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -28,13 +28,13 @@ import { Preferences } from '@capacitor/preferences';
   ],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  isSidebarExpanded = false; // Stato locale sincronizzato con LayoutService
-  private layoutSubscription!: Subscription;
+  isSidebarExpanded = false; // Stato locale sincronizzato con SidebarService
+  private sidebarSub!: Subscription;
 
   role: string = '';
   isGuest: boolean = false; // Inizialmente impostato a false, cambia in base al ruolo
 
-  constructor(private layoutService: LayoutService, private router: Router) {
+  constructor(private sidebarService: SidebarService, private router: Router) {
     addIcons({
       homeOutline,
       peopleOutline,
@@ -47,7 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.layoutSubscription = this.layoutService.sidebarState$.subscribe(
+    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       (state) => (this.isSidebarExpanded = state)
     );
 
@@ -68,18 +68,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   toggleSidebar() {
-    this.layoutService.toggleSidebar();
+    this.sidebarService.toggleSidebar();
   }
 
   // Chiamato quando si clicca un item, per esempio per chiudere la sidebar su mobile
   //handleItemClick() {
   // Esempio: se vuoi che la sidebar si chiuda dopo un click su schermi piccoli
   // if (window.innerWidth < 768 && this.isSidebarExpanded) {
-  //   this.layoutService.setSidebarState(false);
+  //   this.sidebarService.setSidebarState(false);
   // }
   // Oppure, se il click su un item deve espandere e "fissare" la sidebar:
   // if (!this.isSidebarExpanded) {
-  //   this.layoutService.setSidebarState(true);
+  //   this.sidebarService.setSidebarState(true);
   // }
   //}
 
@@ -110,8 +110,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.layoutSubscription) {
-      this.layoutSubscription.unsubscribe();
+    if (this.sidebarSub) {
+      this.sidebarSub.unsubscribe();
     }
   }
 }

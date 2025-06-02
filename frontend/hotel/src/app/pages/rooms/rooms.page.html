@@ -1,0 +1,30 @@
+<ion-content [fullscreen]="false">
+  <ion-item button [routerLink]="['/rooms/add']">Crea stanza</ion-item>
+  @if (loading)
+  {
+  <ion-spinner name="circular" color="secondary"></ion-spinner> <!--In caso modificare il colore-->
+  }
+  @else
+  {
+  @if (!rooms)
+  {
+  <h1>Errore durante il recupero delle stanze</h1>
+  }
+  @else
+  {
+  <ion-grid class="ion-text-center">
+    <ion-row class="header-row">
+      <ion-col>ID</ion-col>
+      <ion-col>Hotel</ion-col>
+      <ion-col>Numero della stanza</ion-col>
+      <ion-col>Tipo di stanza</ion-col>
+      <ion-col>Capienza</ion-col>
+      <ion-col>Prezzo per notte</ion-col>
+      <ion-col>Descrizione</ion-col>
+      <ion-col>Disponibilità</ion-col>
+      <ion-col>Data di creazione</ion-col>
+    </ion-row>
+  </ion-grid>
+  }
+  }
+</ion-content>

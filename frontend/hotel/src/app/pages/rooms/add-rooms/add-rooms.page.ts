@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonGrid, IonRow, IonCol, IonButton, IonItem, IonSelect, IonSelectOption, IonContent } from '@ionic/angular/standalone';
+import { IonButton, IonItem, IonSelect, IonSelectOption, IonContent, IonInput } from '@ionic/angular/standalone';
 import { AddRoomsService } from './add-rooms.service';
 
 interface AddRoomData {
@@ -17,7 +17,7 @@ interface AddRoomData {
     selector: 'app-rooms',
     templateUrl: './add-rooms.page.html',
     styleUrls: ['./add-rooms.page.scss'],
-    imports: [IonContent, IonItem, IonButton, IonSelect, IonSelectOption, CommonModule, FormsModule]
+    imports: [IonContent, IonItem, IonInput, IonButton, IonSelect, IonSelectOption, CommonModule, FormsModule]
 })
 export class AddRoomsPage {
     addRoomData: AddRoomData = {

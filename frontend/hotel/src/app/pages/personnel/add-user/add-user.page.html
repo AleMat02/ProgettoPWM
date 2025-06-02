@@ -1,0 +1,8 @@
+<ion-content [fullscreen]="false"> <!--Perché non [submitButtonText] ?-->
+  <app-user-creation-form 
+    formTitleText="Crea un nuovo utente" 
+    [showRoleSelection]="true" 
+    submitButtonText="Aggiungi Utente" 
+    (formSubmit)="createUser($event)">
+  </app-user-creation-form>
+</ion-content>

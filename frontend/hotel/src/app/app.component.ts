@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
-import { LayoutService } from './shared/shared.service';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
-import { NavbarService } from './navbar/navbar.service';
+import { NavbarService } from './components/navbar/navbar.service';
+import { SidebarService } from './components/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +14,18 @@ import { NavbarService } from './navbar/navbar.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   isSidebarExpanded = false;
-  private layoutSub!: Subscription;
+  private sidebarSub!: Subscription;
   private routerSub!: Subscription;
 
   constructor(
-    private layout: LayoutService,
+    private sidebarService: SidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private navbarService: NavbarService
   ) {}
 
   ngOnInit() {
-    this.layoutSub = this.layout.sidebarState$.subscribe(
+    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       state => (this.isSidebarExpanded = state)
     );
 
@@ -48,8 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.layoutSub) {
-      this.layoutSub.unsubscribe();
+    if (this.sidebarSub) {
+      this.sidebarSub.unsubscribe();
     }
     if (this.routerSub) {
       this.routerSub.unsubscribe();
