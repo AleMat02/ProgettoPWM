@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonGrid, IonRow, IonCol, IonSpinner, IonItem } from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
-import { RoomsService } from './rooms.service';
+import { RoomsService } from 'src/app/services/rooms.service';
 
 @Component({
   selector: 'app-rooms',

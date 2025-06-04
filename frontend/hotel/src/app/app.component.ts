@@ -4,8 +4,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
-import { NavbarService } from './components/navbar/navbar.service';
-import { SidebarService } from './components/sidebar/sidebar.service';
+import { NavbarService } from './services/navbar.service';
+import { SidebarService } from './services/sidebar.service';
 
 @Component({
   selector: 'app-root',

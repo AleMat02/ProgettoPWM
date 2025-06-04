@@ -16,9 +16,9 @@ export const routes: Routes = [
   {
     path: 'personnel/add-user',
     loadComponent: () => import('./pages/personnel/add-user/add-user.page').then(m => m.AddUserPage),
-        data: {
+    data: {
       title: 'Crea Utente',
-      breadcrumbs: [{ label: 'Crea Utente', url: 'personnel/add-user'}]
+      breadcrumbs: [{ label: 'Crea Utente', url: 'personnel/add-user' }]
     }
   },
   {
@@ -37,12 +37,22 @@ export const routes: Routes = [
   },
   {
     path: 'personnel/rooms/add', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
-    loadComponent: () => import('./pages/rooms/add-rooms/add-rooms.page').then(m => m.AddRoomsPage),
+    loadComponent: () => import('./pages/rooms/add-room/add-room.page').then(m => m.AddRoomPage),
     data: {
       title: 'Crea Stanza',
       breadcrumbs: [
         { label: 'Stanze', url: 'personnel/rooms' },
         { label: 'Crea Stanza', url: '/add' }
+      ]
+    }
+  },
+  {
+    path: 'personnel/add-hotel', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
+    loadComponent: () => import('./pages/personnel/add-hotel/add-hotel.page').then(m => m.AddHotelPage),
+    data: {
+      title: 'Crea Hotel',
+      breadcrumbs: [
+        { label: 'Crea Hotel', url: '/add-hotel' }
       ]
     }
   },

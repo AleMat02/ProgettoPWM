@@ -9,11 +9,13 @@ import {
   menuOutline,
   logOutOutline,
   calendarOutline,
+  personAddOutline,
+  businessOutline,
 } from 'ionicons/icons';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
-import { SidebarService } from './sidebar.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -43,6 +45,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
       bedOutline,
       logOutOutline,
       calendarOutline,
+      personAddOutline,
+      businessOutline
     });
   }
 

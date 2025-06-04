@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonTitle, IonText } from '@ionic/angular/standalone';
-import { UserCreationFormData, UserRole } from 'src/app/shared/interfaces/auth.interface';
+import { UserCreationFormData, UserRole } from 'src/app/interfaces/user-creation-form.interface';
+import * as Utils from 'src/app/utils';
 
 @Component({
   selector: 'app-user-creation-form',
@@ -32,7 +33,7 @@ export class UserCreationFormComponent implements OnInit {
 
   userForm!: FormGroup;
 
-  roles = Object.values(UserRole)
+  roles = Object.values(UserRole) //Mettendo keys sarebbe stato indifferente in quanto avremmo comunque tenuto la pipe "Titlecase" per scelta nell'html
 
   matchPasswords(passwordKey: string, confirmPasswordKey: string): ValidatorFn {
     return (group: AbstractControl): { [key: string]: any } | null => {
@@ -72,7 +73,7 @@ export class UserCreationFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.userForm.invalid) { //il pulsante di submit diventa disabled se gli input non sono stati tutti inseriti, questa è un'ulteriore guard
+    if (this.userForm.invalid) { //il pulsante di submit diventa disabled se gli input non sono stati tutti inseriti correttamente, questa è un'ulteriore guard
       this.userForm.markAllAsTouched()
       return;
     }
@@ -82,43 +83,11 @@ export class UserCreationFormComponent implements OnInit {
     this.formSubmit.emit(userFormData as UserCreationFormData)
   }
 
-  isFieldInvalid(field: string): boolean {
-    const control = this.userForm.get(field);
-    if (!control) { return false; }
-
-    // Considera il campo non valido se il controllo stesso è non valido E toccato/sporco
-    let isInvalid = control.invalid && (control.dirty || control.touched);
-
-    // Caso speciale per 'confirmPassword': consideralo non valido anche se c'è un errore di 'passwordMismatch'
-    // a livello di form e almeno uno dei campi password è stato toccato.
-    if (field === 'confirmPassword') {
-      const passwordControl = this.userForm.get('password');
-      if (this.userForm.hasError('passwordMismatch') && (control.touched || passwordControl?.touched)) {
-        return true; // Sovrascrive isInvalid se c'è un mismatch e i campi rilevanti sono stati toccati
-      }
-    }
-    return isInvalid;
+  isFormFieldInvalid(field: string) {
+    return Utils.isFormFieldInvalid(this.userForm, field)
   }
 
-  getErrorMessage(field: string): string | null {
-    const control = this.userForm.get(field);
-    if (!control) return null;
-
-    if (field === 'confirmPassword' && this.userForm.hasError('passwordMismatch')) {
-      const passwordControl = this.userForm.get('password');
-      // Mostra l'errore di mismatch solo se 'confirmPassword' o 'password' sono stati toccati
-      if (control.touched || passwordControl?.touched) {
-        return 'Le password non coincidono.';
-      }
-    }
-
-    if (control.errors) {
-      if (control.errors['required']) return 'Questo campo è obbligatorio.';
-      if (control.errors['email']) return "Inserisci un'email valida.";
-      if (control.errors['minlength']) return `E' necessario inserire almeno ${control.errors['minlength'].requiredLength} caratteri.`;
-      if (control.errors['pattern']) return 'Formato non valido.';
-    }
-    return null;
+  getFormErrorMessage(field: string) {
+    return Utils.getFormErrorMessage(this.userForm, field)
   }
-
 }

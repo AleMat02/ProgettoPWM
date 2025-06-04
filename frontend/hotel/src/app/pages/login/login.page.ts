@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonInput, IonItem, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { LoginService } from './login.service';
 import { Router, RouterLink } from '@angular/router'; 
 import { Preferences } from '@capacitor/preferences';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-login',

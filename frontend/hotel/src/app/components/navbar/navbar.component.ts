@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonBreadcrumb, IonBreadcrumbs, IonLabel } from '@ionic/angular/standalone';
 import { Observable, Subscription } from 'rxjs';
-import { Breadcrumb, NavbarService } from './navbar.service';
+import { Breadcrumb, NavbarService } from '../../services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { SidebarService } from '../sidebar/sidebar.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-navbar',

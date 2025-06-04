@@ -8,12 +8,10 @@ import { BACKEND_URL } from "src/environments/environment";
 })
 export class LoginService {
   apiUrl = `${BACKEND_URL}/api/login`;
+  
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post(this.apiUrl, { username, password });
   }
-
-  
-
 }
