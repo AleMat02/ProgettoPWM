@@ -6,6 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/register/register.page').then(m => m.RegisterPage)
   },
   {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
+  },
+  {
     path: 'personnel/dashboard',
     loadComponent: () => import('./pages/personnel/dashboard/dashboard.page').then(m => m.DashboardPage),
     data: {
@@ -20,10 +24,6 @@ export const routes: Routes = [
       title: 'Crea Utente',
       breadcrumbs: [{ label: 'Crea Utente', url: 'personnel/add-user' }]
     }
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
     path: 'personnel/rooms',

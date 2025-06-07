@@ -5,6 +5,13 @@ import { IonButton, IonItem, IonSelect, IonSelectOption, IonContent, IonInput, I
 import { AddRoomService } from '../../../services/add-room.service';
 import { AddRoomData, RoomType } from 'src/app/interfaces/add-rooms.interface';
 import * as Utils from 'src/app/utils'
+import { ToastService } from 'src/app/services/toast.service';
+
+const ROOM_CAPACITIES: { [key in RoomType]: number } = {
+    [RoomType.Single]: 1,
+    [RoomType.Double]: 2,
+    [RoomType.Family]: 4,
+};
 
 @Component({
     selector: 'app-add-room',
@@ -13,59 +20,71 @@ import * as Utils from 'src/app/utils'
     imports: [IonLabel, IonTitle, IonText, IonContent, IonItem, IonInput, IonButton, IonSelect, IonSelectOption, CommonModule, ReactiveFormsModule]
 })
 export class AddRoomPage implements OnInit {
-    // addRoomData: AddRoomData = {
-    //     room_number: 101,
-    //     room_type: RoomType.Double,
-    //     capacity: 2,
-    //     price_per_night: 150, //va aggiunta la currency visualmente
-    //     hotel_id: 1, //vanno prima creati
-    //     description: "Camera doppia con vista"
-    // }
     roomForm!: FormGroup;
 
     roomTypes = Object.values(RoomType) //Mettendo keys sarebbe stato indifferente in quanto avremmo comunque tenuto la pipe "Titlecase" per scelta nell'html
 
     //loading: boolean = true;
-    constructor(private fb: FormBuilder, private addRoomService: AddRoomService) { }
+    constructor(private fb: FormBuilder, private addRoomService: AddRoomService, private toastService: ToastService) { }
 
     //Inseriamo più regole rispetto al backend per scelta personale
     ngOnInit(): void {
         this.roomForm = this.fb.group(
             {
-                room_number: ['', [Validators.required, Validators.maxLength(3)]],
+                room_number: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{0,2}$/)]], // Es. 1-999, non inizia con 0
                 room_type: [RoomType.Single, Validators.required],
-                capacity: ['', [Validators.required, Validators.max(4)]], //TODO: La capienza basare su room_type
+                capacity: [{ value: ROOM_CAPACITIES[RoomType.Single], disabled: true }, [Validators.required, Validators.max(4)]],
                 price_per_night: ['', [Validators.required, Validators.maxLength(4)]],
                 hotel_id: ['', [Validators.required, Validators.max(10)]],
                 description: ['', [Validators.maxLength(100)]]
             }
         );
+
+        this.roomForm.get('room_type')?.valueChanges.subscribe((selectedRoomType: RoomType) => {
+            const formCapacity = this.roomForm.get('capacity');
+            if (selectedRoomType && formCapacity) { // selectedRoomType potrebbe essere null se il campo è resettato
+                const newCapacity = ROOM_CAPACITIES[selectedRoomType];
+                formCapacity.setValue(newCapacity);
+            }
+        });
     }
 
     onSubmit() {
         if (this.roomForm.invalid) { //il pulsante di submit diventa disabled se gli input non sono stati tutti inseriti correttamente, questa è un'ulteriore guard
             this.roomForm.markAllAsTouched()
+            this.toastService.presentErrorToast('Per favore, compila tutti i campi obbligatori in maniera corretta.');
             return;
         }
-        console.log("Dati per la creazione della stanza inviati ")
 
-        const addRoomData: AddRoomData = this.roomForm.value
+        const addRoomData: AddRoomData = this.roomForm.getRawValue() //includo anche i valori dei campi disabilitati (capacity)
+        console.log("Dati per la creazione della stanza inviati:", addRoomData)
 
         this.addRoomService.addRoom(addRoomData.room_number, addRoomData.room_type, addRoomData.capacity, addRoomData.price_per_night, addRoomData.hotel_id, addRoomData.description).subscribe({
             next: (res: any) => {
-                console.log(res); //deve diventare un alert
+                this.toastService.presentSuccessToast(`Stanza ${addRoomData.room_number} aggiunta con successo!`);
+
+                // Resetta il form dopo il successo
+                this.roomForm.reset({
+                    room_number: '',
+                    room_type: RoomType.Single,
+                    capacity: ROOM_CAPACITIES[RoomType.Single], //Nonostante cambi in base a room_type, ho bisogno di aggiungere anche qui il valore, non lo aggiorna automaticamente in questo caso
+                    price_per_night: '',
+                    hotel_id: '',
+                    description: ''
+                });
             },
             error: (err: any) => {
-                console.error(err); //anche questo
+                const errorMessage = err?.error?.message || 'Si è verificato un errore.';
+                this.toastService.presentErrorToast(errorMessage);
             }
         })
     }
 
-      isFormFieldInvalid(field: string) {
+    isFormFieldInvalid(field: string) {
         return Utils.isFormFieldInvalid(this.roomForm, field)
-      }
-    
-      getFormErrorMessage(field: string) {
+    }
+
+    getFormErrorMessage(field: string) {
         return Utils.getFormErrorMessage(this.roomForm, field)
-      }
+    }
 }

@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonTitle, IonText } from '@ionic/angular/standalone';
 import { UserCreationFormData, UserRole } from 'src/app/interfaces/user-creation-form.interface';
 import * as Utils from 'src/app/utils';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-creation-form',
@@ -20,8 +21,7 @@ import * as Utils from 'src/app/utils';
     IonSelect,
     IonSelectOption,
     CommonModule,
-    ReactiveFormsModule
-    //* Poi dobbiamo spiegare perché abbiamo utilizzato Reactiveforms al posto dei template-driven forms
+    ReactiveFormsModule // Abbiamo deciso di utilizzare i Reactive Forms al posto dei Template-Driven Forms in quanto ci permettono un controllo programmatico maggiore non dipendente dall'HTML, come per esempio per l'implementazione della validazione
   ]
 })
 export class UserCreationFormComponent implements OnInit {
@@ -51,7 +51,8 @@ export class UserCreationFormComponent implements OnInit {
     };
   }
 
-  constructor(private fb: FormBuilder) { } //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
+  //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
+  constructor(private fb: FormBuilder, private toastService: ToastService) { }
 
   //Anche se nel backend full_name, phone e role non sono obbligatori, qui lo sono per una migliore identificazione e gestione del cliente.
   //Inseriamo più regole rispetto al backend per scelta personale
@@ -75,10 +76,12 @@ export class UserCreationFormComponent implements OnInit {
   onSubmit() {
     if (this.userForm.invalid) { //il pulsante di submit diventa disabled se gli input non sono stati tutti inseriti correttamente, questa è un'ulteriore guard
       this.userForm.markAllAsTouched()
+      this.toastService.presentErrorToast('Per favore, compila tutti i campi obbligatori in maniera corretta.');
       return;
     }
-    console.log("Dati per la creazione dell'utente inviati ")
+
     const { confirmPassword, ...userFormData } = this.userForm.value;
+    console.log("Dati per la creazione dell'utente inviati:", userFormData)
 
     this.formSubmit.emit(userFormData as UserCreationFormData)
   }
@@ -89,5 +92,17 @@ export class UserCreationFormComponent implements OnInit {
 
   getFormErrorMessage(field: string) {
     return Utils.getFormErrorMessage(this.userForm, field)
+  }
+
+  resetForm(): void {
+    this.userForm.reset({
+      username: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      full_name: '',
+      phone: '',
+      role: this.showRoleSelection ? UserRole.Guest : null
+    });
   }
 }

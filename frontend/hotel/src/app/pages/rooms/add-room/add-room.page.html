@@ -1,67 +1,69 @@
-<ion-title>Crea nuova stanza</ion-title>
-<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
-  <ion-item [class.invalid-item]="isFormFieldInvalid('room_number')">
-    <ion-label position="floating">Numero della stanza</ion-label>
-    <ion-input formControlName="room_number" type="number"></ion-input>
-  </ion-item>
-  @if(isFormFieldInvalid("room_number"))
-  {
-  <ion-text color="danger">{{getFormErrorMessage("room_number")}}</ion-text>
-  }
+<ion-content>
+  <ion-title>Crea nuova stanza</ion-title>
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <ion-item [class.invalid-item]="isFormFieldInvalid('room_number')">
+      <ion-label position="floating">Numero della stanza</ion-label>
+      <ion-input formControlName="room_number" type="number"></ion-input>
+    </ion-item>
+    @if(isFormFieldInvalid("room_number"))
+    {
+    <ion-text color="danger">{{getFormErrorMessage("room_number")}}</ion-text>
+    }
 
-  <ion-item [class.invalid-item]="isFormFieldInvalid('room_type')">
-    <ion-label position="floating">Ruolo</ion-label>
-    <ion-select formControlName="room_type" interface="popover" value="single">
-      @for(roomType of roomTypes; track roomType)
+    <ion-item [class.invalid-item]="isFormFieldInvalid('room_type')">
+      <ion-label position="floating">Ruolo</ion-label>
+      <ion-select formControlName="room_type" interface="popover" value="single">
+        @for(roomType of roomTypes; track roomType)
+        {
+        <ion-select-option [value]="roomType">{{roomType | titlecase}}</ion-select-option>
+        }
+      </ion-select>
+      @if(isFormFieldInvalid("room_type"))
       {
-      <ion-select-option [value]="roomType">{{roomType | titlecase}}</ion-select-option>
+      <ion-text color="danger">{{getFormErrorMessage("room_type")}}</ion-text>
       }
-    </ion-select>
-    @if(isFormFieldInvalid("room_type"))
+    </ion-item>
+
+    <ion-item [class.item-invalid]="isFormFieldInvalid('capacity')">
+      <ion-label position="floating">Capienza</ion-label>
+      <ion-input formControlName="capacity" type="number"></ion-input>
+    </ion-item>
+    @if(isFormFieldInvalid("capacity"))
     {
-    <ion-text color="danger">{{getFormErrorMessage("room_type")}}</ion-text>
+    <ion-text color="danger">{{getFormErrorMessage("capacity")}}</ion-text>
     }
-  </ion-item>
 
-  <ion-item [class.item-invalid]="isFormFieldInvalid('capacity')">
-    <ion-label position="floating">Capienza</ion-label>
-    <ion-input formControlName="capacity" type="number"></ion-input>
-  </ion-item>
-  @if(isFormFieldInvalid("capacity"))
-  {
-  <ion-text color="danger">{{getFormErrorMessage("capacity")}}</ion-text>
-  }
+    <ion-item [class.invalid-item]="isFormFieldInvalid('price_per_night')">
+      <ion-label position="floating">Prezzo a notte</ion-label>
+      <ion-input formControlName="price_per_night" type="number"></ion-input>
+      @if(isFormFieldInvalid("price_per_night"))
+      {
+      <ion-text color="danger">{{getFormErrorMessage("price_per_night")}}</ion-text>
+      }
+    </ion-item>
 
-  <ion-item [class.invalid-item]="isFormFieldInvalid('price_per_night')">
-    <ion-label position="floating">Prezzo a notte</ion-label>
-    <ion-input formControlName="price_per_night" type="number"></ion-input>
-    @if(isFormFieldInvalid("price_per_night"))
-    {
-    <ion-text color="danger">{{getFormErrorMessage("price_per_night")}}</ion-text>
-    }
-  </ion-item>
+    <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
+      <ion-label position="floating">ID dell'hotel di appartenenza</ion-label>
+      <ion-input formControlName="hotel_id" type="number"></ion-input>
+      @if(isFormFieldInvalid("hotel_id"))
+      {
+      <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
+      }
+    </ion-item>
 
-  <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
-    <ion-label position="floating">ID dell'hotel di appartenenza</ion-label>
-    <ion-input formControlName="hotel_id" type="number"></ion-input>
-    @if(isFormFieldInvalid("hotel_id"))
-    {
-    <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
-    }
-  </ion-item>
-
-  <ion-item [class.invalid-item]="isFormFieldInvalid('description')">
-    <ion-label position="floating">Descrizione</ion-label>
-    <ion-input formControlName="description"></ion-input>
-    @if(isFormFieldInvalid("description"))
-    {
-    <ion-text color="danger">{{getFormErrorMessage("description")}}</ion-text>
-    }
-  </ion-item>
+    <ion-item [class.invalid-item]="isFormFieldInvalid('description')">
+      <ion-label position="floating">Descrizione</ion-label>
+      <ion-input formControlName="description"></ion-input>
+      @if(isFormFieldInvalid("description"))
+      {
+      <ion-text color="danger">{{getFormErrorMessage("description")}}</ion-text>
+      }
+    </ion-item>
 
 
 
-  <ion-button type="submit" expand="block" [disabled]="roomForm.invalid">
-    Aggiungi Stanza
-  </ion-button>
-</form>
+    <ion-button type="submit" expand="block" [disabled]="roomForm.invalid">
+      Aggiungi Stanza
+    </ion-button>
+  </form>
+</ion-content>

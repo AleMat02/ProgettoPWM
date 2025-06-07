@@ -1,17 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonIcon, IonItem, IonList } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import {
-  bedOutline,
-  compassOutline,
-  homeOutline,
-  peopleOutline,
-  menuOutline,
-  logOutOutline,
-  calendarOutline,
-  personAddOutline,
-  businessOutline,
-} from 'ionicons/icons';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
@@ -34,36 +22,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private sidebarSub!: Subscription;
 
   role: string = '';
-  isGuest: boolean = false; // Inizialmente impostato a false, cambia in base al ruolo
 
-  constructor(private sidebarService: SidebarService, private router: Router) {
-    addIcons({
-      homeOutline,
-      peopleOutline,
-      menuOutline,
-      compassOutline,
-      bedOutline,
-      logOutOutline,
-      calendarOutline,
-      personAddOutline,
-      businessOutline
-    });
-  }
+  constructor(private sidebarService: SidebarService, private router: Router) { }
 
   ngOnInit() {
     this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       (state) => (this.isSidebarExpanded = state)
     );
 
-    Preferences.get({ key: 'userData' })
+    Preferences.get({ key: 'userData' }) //* Solo per debug, poi va tolto
       .then((result) => {
         if (result.value) {
           const userData = JSON.parse(result.value).data;
           this.role = userData.role;
           console.log('Ruolo utente:', this.role);
-          if (this.role === 'guest') {
-            this.isGuest = true;
-          }
         }
       })
       .catch((err) => {
