@@ -74,8 +74,7 @@ export class AddRoomPage implements OnInit {
                 });
             },
             error: (err: any) => {
-                const errorMessage = err?.error?.message || 'Si è verificato un errore.';
-                this.toastService.presentErrorToast(errorMessage);
+                this.toastService.handleErrorToast(err)
             }
         })
     }

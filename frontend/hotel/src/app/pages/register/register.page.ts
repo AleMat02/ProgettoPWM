@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent } from '@ionic/angular/standalone';
 import { UserCreationFormData, UserRole } from '../../interfaces/user-creation-form.interface';
 import { UserCreationFormComponent } from 'src/app/components/user-creation-form/user-creation-form.component';
 import { RegisterService } from 'src/app/services/register.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,19 +18,25 @@ import { RegisterService } from 'src/app/services/register.service';
     CommonModule,
     FormsModule,
     UserCreationFormComponent
-]
+  ]
 })
 export class RegisterPage {
 
-  constructor(private registerService: RegisterService) { }
+  @ViewChild(UserCreationFormComponent) private userCreationForm!: UserCreationFormComponent
+
+  constructor(private registerService: RegisterService, private router: Router, private toastService: ToastService) { }
 
   registerUser(userData: UserCreationFormData) {
     this.registerService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email).subscribe({
-      next: (res: any) => { //Forse al posto di any si può mettere Response?
-        console.log(res.message); //!questo sarà un alert, si svuoterà il form
+      next: (res: any) => {
+        this.toastService.presentSuccessToast(`Registrazione avvenuta con successo!`);
+
+        this.userCreationForm.resetForm()
+
+        this.router.navigate(['/dashboard'])
       },
-      error: (err: any) => { //Forse al posto di any si può mettere Error?
-        console.error("Errore durante la registrazione: ", err); //!questo sarà un alert, e così non si svuota il form
+      error: (err: any) => {
+        this.toastService.handleErrorToast(err)
       }
     });
   }

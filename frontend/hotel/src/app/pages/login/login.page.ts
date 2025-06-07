@@ -5,6 +5,7 @@ import { IonContent, IonInput, IonItem, IonButton, IonIcon } from '@ionic/angula
 import { Router, RouterLink } from '@angular/router'; 
 import { Preferences } from '@capacitor/preferences';
 import { LoginService } from 'src/app/services/login.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +18,15 @@ export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private toastService: ToastService) {}
 
   ngOnInit() {}
 
   login() {
     this.loginService.login(this.email, this.password).subscribe({
       next: (data) => {
-        console.log('Login effettuato con successo.');
-        console.log(data);
+        this.toastService.presentSuccessToast(`Accesso effettuato con successo!`);
+        console.log("Dati ricevuti:", data);
         Preferences.set({
           key: 'userData',
           value: JSON.stringify(data),
@@ -33,19 +34,14 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/dashboard']); // Reindirizza alla dashboard dopo il login
       },
       error: (err: any) => {
-        console.error('Errore durante il login: ', err);
-        alert('Email o password errati. Riprova.');
+        this.toastService.handleErrorToast(err)
       },
     });
   }
 
   logut() {
-    // Rimuovi i dati utente da localStorage
     localStorage.removeItem('user');
     console.log("Logout effettuato con successo.");
-    // Gestisci il logout, ad esempio reindirizza l'utente alla pagina di login
+    this.router.navigate(['/dashboard']);
   }
-
-
-
 }
