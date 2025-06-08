@@ -1,0 +1,62 @@
+<ion-content>
+    <ion-title>Crea un nuovo hotel</ion-title>
+    <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()">
+        <ion-item [class.invalid-item]="isFormFieldInvalid('name')">
+            <ion-label position="floating">Nome</ion-label>
+            <ion-input formControlName="name"></ion-input>
+        </ion-item>
+        @if(isFormFieldInvalid("name"))
+        {
+        <ion-text color="danger">{{getFormErrorMessage("name")}}</ion-text>
+        }
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('address')">
+            <ion-label position="floating">Indirizzo</ion-label>
+            <ion-input formControlName="address"></ion-input>
+            @if(isFormFieldInvalid("address"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("address")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('city')">
+            <ion-label position="floating">Città</ion-label>
+            <ion-input formControlName="city"></ion-input>
+            @if(isFormFieldInvalid("city"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("city")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('latitude')">
+            <ion-label position="floating">Latitudine</ion-label>
+            <ion-input formControlName="latitude" type="number"></ion-input>
+            @if(isFormFieldInvalid("latitude"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("latitude")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('longitude')">
+            <ion-label position="floating">Longitudine</ion-label>
+            <ion-input formControlName="longitude" type="number"></ion-input>
+            @if(isFormFieldInvalid("longitude"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("longitude")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('description')">
+            <ion-label position="floating">Descrizione</ion-label>
+            <ion-input formControlName="description"></ion-input>
+            @if(isFormFieldInvalid("description"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("description")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-button type="submit" expand="block" [disabled]="hotelForm.invalid">
+            Aggiungi Hotel
+        </ion-button>
+    </form>
+</ion-content>

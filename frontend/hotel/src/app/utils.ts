@@ -34,6 +34,7 @@ export function getFormErrorMessage(form: FormGroup<any>, field: string): string
         if (control.errors['required']) return 'Questo campo è obbligatorio.';
         if (control.errors['email']) return "Inserisci un'email valida.";
         if (control.errors['minlength']) return `E' necessario inserire almeno ${control.errors['minlength'].requiredLength} caratteri.`;
+        if (control.errors['maxlength']) return `E' consentito inserire al massimo ${control.errors['maxlength'].requiredLength} caratteri.`;
         if (control.errors['pattern']) return 'Formato non valido.';
     }
     return null;

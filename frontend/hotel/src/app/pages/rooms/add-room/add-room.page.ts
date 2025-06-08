@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonButton, IonItem, IonSelect, IonSelectOption, IonContent, IonInput, IonText, IonTitle, IonLabel } from '@ionic/angular/standalone';
 import { AddRoomService } from '../../../services/add-room.service';
-import { AddRoomData, RoomType } from 'src/app/interfaces/add-rooms.interface';
+import { AddRoomData } from 'src/app/interfaces/add-room.interface';
 import * as Utils from 'src/app/utils'
 import { ToastService } from 'src/app/services/toast.service';
+import { RoomType } from 'src/app/interfaces/room.interface';
 
 const ROOM_CAPACITIES: { [key in RoomType]: number } = {
     [RoomType.Single]: 1,

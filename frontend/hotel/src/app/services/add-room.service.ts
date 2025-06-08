@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { BACKEND_URL } from "src/environments/environment";
-import { RoomType } from "../interfaces/add-rooms.interface";
+import { RoomType } from "../interfaces/room.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +14,9 @@ export class AddRoomService {
 
     addRoom(
         room_number: number,
-        room_type: RoomType, //bisogna capire il tipo, nell'esempio della collezione consiglia "double"
+        room_type: RoomType,
         capacity: number,
-        price_per_night: number, //va aggiunta la currency visualmente
+        price_per_night: number,
         hotel_id: number, //Gli hotel ovviamente devono già esistere, ma purtroppo non è possibile utilizzare una select perché nel back-end manca la funzione per ottenere tutti quelli esistenti
         description?: string
     ): Observable<any> {

@@ -36,6 +36,7 @@
     <ion-item [class.invalid-item]="isFormFieldInvalid('price_per_night')">
       <ion-label position="floating">Prezzo a notte</ion-label>
       <ion-input formControlName="price_per_night" type="number"></ion-input>
+      <!--TODO: va aggiunta la currency visualmente-->
       @if(isFormFieldInvalid("price_per_night"))
       {
       <ion-text color="danger">{{getFormErrorMessage("price_per_night")}}</ion-text>

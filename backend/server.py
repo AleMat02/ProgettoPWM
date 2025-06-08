@@ -7,11 +7,18 @@ from flask_cors import CORS
 import utils
 
 app = Flask(__name__)
-CORS(app, origins=["*"])
+CORS(app, origins=["*"], supports_credentials=True, allow_headers="*")
 secret_key = os.urandom(24)
 app.secret_key = secret_key
 DATABASE = 'database/hotel.db'
 session={}
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+    return response
 
 
 def get_db_connection():
