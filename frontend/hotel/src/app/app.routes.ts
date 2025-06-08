@@ -66,7 +66,7 @@ export const routes: Routes = [
   },
   {
     path: 'nearby-hotels', //Sarà personnel?
-    loadComponent: () => import('./pages/personnel/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
+    loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
     data: {
       title: 'Hotel nelle vicinanze',
       breadcrumbs: [
