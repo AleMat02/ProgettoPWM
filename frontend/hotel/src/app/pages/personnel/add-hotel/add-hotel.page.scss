@@ -1,0 +1,50 @@
+// Stili globali per il componente form
+:host {
+  display: block; // Assicura che il componente prenda lo spazio necessario
+}
+
+form {
+  padding: 16px; // Padding attorno al form per dare respiro
+}
+
+ion-title {
+  text-align: center;
+  padding-top: 16px; // Spazio sopra il titolo
+  padding-bottom: 24px; // Spazio sotto il titolo
+  font-size: 1.6em; // Dimensione del titolo leggermente più grande
+  font-weight: bold; // Titolo in grassetto
+}
+
+ion-item {
+  // Stile quando l'item contiene un input non valido e toccato/sporco
+  &.invalid-item {
+    --border-color: var(--ion-color-danger); // Bordo rosso per errore
+    --highlight-color-focused: var(--ion-color-danger); // Mantiene il bordo rosso anche al focus se non valido
+
+    ion-label {
+      color: var(--ion-color-danger) !important; // Etichetta rossa
+    }
+  }
+}
+
+// Stile per i messaggi di errore
+ion-text {
+  display: block; // Assicura che il messaggio vada a capo
+  font-size: 0.8em; // Testo dell'errore più piccolo
+  padding-top: 6px; // Spazio tra l'input e il messaggio di errore
+  padding-bottom: 2px; // Leggero padding inferiore
+  padding-left: 16px;
+}
+
+// Stile per il pulsante di submit
+ion-button {
+  margin-top: 28px; // Spazio maggiore prima del pulsante
+  --border-radius: 8px; // Angoli arrotondati per il pulsante
+  height: 48px; // Altezza definita per il pulsante
+  font-weight: bold;
+}
+
+ion-input {
+  --background: var(--ion-color-light-tint);
+  z-index: -5;
+}

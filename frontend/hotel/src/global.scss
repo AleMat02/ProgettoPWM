@@ -53,3 +53,16 @@ ion-router-outlet {
         margin-left: var(--sidebar-width-expanded);
     }
 }
+
+.custom-toast {
+
+  // Usiamo ::part per stilizzare in modo sicuro gli elementi interni del componente Ionic
+  // Questo è l'approccio raccomandato e più robusto.
+
+
+  &::part(message) {
+    // Assicura che il testo del messaggio sia allineato correttamente
+    // e non abbia stili che interferiscono con flexbox.
+    text-align: center;
+  }
+}

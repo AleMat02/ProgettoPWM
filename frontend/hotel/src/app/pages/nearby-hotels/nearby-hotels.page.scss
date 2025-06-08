@@ -1,0 +1,17 @@
+.map-card {
+    min-width: 80%;
+    min-height: 80%;
+    margin-inline: 5%;
+    margin-block: 2.5%;
+}
+  
+.map {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color:#a6cfd1; /* optional: add a background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

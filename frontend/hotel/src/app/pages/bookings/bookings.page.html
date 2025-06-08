@@ -1,0 +1,13 @@
+<ion-content [fullscreen]="true">
+  <div class="flex-container">
+    @if(isGuest){
+    <ion-button class="multiline-btn" [routerLink]="['/create-booking-request']" routerLinkActive="active">
+      <span class="btn-text">Aggiungi<br>prenotazione</span>
+    </ion-button>
+    }@else{
+    <ion-item class="btn-text" button [routerLink]="['/login']" routerLinkActive="active">
+      <span>Registrati / Login</span>
+    </ion-item>
+    }
+  </div>
+</ion-content>

@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
-import { LayoutService } from './shared/shared.service';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
-import { NavbarService } from './navbar/navbar.service';
+import { NavbarService } from './services/navbar.service';
+import { SidebarService } from './services/sidebar.service';
+import { addIcons } from 'ionicons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +16,33 @@ import { NavbarService } from './navbar/navbar.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   isSidebarExpanded = false;
-  private layoutSub!: Subscription;
+  private sidebarSub!: Subscription;
   private routerSub!: Subscription;
 
   constructor(
-    private layout: LayoutService,
+    private sidebarService: SidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private navbarService: NavbarService
-  ) {}
+  ) {
+    //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
+    addIcons({
+      checkmarkCircleOutline,
+      alertCircleOutline,
+      homeOutline,
+      peopleOutline,
+      menuOutline,
+      compassOutline,
+      bedOutline,
+      logOutOutline,
+      calendarOutline,
+      personAddOutline,
+      businessOutline
+    })
+  }
 
   ngOnInit() {
-    this.layoutSub = this.layout.sidebarState$.subscribe(
+    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       state => (this.isSidebarExpanded = state)
     );
 
@@ -48,8 +65,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.layoutSub) {
-      this.layoutSub.unsubscribe();
+    if (this.sidebarSub) {
+      this.sidebarSub.unsubscribe();
     }
     if (this.routerSub) {
       this.routerSub.unsubscribe();
