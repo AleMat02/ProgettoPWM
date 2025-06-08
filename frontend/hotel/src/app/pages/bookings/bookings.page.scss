@@ -1,10 +1,9 @@
 .flex-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center; // centra verticalmente
+  flex-direction: row;
   align-items: center;
-  height: 100vh;
-  padding-top: 10x; // rimosso padding-top
+  margin-left: 15px;
+
   gap: 15px; // spazio tra elementi
 }
 

@@ -8,8 +8,7 @@ import {
   IonToolbar,
   IonButton,
   IonIcon,
-  IonItem
-} from '@ionic/angular/standalone';
+  IonItem, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonText } from '@ionic/angular/standalone';
 import { Preferences } from '@capacitor/preferences';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -26,6 +25,10 @@ export class BookingsPage implements OnInit {
   role: string = '';
   isGuest: boolean = false; // Inizialmente impostato a true, cambia in base al ruolo
 
+  PendingReservations: any[] = []; // Array per memorizzare le prenotazioni
+
+
+
   ngOnInit() {
     Preferences.get({ key: 'userData' }).then((result) => {
         if (result.value) {
@@ -36,11 +39,22 @@ export class BookingsPage implements OnInit {
             this.isGuest =  true;
           }
         }
+        
       })
       .catch((err) => {
         console.error('Errore durante il recupero dei dati utente: ', err);
       });
+
+    //chiamata al servizio per ottenere le prenotazioni 
+    
+
+
   }
+
+
+
+
+  
   constructor() {}
 
 

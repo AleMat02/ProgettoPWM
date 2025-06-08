@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true">
+  <div class="flex-container">  
+    <div class="cb-box">
+      <div class="cb-title">Richiedi nuova prenotazione</div>
+        
+      <div class="input-group">
+        <ion-item>
+          <ion-input label="id_stanza" [(ngModel)]="this.room_id" ></ion-input>
+        </ion-item>  
+        <ion-item> 
+          <ion-input label="Check-in" type="date" [(ngModel)]="this.check_in_date"></ion-input>
+        </ion-item>
+        <ion-item> 
+          <ion-input label="Check-out" type="date" [(ngModel)]="this.check_out_date"></ion-input>
+        </ion-item>
+      </div>
+
+      <ion-button class="cb-btn" expand="block" size="full" fill="clear" (click)="createBookingRequest()">Richiedi</ion-button> 
+
+    </div>
+  </div>
+</ion-content>

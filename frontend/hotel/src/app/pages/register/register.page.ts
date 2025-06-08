@@ -33,7 +33,7 @@ export class RegisterPage {
 
         this.userCreationForm.resetForm()
 
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/login'])
       },
       error: (err: any) => {
         this.toastService.handleErrorToast(err)

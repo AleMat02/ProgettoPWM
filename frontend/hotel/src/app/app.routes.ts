@@ -10,7 +10,15 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
-    path: 'personnel/dashboard',
+    path: 'bookings',
+    loadComponent: () => import('./pages/bookings/bookings.page').then(m => m.BookingsPage)
+  },
+  {
+    path: 'add-booking',
+    loadComponent: () => import('./pages/bookings/add-booking/add-booking.page').then( m => m.AddBookingPage)
+  },
+  {
+    path: 'personnel/dashboard', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
     loadComponent: () => import('./pages/personnel/dashboard/dashboard.page').then(m => m.DashboardPage),
     data: {
       title: 'Dashboard',
@@ -36,7 +44,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'personnel/rooms/add', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
+    path: 'personnel/rooms/add',
     loadComponent: () => import('./pages/rooms/add-room/add-room.page').then(m => m.AddRoomPage),
     data: {
       title: 'Crea Stanza',
@@ -47,7 +55,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'personnel/add-hotel', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
+    path: 'personnel/add-hotel',
     loadComponent: () => import('./pages/personnel/add-hotel/add-hotel.page').then(m => m.AddHotelPage),
     data: {
       title: 'Crea Hotel',
@@ -68,11 +76,10 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'personnel/dashboard', //in futuro manderà alla landing page, forse rimarrà ''
-    pathMatch: 'full'
+    loadComponent: () => import('./pages/landing/landing.page').then( m => m.LandingPage)
   },
   {
     path: '**',
-    redirectTo: 'personnel/dashboard'
+    redirectTo: ''
   }
 ];
