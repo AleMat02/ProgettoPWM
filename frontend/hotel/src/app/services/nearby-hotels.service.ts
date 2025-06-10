@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Geolocation } from '@capacitor/geolocation';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NearbyHotelsService {
-  apiUrl = "http://localhost:5000/api";
+  apiUrl = `${environment.backendUrl}/api/hotels/nearby`;
   constructor(private http: HttpClient) { }
 
   latitude: number | null = null;
@@ -28,6 +29,6 @@ export class NearbyHotelsService {
   }
 
   getNearbyHotels(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/hotels/nearby?lat=${this.latitude}&lng=${this.longitude}&radius=${this.radius}`);
+    return this.http.get(`${this.apiUrl}?lat=${this.latitude}&lng=${this.longitude}&radius=${this.radius}`);
   }
 }

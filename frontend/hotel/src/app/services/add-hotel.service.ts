@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BACKEND_URL } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 import { AddHotelData } from "../interfaces/add-hotel.interface";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AddHotelService {
-    apiUrl = `${BACKEND_URL}/api/create_hotel`;
+    apiUrl = `${environment.backendUrl}/api/create_hotel`;
 
     constructor(private http: HttpClient) { }
 

@@ -1,13 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BACKEND_URL } from "src/environments/environment";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  apiUrl = `${BACKEND_URL}/api/login`;
+  apiUrl = `${environment.backendUrl}/api/login`;
   
   constructor(private http: HttpClient) { }
 

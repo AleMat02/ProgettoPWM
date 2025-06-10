@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-export interface Breadcrumb {
+export interface Breadcrumb { //* spostare nel file apposito
     label: string;
     url: string;
 }

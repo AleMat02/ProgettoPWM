@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BACKEND_URL } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 import { RoomType } from "../interfaces/room.interface";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AddRoomService {
-    apiUrl = `${BACKEND_URL}/api/add_rooms`;
+    apiUrl = `${environment.backendUrl}/api/add_rooms`;
 
     constructor(private http: HttpClient) { }
 
