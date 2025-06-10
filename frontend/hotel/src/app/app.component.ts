@@ -7,7 +7,7 @@ import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 import { NavbarService } from './services/navbar.service';
 import { SidebarService } from './services/sidebar.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, createOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
       logOutOutline,
       calendarOutline,
       personAddOutline,
-      businessOutline
+      businessOutline,
+      addOutline,
+      trashOutline
     })
   }
 

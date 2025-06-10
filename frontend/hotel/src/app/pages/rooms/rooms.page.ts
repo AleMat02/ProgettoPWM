@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonGrid, IonRow, IonCol, IonSpinner, IonItem } from '@ionic/angular/standalone';
+import { IonContent, IonItem, IonHeader, IonToolbar, IonTitle, IonFab, IonIcon, IonList, IonCard, IonCardContent, IonCardHeader, IonSkeletonText, IonCardTitle, IonCardSubtitle, IonLabel, IonChip, IonButtons, IonButton } from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { RoomData } from 'src/app/interfaces/room.interface';
@@ -11,7 +11,7 @@ import { RoomData } from 'src/app/interfaces/room.interface';
   templateUrl: './rooms.page.html',
   styleUrls: ['./rooms.page.scss'],
   standalone: true,
-  imports: [IonItem, IonGrid, IonContent, IonGrid, IonRow, IonCol, IonSpinner, CommonModule, FormsModule, RouterLink]
+  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonHeader, IonCardContent, IonHeader, IonItem, IonToolbar, IonContent, IonTitle, IonFab, IonList, CommonModule, FormsModule, RouterLink]
 })
 export class RoomsPage implements OnInit {
   rooms: RoomData[] = [];

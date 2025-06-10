@@ -1,55 +1,74 @@
 <ion-content [fullscreen]="false">
-  <ion-item button [routerLink]="['./add']">Crea stanza</ion-item>
-  @if (loading)
-  {
-  <ion-spinner name="circular" color="secondary"></ion-spinner> <!--In caso modificare il colore-->
-  }
-  @else
-  {
-  @if (!rooms)
-  {
-  <h1>Errore durante il recupero delle stanze</h1>
-  <!--TODO: Forse va modificato direttamente col toast, oppure trasformato in una pagina con il simbolo di errore (punto esclamativo gigante?) al centro e sotto il testo di errore-->
-  }
-  @else
-  {
-  <ion-grid class="ion-text-center">
-    <!-- Header -->
-    <ion-row class="header-row">
-      <ion-col size="1">ID</ion-col>
-      <ion-col size="1">Hotel ID</ion-col>
-      <ion-col size="1">N° Stanza</ion-col>
-      <ion-col size="1.5">Tipo</ion-col>
-      <ion-col size="1">Capienza</ion-col>
-      <ion-col size="1.5">Prezzo/Notte</ion-col>
-      <ion-col size="2">Descrizione</ion-col>
-      <ion-col size="1.5">Disponibilità</ion-col>
-      <ion-col size="1.5">Data Creazione</ion-col>
-    </ion-row>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['./add']" color="secondary">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
-    <!-- Dati -->
-    @for (room of rooms; track room.id) {
-    <ion-row class="data-row">
-      <ion-col size="1">{{ room.id }}</ion-col>
-      <ion-col size="2">
-        <div>
-          <strong>{{ room.hotel_name }}</strong>
-          <br>
-          <small>{{ room.hotel_city }}</small>
-        </div>
-      </ion-col>
-      <ion-col size="1">{{ room.room_number }}</ion-col>
-      <ion-col size="1.5">{{room.room_type }}</ion-col>
-      <ion-col size="1">{{ room.capacity }}</ion-col>
-      <ion-col size="1.5">{{ room.price_per_night }}</ion-col>
-      <ion-col size="2">{{ room.description || 'N/A' }}</ion-col>
-      <ion-col size="1.5">
-        {{room.is_available}}
-      </ion-col>
-      <ion-col size="1.5">{{ room.created_at }}</ion-col>
-    </ion-row>
+  @if (loading) {
+  <ion-list>
+    @for (item of [1, 2, 3]; track item) {
+    <ion-card class="skeleton-card">
+      <ion-card-header>
+        <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
     }
-  </ion-grid>
+  </ion-list>
+  } @else {
+  @if (!rooms || rooms.length === 0) {
+  <div class="empty-state">
+    <ion-icon name="sad-outline" color="medium"></ion-icon>
+    <h1>Nessuna stanza trovata</h1>
+    <p>Inizia creando una nuova stanza.</p>
+    <ion-button [routerLink]="['./add']" color="secondary">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Crea Stanza
+    </ion-button>
+  </div>
+  } @else {
+  <ion-list>
+    @for (room of rooms; track room.id) {
+    <ion-card class="room-card">
+      <ion-card-header>
+        <ion-card-title>Stanza N° {{ room.room_number }}</ion-card-title>
+        <ion-card-subtitle>ID: {{ room.id }}</ion-card-subtitle>
+        <ion-card-subtitle>Hotel ID: {{room.hotel_id}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>
+            <p><strong>Tipo:</strong> {{ room.room_type }}</p>
+            <p><strong>Capienza:</strong> {{ room.capacity === 1 ? room.capacity + ' persona' : room.capacity + '
+              persone' }}</p>
+            <p><strong>Prezzo/Notte:</strong> {{ room.price_per_night | currency:'EUR' }}</p>
+            <p><strong>Descrizione:</strong> {{ room.description || 'Nessuna descrizione' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-chip [color]="room.is_available === 1 ? 'success' : 'danger'" slot="start" style="margin-left: 0px;">
+            {{ room.is_available === 1 ? 'Disponibile' : 'Non Disponibile' }}
+          </ion-chip>
+          <ion-chip color="primary" slot="start" style="margin-left: 0px;">
+            {{ room.created_at }}
+          </ion-chip>
+          <ion-buttons slot="end">
+            <ion-button color="danger">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
   }
   }
 </ion-content>

@@ -1,23 +1,48 @@
-ion-col {
-  border: solid 1px #fff;
-  color: #fff;
+// Rimuove gli stili della tabella precedente
+// ion-col { border: none; }
+
+// Stile per le card delle stanze
+.room-card {
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  border-radius: 12px; // Angoli più arrotondati
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombra delicata
 }
 
-.header-row {
-  background: #7163AA;
-  color: #fff;
-  font-size: 18px;
+.room-card ion-card-title {
+  color: var(--ion-color-primary);
+  font-weight: bold;
 }
 
-// ion-col {
-//   border: 1px solid #ECEEEF;
-// }
+.room-card ion-card-content ion-item {
+  --background: transparent; // Rimuove lo sfondo dagli item interni
+  --inner-padding-end: 0; // Allinea i bottoni al bordo
+}
 
-ion-spinner {
-  width: 10rem;
-  height: 10rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.room-card p {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+// Stile per lo stato vuoto/errore
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  text-align: center;
+}
+
+.empty-state ion-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+// Stile per lo skeleton loading
+.skeleton-card {
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
 }
