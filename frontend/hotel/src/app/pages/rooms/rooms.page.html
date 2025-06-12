@@ -10,12 +10,11 @@
     @for (item of [1, 2, 3]; track item) {
     <ion-card class="skeleton-card">
       <ion-card-header>
-        <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
       </ion-card-header>
       <ion-card-content>
-        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-        <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-        <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
       </ion-card-content>
     </ion-card>
     }
@@ -26,10 +25,6 @@
     <ion-icon name="sad-outline" color="medium"></ion-icon>
     <h1>Nessuna stanza trovata</h1>
     <p>Inizia creando una nuova stanza.</p>
-    <ion-button [routerLink]="['./add']" color="secondary">
-      <ion-icon slot="start" name="add-outline"></ion-icon>
-      Crea Stanza
-    </ion-button>
   </div>
   } @else {
   <ion-list>
@@ -60,7 +55,7 @@
             {{ room.created_at }}
           </ion-chip>
           <ion-buttons slot="end">
-            <ion-button color="danger">
+            <ion-button color="danger" (click)="deleteRoom(room.id)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
           </ion-buttons>

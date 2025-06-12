@@ -7,11 +7,16 @@ import { environment } from "src/environments/environment";
     providedIn: 'root'
 })
 export class RoomsService {
-    apiUrl = `${environment.backendUrl}/api/get_rooms`;
+    getRoomsUrl = `${environment.backendUrl}/api/get_rooms`;
+    deleteRoomUrl = `${environment.backendUrl}/api/rooms`;
 
     constructor(private http: HttpClient) { }
 
     getRooms(): Observable<any> {
-        return this.http.get(this.apiUrl);
+        return this.http.get(this.getRoomsUrl);
+    }
+
+    deleteRoom(id: string): Observable<any> {
+        return this.http.delete(`${this.deleteRoomUrl}/${id}`);
     }
 }
