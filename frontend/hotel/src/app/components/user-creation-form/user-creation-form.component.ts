@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonTitle, IonText } from '@ionic/angular/standalone';
-import { UserCreationFormData, UserRole } from 'src/app/interfaces/user-creation-form.interface';
 import * as Utils from 'src/app/utils';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserData, UserRole } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-user-creation-form',
@@ -29,7 +29,7 @@ export class UserCreationFormComponent implements OnInit {
   @Input() showRoleSelection: boolean = false;
   @Input() submitButtonText: string = "Registrati"
 
-  @Output() formSubmit = new EventEmitter<UserCreationFormData>();
+  @Output() formSubmit = new EventEmitter<UserData>();
 
   userForm!: FormGroup;
 
@@ -83,7 +83,7 @@ export class UserCreationFormComponent implements OnInit {
     const { confirmPassword, ...userFormData } = this.userForm.value;
     console.log("Dati per la creazione dell'utente inviati:", userFormData)
 
-    this.formSubmit.emit(userFormData as UserCreationFormData)
+    this.formSubmit.emit(userFormData as UserData)
   }
 
   isFormFieldInvalid(field: string) {

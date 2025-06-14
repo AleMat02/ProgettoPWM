@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent } from '@ionic/angular/standalone';
-import { UserCreationFormData } from 'src/app/interfaces/user-creation-form.interface';
 import { UserCreationFormComponent } from 'src/app/components/user-creation-form/user-creation-form.component';
-import { RegisterService } from 'src/app/services/register.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserData } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-add-user',
@@ -21,10 +21,10 @@ export class AddUserPage {
 
   @ViewChild(UserCreationFormComponent) private userCreationForm!: UserCreationFormComponent
 
-  constructor(private registerService: RegisterService, private toastService: ToastService) { }
+  constructor(private authService: AuthService, private toastService: ToastService) { }
 
-  createUser(userData: UserCreationFormData) {
-    this.registerService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email).subscribe({
+  createUser(userData: UserData) {
+    this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(`Utente ${userData.username} aggiunto con successo!`);
 

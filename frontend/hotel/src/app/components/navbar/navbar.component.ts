@@ -4,7 +4,6 @@ import { Observable, Subscription } from 'rxjs';
 import { NavbarService } from '../../services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,21 +16,15 @@ import { SidebarService } from '../../services/sidebar.service';
     IonToolbar
   ]
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnDestroy {
   isExpanded = false;
   private sidebarSub!: Subscription;
 
   // title$: Observable<string>;
 
-  constructor(private sidebarService: SidebarService, private navbarService: NavbarService) {
+  constructor(private navbarService: NavbarService) {
     // this.title$ = this.navbarService.currentTitle$;
       // console.log(this.title$)
-  }
-
-  ngOnInit() {
-    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
-      state => this.isExpanded = state
-    );
   }
 
   ngOnDestroy() {

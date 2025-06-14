@@ -1,29 +1,27 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 import { NavbarService } from './services/navbar.service';
-import { SidebarService } from './services/sidebar.service';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, createOutline, sadOutline } from 'ionicons/icons';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet, SidebarComponent, NavbarComponent],
+  imports: [IonApp, IonRouterOutlet, NavbarComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  isSidebarExpanded = false;
-  private sidebarSub!: Subscription;
+  showPersonnelLayout = false;
   private routerSub!: Subscription;
 
   constructor(
-    private sidebarService: SidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private navbarService: NavbarService
+    private navbarService: NavbarService,
+    private authService: AuthService
   ) {
     //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
     addIcons({
@@ -44,16 +42,15 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnInit() {
-    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
-      state => (this.isSidebarExpanded = state)
-    );
+  async ngOnInit() {
+      this.routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+        this.showPersonnelLayout = event.urlAfterRedirects.startsWith('/personnel/')
+      })
+
+      await this.authService.loadUser()
   }
 
   ngOnDestroy() {
-    if (this.sidebarSub) {
-      this.sidebarSub.unsubscribe();
-    }
     if (this.routerSub) {
       this.routerSub.unsubscribe();
     }

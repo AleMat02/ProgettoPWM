@@ -4,7 +4,7 @@ export enum UserRole {
   Guest = "guest"
 }
 
-export interface UserCreationFormData {
+export interface UserData {
   username: string,
   password: string,
   email: string,
