@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonHeader, IonToolbar, IonLabel } from '@ionic/angular/standalone';
-import { Observable, Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { IonHeader, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
 import { NavbarService } from '../../services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,25 +8,19 @@ import { CommonModule } from '@angular/common';
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [ 
+  imports: [IonButtons,  
     CommonModule,
     RouterModule,
     IonHeader,
-    IonToolbar
+    IonToolbar,
+    IonMenuButton
   ]
 })
-export class NavbarComponent implements OnDestroy {
-  isExpanded = false;
-  private sidebarSub!: Subscription;
-
+export class NavbarComponent {
   // title$: Observable<string>;
 
   constructor(private navbarService: NavbarService) {
     // this.title$ = this.navbarService.currentTitle$;
       // console.log(this.title$)
-  }
-
-  ngOnDestroy() {
-    this.sidebarSub.unsubscribe();
   }
 }

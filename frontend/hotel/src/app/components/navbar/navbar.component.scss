@@ -1,21 +1,6 @@
 ion-header {
-  position: fixed;
-  top: 0;
-  left: var(--sidebar-width-collapsed);
-  right: 0;
-  height: var(--navbar-height); // Esplicita l'altezza
-  transition: left var(--sidebar-transition-duration) ease;
-  z-index: 999; // Leggermente inferiore alla sidebar se si sovrappongono
-  box-shadow: none; // Come da tuo codice
-  margin-bottom: var(--navbar-height);
-
-  &.expanded {
-    left: var(--sidebar-width-expanded);
-  }
-
   ion-toolbar {
     --background: #527fcd;
-    min-height: var(--navbar-height); // Assicura che la toolbar riempia l'header
-    align-content: center;
+    color: white;
   }
 }

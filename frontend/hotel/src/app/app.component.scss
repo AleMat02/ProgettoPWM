@@ -1,0 +1,58 @@
+ion-menu {
+    @media (min-width:767px) {
+        width: var(--sidebar-width);
+    }
+
+    border: none;
+
+    ion-content {
+        --background: var(--ion-color-secondary);
+        /* Sfondo principale del menu */
+
+        ion-list {
+            background: var(--ion-color-secondary);
+            padding: 0; //Allineo il primo elemento alla navbar
+        }
+
+        ion-item {
+            --min-height: var(--navbar-height); //rendo l'elemento della stessa altezza della navbar
+            --ripple-color: transparent; //Elimina la transizione di colore di default di Ionic quando clicco su un altro ion-item
+            --background: var(--ion-color-secondary);
+            color: #e8e8e8;
+
+            ion-icon {
+                color: #e8e8e8;
+            }
+
+            ion-label {
+                color: #e8e8e8;
+            }
+
+            &:hover {
+                --background: darkblue;
+                color: white;
+
+                ion-icon {
+                    color: white;
+                }
+
+                ion-label {
+                    color: white;
+                }
+            }
+
+            &.active {
+                --background: darkblue;
+                color: white;
+
+                ion-icon {
+                    color: white;
+                }
+
+                ion-label {
+                    color: white;
+                }
+            }
+        }
+    }
+}

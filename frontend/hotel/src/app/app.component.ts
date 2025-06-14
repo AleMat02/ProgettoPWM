@@ -1,17 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonLabel, IonMenu, IonItem, IonIcon, IonContent, IonList } from '@ionic/angular/standalone';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
-import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { NavbarService } from './services/navbar.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, createOutline, sadOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline } from 'ionicons/icons';
 import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet, NavbarComponent],
+  styleUrl: 'app.component.scss',
+  imports: [IonLabel, IonSplitPane, IonApp, IonRouterOutlet, NavbarComponent, IonMenu, IonItem, IonIcon, IonContent, IonList, RouterModule], //Senza router module non funzionerebbero le rotte nell'html
 })
 export class AppComponent implements OnInit, OnDestroy {
   showPersonnelLayout = false;
