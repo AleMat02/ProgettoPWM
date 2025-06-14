@@ -1,9 +1,4 @@
 <ion-header [translucent]="false" [class.expanded]="isExpanded">
-  <ion-toolbar *ngIf="(breadcrumbs$ | async)?.length">
-    <ion-breadcrumbs>
-      <ion-breadcrumb *ngFor="let crumb of (breadcrumbs$ | async)" [routerLink]="crumb.url">
-        <ion-label>{{ crumb.label }}</ion-label>
-      </ion-breadcrumb>
-    </ion-breadcrumbs>
+  <ion-toolbar>
   </ion-toolbar>
 </ion-header>

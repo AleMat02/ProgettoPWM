@@ -8,7 +8,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonCardContent, IonCardHea
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.scss'],
   standalone: true,
-  imports: [IonCardTitle, IonCard, IonCardHeader, IonCardContent, IonContent,IonTitle, CommonModule, FormsModule]
+  imports: [IonContent,IonTitle, CommonModule, FormsModule]
 })
 export class LandingPage implements OnInit {
 

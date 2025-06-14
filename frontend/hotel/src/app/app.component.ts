@@ -48,23 +48,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
       state => (this.isSidebarExpanded = state)
     );
-
-    this.routerSub = this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd), // Type guard per NavigationEnd
-      map(() => {
-        let route = this.activatedRoute;
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      }),
-      filter(route => route.outlet === 'primary'),
-      mergeMap(route => route.data), // route.data è Observable<Data>
-      // Evita emissioni multiple se i breadcrumbs non cambiano
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev['breadcrumbs']) === JSON.stringify(curr['breadcrumbs']))
-    ).subscribe((eventData: Data) => {
-      this.navbarService.setBreadcrumbs(eventData['breadcrumbs'] || []);
-    });
   }
 
   ngOnDestroy() {

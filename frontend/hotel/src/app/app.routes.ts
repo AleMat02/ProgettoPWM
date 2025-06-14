@@ -20,59 +20,26 @@ export const routes: Routes = [
   {
     path: 'personnel/dashboard', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
     loadComponent: () => import('./pages/personnel/dashboard/dashboard.page').then(m => m.DashboardPage),
-    data: {
-      title: 'Dashboard',
-      breadcrumbs: [{ label: 'Dashboard', url: 'personnel/dashboard' }]
-    }
   },
   {
     path: 'personnel/add-user',
     loadComponent: () => import('./pages/personnel/add-user/add-user.page').then(m => m.AddUserPage),
-    data: {
-      title: 'Crea Utente',
-      breadcrumbs: [{ label: 'Crea Utente', url: 'personnel/add-user' }]
-    }
   },
   {
     path: 'personnel/rooms',
-    loadComponent: () => import('./pages/rooms/rooms.page').then(m => m.RoomsPage),
-    data: {
-      title: 'Stanze',
-      breadcrumbs: [
-        { label: 'Stanze', url: 'personnel/rooms' }
-      ]
-    }
+    loadComponent: () => import('./pages/personnel/rooms/rooms.page').then(m => m.RoomsPage),
   },
   {
     path: 'personnel/rooms/add',
-    loadComponent: () => import('./pages/rooms/add-room/add-room.page').then(m => m.AddRoomPage),
-    data: {
-      title: 'Crea Stanza',
-      breadcrumbs: [
-        { label: 'Stanze', url: 'personnel/rooms' },
-        { label: 'Crea Stanza', url: '/add' }
-      ]
-    }
+    loadComponent: () => import('./pages/personnel/rooms/add-room/add-room.page').then(m => m.AddRoomPage),
   },
   {
     path: 'personnel/add-hotel',
     loadComponent: () => import('./pages/personnel/add-hotel/add-hotel.page').then(m => m.AddHotelPage),
-    data: {
-      title: 'Crea Hotel',
-      breadcrumbs: [
-        { label: 'Crea Hotel', url: '/add-hotel' }
-      ]
-    }
   },
   {
     path: 'nearby-hotels', //Sarà personnel?
     loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
-    data: {
-      title: 'Hotel nelle vicinanze',
-      breadcrumbs: [
-        { label: 'Hotel nelle vicinanze', url: '/nearby-hotels' }
-      ]
-    }
   },
   {
     path: '',

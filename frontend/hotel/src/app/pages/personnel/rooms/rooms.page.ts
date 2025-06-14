@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './rooms.page.html',
   styleUrls: ['./rooms.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonHeader, IonCardContent, IonHeader, IonItem, IonToolbar, IonContent, IonTitle, IonFab, IonList, CommonModule, FormsModule, RouterLink]
+  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink]
 })
 export class RoomsPage {
   rooms: RoomData[] = [];

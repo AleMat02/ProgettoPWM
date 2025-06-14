@@ -7,19 +7,11 @@ from flask_cors import CORS
 import utils
 
 app = Flask(__name__)
-CORS(app, origins=["*"], supports_credentials=True, allow_headers="*")
+CORS(app)
 secret_key = os.urandom(24)
 app.secret_key = secret_key
 DATABASE = 'database/hotel.db'
 session={}
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
-    return response
-
 
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
@@ -148,6 +140,59 @@ def register_user():
         if conn:
             conn.close()
 
+@app.route('/api/get_hotels', methods=['GET'])
+def get_hotels():
+    conn = get_db_connection()
+    try:
+        hotels = conn.execute('SELECT * FROM hotels').fetchall()
+        return jsonify({
+            "status": "success",
+            "data": {
+                "hotels": [dict(hotel) for hotel in hotels],
+                "count": len(hotels)
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Errore recupero hotel: {str(e)}"
+        }), 500
+
+@app.route('/api/remove_hotel/<hotel_id>', methods=['DELETE'])
+@role_required(['admin'])
+def remove_hotel():
+    hotel_id = request.args.get('hotel_id', type=int)
+    if not hotel_id:
+        return jsonify({
+            "status": "error",
+            "code": "HOTEL_ID Required",
+            "message": "ID hotel mancante"
+        }), 400
+
+    conn = get_db_connection()
+    try:
+        hotel = conn.execute('SELECT * FROM hotels WHERE id = ?', (hotel_id,)).fetchone()
+        if not hotel:
+            return jsonify({
+                "status": "error",
+                "code": "HOTEL NOT FOUND",
+                "message": "Hotel da rimuovere, non trovato"
+            }), 404
+        
+        conn.execute('DELETE FROM hotels WHERE id = ?', (hotel_id,))
+        conn.commit()
+        
+        return jsonify({
+            "status": "success",
+            "message": f"Hotel {hotel_id} eliminato con successo"
+        }), 200
+    except sqlite3.Error as e:
+        return jsonify({
+            "status": "error",
+            "code": "DATABASE_ERROR",
+            "message": f"Errore nel database: {str(e)}"
+        }), 500
+
 @app.route('/api/create_hotel', methods=['POST'])
 @role_required(['admin'])
 def create_hotel():
@@ -164,11 +209,8 @@ def create_hotel():
     latitude= data.get('latitude', 41.9028)
     longitude= data.get('longitude', 12.4964)
     description= data.get('description', 'Hotel di test per il progetto')
-    
-    
     conn = get_db_connection()
     try:
-        
         # Verifica se l'hotel esiste già
         existing_hotel = conn.execute(
             'SELECT * FROM hotels WHERE name = ? AND address = ? AND city = ?',
@@ -197,6 +239,7 @@ def create_hotel():
         }), 409
     finally:
         conn.close()
+        
 
 @app.route('/api/get_rooms', methods=['GET'])
 @role_required(['admin', 'reception'])
@@ -561,7 +604,6 @@ def check_room_availability(room_id):
 #     finally:
 #         conn.close()
         
-        
 @app.route('/api/hotels/<int:hotel_id>/available-rooms', methods=['GET'])
 def get_available_rooms(hotel_id):
     """
@@ -582,6 +624,7 @@ def get_available_rooms(hotel_id):
     conn = get_db_connection()
     hotel = conn.execute('SELECT id FROM hotels WHERE id = ?', (hotel_id,)).fetchone()
     if not hotel:
+        conn.close()
         return jsonify({
             "status": "error",
             "code": "HOTEL_NOT_FOUND",
@@ -589,17 +632,42 @@ def get_available_rooms(hotel_id):
         }), 404
 
     try:
+        # Nuovi controlli per le date
+        if check_in and check_out:
+            today = datetime.now().date()
+            
+            try:
+                check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
+                check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
+            except ValueError:
+                return jsonify({
+                    "status": "error",
+                    "code": "INVALID_DATE_FORMAT",
+                    "message": "Formato data non valido. Usare YYYY-MM-DD"
+                }), 400
+            
+            # Controllo che check-in non sia nel passato
+            if check_in_date < today:
+                return jsonify({
+                    "status": "error",
+                    "code": "INVALID_CHECKIN_DATE",
+                    "message": "La data di check-in non può essere nel passato"
+                }), 400
+            
+            # Controllo che check-out sia dopo check-in
+            if check_out_date <= check_in_date:
+                return jsonify({
+                    "status": "error",
+                    "code": "INVALID_DATE_RANGE",
+                    "message": "La data di check-out deve essere successiva alla data di check-in"
+                }), 400
+
         # Costruzione query base
         query = '''
-        SELECT CASE WHEN EXISTS (
-            SELECT 1 FROM bookings b
-            WHERE b.room_id = ?
-            AND b.status = 'confirmed'
-            AND (
-                (b.check_in < ? AND b.check_out > ?) OR
-                (b.check_in >= ? AND b.check_in < ?)
-            )
-        ) THEN 0 ELSE 1 END as is_available
+        SELECT r.*, h.name as hotel_name
+        FROM rooms r
+        JOIN hotels h ON r.hotel_id = h.id
+        WHERE r.hotel_id = ? AND r.is_available = 1
         '''
         params = [hotel_id]
 
@@ -617,13 +685,13 @@ def get_available_rooms(hotel_id):
             query += '''
             AND r.id NOT IN (
                 SELECT b.room_id FROM bookings b
-                WHERE b.room_id = r.id
-                AND b.status = 'confirmed'
+                WHERE b.status = 'confirmed'
                 AND (
                     (b.check_in < ? AND b.check_out > ?) OR
                     (b.check_in >= ? AND b.check_in < ?) OR
                     (b.check_out > ? AND b.check_out <= ?)
                 )
+            )
             '''
             params.extend([check_out, check_in, check_in, check_out, check_in, check_out])
 
@@ -645,13 +713,6 @@ def get_available_rooms(hotel_id):
             }
         })
 
-    except ValueError as e:
-        return jsonify({
-            "status": "error",
-            "code": "INVALID_DATE_FORMAT",
-            "message": "Formato data non valido. Usare YYYY-MM-DD"
-        }), 400
-        
     except Exception as e:
         return jsonify({
             "status": "error",
