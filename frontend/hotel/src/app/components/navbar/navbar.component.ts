@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IonHeader, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { NavbarService } from '../../services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [IonButtons,  
+  imports: [IonIcon, IonButton, IonButtons,  
     CommonModule,
     RouterModule,
     IonHeader,

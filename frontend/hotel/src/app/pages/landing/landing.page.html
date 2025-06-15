@@ -29,7 +29,8 @@
       </ion-text>
 
       <ion-button size="large" style="--background: #d4af37; --border-radius: 30px; 
-                  --padding-start: 40px; --padding-end: 40px; font-weight: 600;">
+                  --padding-start: 40px; --padding-end: 40px; font-weight: 600;" [routerLink]="['/bookings']" 
+          routerLinkActive="active">
         Prenota Ora
       </ion-button>
     </div>
@@ -62,14 +63,18 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <section style="padding-left: 16px; padding-right: 16px;">
+  <section style="padding-left: 16px; padding-right: 16px;margin-bottom: 100px;">
     <ion-grid>
       <ion-row>
         <ion-col size="4" style="align-content: center; text-align: center;">
           <ion-text class="ion-justify-content-start">
             <h1 style="margin-bottom: 0px;">Sei ancora indeciso?</h1><br />
           </ion-text>
-          <ion-button size="large" style="--background: #4737d4; --border-radius: 30px; font-weight: 600;">
+          <ion-button 
+          size="large" 
+          style="--background: #4737d4; --border-radius: 30px; font-weight: 600;" 
+          [routerLink]="['/rooms']" 
+          routerLinkActive="active">
             Visualizza Le Nostre Stanze
           </ion-button>
         </ion-col>

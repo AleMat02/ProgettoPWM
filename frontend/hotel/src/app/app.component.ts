@@ -5,7 +5,7 @@ import { filter, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { NavbarService } from './services/navbar.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline } from 'ionicons/icons';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -39,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
       businessOutline,
       addOutline,
       trashOutline,
-      sadOutline
+      sadOutline,
+      personCircleOutline
     })
   }
 
