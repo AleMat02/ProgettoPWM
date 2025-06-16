@@ -31,8 +31,6 @@ export class BookingsPage implements OnInit, OnDestroy {
     this.userSub = this.authService.user$.subscribe(user => {
       if(user) {
         this.isGuest = user.role === UserRole.Guest
-      } else {
-        this.toastService.presentErrorToast("C'è stato un errore nel recupero dell'utente.")
       }
     })
     //chiamata al servizio per ottenere le prenotazioni 

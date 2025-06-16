@@ -22,7 +22,7 @@ export class ProfileMenuComponent {
         private authService: AuthService
     ) {
         this.userSub = this.authService.user$.subscribe(user => {
-            this.isGuest = user?.role === UserRole.Guest;
+            if (user) this.isGuest = user.role === UserRole.Guest;
         })
     }
 
