@@ -1,0 +1,18 @@
+<ion-list lines="none">
+    @if(isGuest) {
+    <ion-item [button]="true" (click)="goToBookings()">
+        <ion-icon name="calendar-outline" slot="start" />
+        Le tue prenotazioni
+    </ion-item>
+    }
+    @else {
+    <ion-item [button]="true" (click)="goToPersonnel()">
+        <ion-icon name="lock-closed-outline" slot="start" />
+        Area del personale
+    </ion-item>
+    }
+    <ion-item [button]="true" (click)="logout()" color="danger">
+        <ion-icon name="log-out-outline" slot="start" />
+        Logout
+    </ion-item>
+</ion-list>

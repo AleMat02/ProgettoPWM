@@ -42,7 +42,7 @@ export class AuthService {
     }
 
     async logout() {
-        await Preferences.remove({ key: 'authData' }); //dalla navbar(?) deve reindirizzare alla pagina di login
+        await Preferences.remove({ key: 'authData' }); //reindirizza alla pagina di login dalla navbar
         this.userSubject.next(null);
     }
 

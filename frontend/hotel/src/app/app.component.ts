@@ -3,9 +3,8 @@ import { IonApp, IonRouterOutlet, IonSplitPane, IonLabel, IonMenu, IonItem, IonI
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { filter, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { NavbarService } from './services/navbar.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, bagOutline, lockClosedOutline } from 'ionicons/icons';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -21,7 +20,6 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private navbarService: NavbarService,
     private authService: AuthService
   ) {
     //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
@@ -40,7 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
       addOutline,
       trashOutline,
       sadOutline,
-      personCircleOutline
+      personCircleOutline,
+      lockClosedOutline
     })
   }
 

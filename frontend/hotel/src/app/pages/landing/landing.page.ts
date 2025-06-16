@@ -10,10 +10,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [IonCardHeader, IonCardContent, IonCardTitle, IonCard, IonCol, IonRow, IonGrid, IonContent, IonTitle, IonText, CommonModule, NgOptimizedImage, IonButton, RouterModule] //Angular raccomanda di utilizzare NgOptimizedImage per gestire le immagini al meglio
 })
-export class LandingPage implements OnInit {
+export class LandingPage {
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }
