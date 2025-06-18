@@ -36,6 +36,7 @@ export function getFormErrorMessage(form: FormGroup<any>, field: string): string
         if (control.errors['minlength']) return `E' necessario inserire almeno ${control.errors['minlength'].requiredLength} caratteri.`;
         if (control.errors['maxlength']) return `E' consentito inserire al massimo ${control.errors['maxlength'].requiredLength} caratteri.`;
         if (control.errors['pattern']) return 'Formato non valido.';
+        if (control.errors['check_out']) return "Data precedente al check_in non valida"
     }
     return null;
 }

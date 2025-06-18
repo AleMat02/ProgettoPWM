@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
+    path: 'guest-rooms/:hotelId',
+    loadComponent: () => import('./pages/guest-rooms/guest-rooms.page').then(m => m.GuestRoomsPage)
+  },
+  {
     path: 'bookings',
     loadComponent: () => import('./pages/bookings/bookings.page').then(m => m.BookingsPage)
   },
@@ -52,6 +56,10 @@ export const routes: Routes = [
   {
     path: 'nearby-hotels', //Sarà personnel?
     loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
+  },
+  {
+    path: 'personnel/booking-management',
+    loadComponent: () => import('./pages/personnel/booking-management/booking-management.page').then(m => m.BookingManagementPage)
   },
   {
     path: 'unauthorized',

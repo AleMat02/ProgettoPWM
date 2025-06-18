@@ -1,0 +1,23 @@
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1rem;
+
+  ion-item {
+    flex: 1 1 0;
+    margin-bottom: 0;
+  }
+
+  ion-button[type="submit"] {
+    margin-left: 1rem;
+    align-self: flex-end;
+    height: 40px;
+  }
+}
+
+// Per evitare padding extra su ion-content
+ion-content {
+  --padding-start: 0;
+  --padding-end: 0;
+}

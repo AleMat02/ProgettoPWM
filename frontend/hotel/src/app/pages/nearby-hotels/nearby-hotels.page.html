@@ -1,13 +1,33 @@
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
 <ion-content>
-  <ion-card class="map-card">
-    <!-- <ion-card-header style="align-items: center; --background: midnightblue">
-      <ion-card-title>MAPPA SERVIZI</ion-card-title>
-    </ion-card-header> -->
+  <!-- Selettore per il raggio -->
+  <div style="padding: 1em; display: flex; align-items: center; gap: 1em">
+    <label for="radius-select">Raggio di ricerca (km):</label>
+    <select
+      id="radius-select"
+      [ngModel]="positionData.radius"
+      (ngModelChange)="onRadiusChange($event)"
+    >
+      <option *ngFor="let r of [5,10,15,20,25,30]" [value]="r">{{r}}</option>
+    </select>
+  </div>
+
+  @if (hotels.length > 0) { @for (hotel of hotels; track hotel.id) {
+  <ion-card class="hotel-card">
     <ion-card-content>
-      <div id="map" class="map"></div>
+      <h2>{{hotel.name}}</h2>
+      <p>{{hotel.address}}</p>
+      <div class="hotel-details">
+        <p>Distanza: {{hotel.distance | number:'1.0-2'}} km</p>
+      </div>
     </ion-card-content>
+
+    <ion-button [routerLink]="['/guest-rooms', hotel.id]" >Stanze disponibili</ion-button>
   </ion-card>
+  } } @else {
+  <ion-card>
+    <div style="padding: 1em; text-align: center">
+      Nessun hotel nelle vicinanze trovato
+    </div>
+  </ion-card>
+  }
 </ion-content>
