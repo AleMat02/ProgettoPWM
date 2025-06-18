@@ -1,22 +1,42 @@
-<ion-content [fullscreen]="true">
-  <div class="flex-container">  
-    <div class="cb-box">
-      <div class="cb-title">Richiedi nuova prenotazione</div>
+<ion-content>
+    <ion-title>Crea nuova prenotazione</ion-title>
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+        <ion-item [class.invalid-item]="isFormFieldInvalid('room_id')">
+            <ion-label position="floating">ID Stanza</ion-label>
+            <ion-input type="number" formControlName="room_id"></ion-input>
+        </ion-item>
+        @if(isFormFieldInvalid("room_id"))
+        {
+        <ion-text color="danger">{{getFormErrorMessage("room_id")}}</ion-text>
+        }
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('check_in')">
+            <ion-label position="floating">Data Check-in</ion-label>
+            <ion-input type="date" 
+              formControlName="check_in"
+              [min]="today">
+            </ion-input>           
+        </ion-item>
+        @if(isFormFieldInvalid("check_in"))
+        {
+          <ion-text color="danger">{{getFormErrorMessage("check_in")}}</ion-text>
+        }
+          <ion-item [class.invalid-item]="isFormFieldInvalid('check_out')">
+            <ion-label position="floating">Data Check-out</ion-label>
+            <ion-input
+                type="date"
+                formControlName="check_out"
+                [min]="bookingForm.get('check_in')?.value">
+            </ion-input>
+          </ion-item>
+          @if(isFormFieldInvalid("check_out"))
+          {
+            <ion-text color="danger">{{getFormErrorMessage("check_out")}}</ion-text>
+          }   
+        <ion-button type="submit" expand="block" [disabled]="bookingForm.invalid">
+            Aggiungi Prenotazione
+        </ion-button>
+
         
-      <div class="input-group">
-        <ion-item>
-          <ion-input label="id_stanza" [(ngModel)]="this.room_id" ></ion-input>
-        </ion-item>  
-        <ion-item> 
-          <ion-input label="Check-in" type="date" [(ngModel)]="this.check_in_date"></ion-input>
-        </ion-item>
-        <ion-item> 
-          <ion-input label="Check-out" type="date" [(ngModel)]="this.check_out_date"></ion-input>
-        </ion-item>
-      </div>
-
-      <ion-button class="cb-btn" expand="block" size="full" fill="clear" (click)="createBookingRequest()">Richiedi</ion-button> 
-
-    </div>
-  </div>
+    </form>
 </ion-content>

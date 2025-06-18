@@ -37,21 +37,12 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 :root {
-    --navbar-height: 56px;
-    /* Altezza standard ion-toolbar */
-    --sidebar-width-collapsed: 60px;
-    --sidebar-width-expanded: 250px;
-    --sidebar-transition-duration: 0.3s;
+    --navbar-height: 56px; // Altezza standard ion-toolbar
+    --sidebar-width: 100px; //Larghezza del side-menu nelle rotte /personnel/
 }
 
 ion-router-outlet {
     margin-top: var(--navbar-height);
-    margin-left: var(--sidebar-width-collapsed);
-    transition: margin-left var(--sidebar-transition-duration) ease;
-
-    &.expanded {
-        margin-left: var(--sidebar-width-expanded);
-    }
 }
 
 .custom-toast {

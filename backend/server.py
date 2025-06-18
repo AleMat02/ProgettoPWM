@@ -7,25 +7,16 @@ from flask_cors import CORS
 import utils
 
 app = Flask(__name__)
-CORS(app, origins=["*"], supports_credentials=True, allow_headers="*")
+CORS(app)
 secret_key = os.urandom(24)
 app.secret_key = secret_key
 DATABASE = 'database/hotel.db'
 session={}
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
-    return response
-
-
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     return conn
-
 
 def role_required(roles):
     def decorator(f):
@@ -40,7 +31,6 @@ def role_required(roles):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
-
 
 #API LOGIN (OK)
 @app.route('/api/login', methods=['POST'])
@@ -114,6 +104,8 @@ def register_user():
     full_name = data.get("full_name")
     email = data.get("email")
     phone = data.get("phone")
+    hotel_id = data.get("hotel_id")
+    
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -131,11 +123,20 @@ def register_user():
         ).fetchone()
         if existing_email:
             return utils.error_response(message="Email già in uso")       
-        # 1. Inserisci utente
-        cursor.execute(
-            "INSERT INTO users (username, password, role, full_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)",
-            (username, password, role, full_name, email, phone)
-        )
+        
+        if role in ['admin', 'guest']:
+            cursor.execute(
+                "INSERT INTO users (username, password, role, full_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)",
+                (username, password, role, full_name, email, phone)
+            )
+        else:
+            
+            if not hotel_id:
+                return utils.error_response(message="Hotel ID richiesto per reception")
+            cursor.execute(
+                "INSERT INTO users (username, password, role, full_name, email, phone, hotel_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (username, password, role, full_name, email, phone, hotel_id)
+            )
 
         conn.commit()
         return utils.success_response(data={"user_id": data}, message="Registrazione avvenuta con successo")
@@ -147,6 +148,58 @@ def register_user():
     finally:
         if conn:
             conn.close()
+
+@app.route('/api/get_hotels', methods=['GET'])
+def get_hotels():
+    conn = get_db_connection()
+    try:
+        hotels = conn.execute('SELECT * FROM hotels').fetchall()
+        return jsonify({
+            "status": "success",
+            "data": {
+                "hotels": [dict(hotel) for hotel in hotels],
+                "count": len(hotels)
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Errore recupero hotel: {str(e)}"
+        }), 500
+
+@app.route('/api/remove_hotel/<int:hotel_id>', methods=['DELETE'])
+@role_required(['admin'])
+def remove_hotel(hotel_id):
+    if not hotel_id:
+        return jsonify({
+            "status": "error",
+            "code": "HOTEL_ID Required",
+            "message": "ID hotel mancante"
+        }), 400
+
+    conn = get_db_connection()
+    try:
+        hotel = conn.execute('SELECT * FROM hotels WHERE id = ?', (hotel_id,)).fetchone()
+        if not hotel:
+            return jsonify({
+                "status": "error",
+                "code": "HOTEL NOT FOUND",
+                "message": "Hotel da rimuovere, non trovato"
+            }), 404
+        
+        conn.execute('DELETE FROM hotels WHERE id = ?', (hotel_id,))
+        conn.commit()
+        
+        return jsonify({
+            "status": "success",
+            "message": f"Hotel {hotel_id} eliminato con successo"
+        }), 200
+    except sqlite3.Error as e:
+        return jsonify({
+            "status": "error",
+            "code": "DATABASE_ERROR",
+            "message": f"Errore nel database: {str(e)}"
+        }), 500
 
 @app.route('/api/create_hotel', methods=['POST'])
 @role_required(['admin'])
@@ -164,11 +217,8 @@ def create_hotel():
     latitude= data.get('latitude', 41.9028)
     longitude= data.get('longitude', 12.4964)
     description= data.get('description', 'Hotel di test per il progetto')
-    
-    
     conn = get_db_connection()
     try:
-        
         # Verifica se l'hotel esiste già
         existing_hotel = conn.execute(
             'SELECT * FROM hotels WHERE name = ? AND address = ? AND city = ?',
@@ -197,6 +247,7 @@ def create_hotel():
         }), 409
     finally:
         conn.close()
+        
 
 @app.route('/api/get_rooms', methods=['GET'])
 @role_required(['admin', 'reception'])
@@ -332,64 +383,60 @@ def delete_room_by_details():
     finally:
         conn.close()
 
-# AGGIUNGI PRENOTAZIONE (OK)
-@app.route('/api/bookings', methods=['POST'])
-@role_required(['guest'])
-def create_booking_request():
-    data = request.get_json()
-    
-    # Validazione dati
-    required_fields = ['room_id', 'check_in', 'check_out']
-    if not all(field in data for field in required_fields):
-        return jsonify({"status": "error", "message": "Campi mancanti"}), 400
+@app.route('/api/users/bookings', methods=['GET'])
+@role_required(['guest', 'reception', 'admin'])  # Decoratore per controllare i permessi
+def get_user_bookings():
+    """
+    Ottiene lo storico completo delle prenotazioni di un utente
+    Parametri opzionali:
+    - user_id: (solo admin/reception) ID dell'utente da cercare
+    - status: filtra per stato (confirmed, canceled, completed)
+    - limit: numero massimo di risultati
+    - offset: paginazione
+    """
+    # Verifica permessi e ottieni user_id corretto
+    if session['role'] in ['admin', 'reception'] and 'user_id' in request.args:
+        user_id = request.args.get('user_id', type=int)
+        
+    else:
+        user_id = session['user_id']
 
     conn = get_db_connection()
     try:
-        # Verifica disponibilità stanza
-        room = conn.execute('''
-        SELECT * FROM rooms 
-        WHERE id = ? AND is_available = 1
-        ''', (data['room_id'],)).fetchone()
+        query = '''
+        SELECT b.id, b.check_in, b.check_out, b.total_price, b.status, b.created_at,
+               r.room_number, r.room_type, r.description as room_description,
+               h.name as hotel_name, h.address as hotel_address, h.city as hotel_city,
+               CASE WHEN b.is_offer = 1 THEN 'yes' ELSE 'no' END as was_offer
+        FROM bookings b
+        JOIN rooms r ON b.room_id = r.id
+        JOIN hotels h ON r.hotel_id = h.id
+        WHERE b.guest_id = ?
+        '''
+        bookings = conn.execute(query, [user_id]).fetchall()
 
-        if not room:
-            return jsonify({"status": "error", "message": "Stanza non disponibile"}), 400
-
-        # Calcola prezzo
-        nights = (datetime.strptime(data['check_out'], '%Y-%m-%d') - 
-                 datetime.strptime(data['check_in'], '%Y-%m-%d')).days
-        total_price = nights * room['price_per_night']
-
-        # Crea prenotazione in stato pending
-        conn.execute('''
-        INSERT INTO bookings (room_id, guest_id, check_in, check_out, total_price, status)
-        VALUES (?, ?, ?, ?, ?, 'pending')
-        ''', (
-            data['room_id'],
-            session['user_id'],
-            data['check_in'],
-            data['check_out'],
-            total_price
-        ))
-
-        conn.commit()
         return jsonify({
             "status": "success",
-            "message": "Richiesta prenotazione inviata, in attesa di approvazione"
-        }), 201
+            "data": {
+                "bookings": [dict(booking) for booking in bookings],
+                }
+            })
 
     except Exception as e:
-        conn.rollback()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({
+            "status": "error",
+            "code": "SERVER_ERROR",
+            "message": str(e)
+        }), 500
+        
     finally:
         conn.close()
 
 
-# PROCESSA UNA PRENOTAZIONE (OK)
 @app.route('/api/bookings/<int:booking_id>/process', methods=['PUT'])
 @role_required(['reception', 'admin'])
 def process_booking(booking_id):
     data = request.get_json()
-    print(data, booking_id)
     action = data.get('action')  # 'approve' o 'reject'
 
     if action not in ['approve', 'reject']:
@@ -397,7 +444,6 @@ def process_booking(booking_id):
 
     conn = get_db_connection()
     try:
-        # Verifica prenotazione esistente
         booking = conn.execute('''
         SELECT * FROM bookings WHERE id = ? AND status = 'pending'
         ''', (booking_id,)).fetchone()
@@ -405,34 +451,50 @@ def process_booking(booking_id):
         if not booking:
             return jsonify({"status": "error", "message": "Prenotazione non trovata o già processata"}), 404
 
+        # Verifica che la stanza sia ancora disponibile (solo per approvazione)
+        if action == 'approve':
+            overlapping = conn.execute('''
+            SELECT 1 FROM bookings 
+            WHERE room_id = ? 
+            AND status = 'confirmed'
+            AND id != ?
+            AND (
+                (check_in < ? AND check_out > ?) OR
+                (check_in >= ? AND check_in < ?) OR
+                (check_out > ? AND check_out <= ?)
+            )
+            ''', (
+                booking['room_id'],
+                booking_id,
+                booking['check_out'], booking['check_in'],
+                booking['check_in'], booking['check_out'],
+                booking['check_in'], booking['check_out']
+            )).fetchone()
+
+            if overlapping:
+                return jsonify({
+                    "status": "error",
+                    "message": "La stanza non è più disponibile per le date richieste"
+                }), 400
+
         # Aggiorna stato
         new_status = 'confirmed' if action == 'approve' else 'rejected'
-        
         conn.execute('''
         UPDATE bookings 
         SET status = ?, reception_id = ?, processed_at = CURRENT_TIMESTAMP
         WHERE id = ?
         ''', (new_status, session['user_id'], booking_id))
 
-        # Se approvata, marca stanza come non disponibile
-        if action == 'approve':
-            conn.execute('''
-            UPDATE rooms SET is_available = 0 WHERE id = ?
-            ''', (booking['room_id'],))
-
         conn.commit()
         return jsonify({
             "status": "success",
             "message": f"Prenotazione {new_status}"
         })
-
     except Exception as e:
         conn.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
     finally:
         conn.close()
-        
-
 from math import radians, sin, cos, acos
 
 @app.route('/api/hotels/nearby', methods=['GET'])
@@ -519,91 +581,35 @@ def check_room_availability(room_id):
         conn.close()
 
 
-# @app.route('/api/rooms/available', methods=['GET'])
-# def get_available_rooms():
-#     check_in = request.args.get('check_in')
-#     check_out = request.args.get('check_out')
-#     capacity = request.args.get('capacity')
-
-#     conn = get_db_connection()
-#     try:
-#         query = '''
-#         SELECT r.* FROM rooms r
-#         WHERE r.is_available = 1
-#         '''
-#         params = []
-
-#         if capacity:
-#             query += ' AND r.capacity >= ?'
-#             params.append(int(capacity))
-
-#         if check_in and check_out:
-#             query += '''
-#             AND r.id NOT IN (
-#                 SELECT b.room_id FROM bookings b
-#                 WHERE (
-#                     (b.check_in <= ? AND b.check_out >= ?)
-#                     OR (b.check_in >= ? AND b.check_in <= ?)
-#                 )
-#                 AND b.status = 'confirmed'
-#             )
-#             '''
-#             params.extend([check_out, check_in, check_in, check_out])
-
-#         rooms = conn.execute(query, params).fetchall()
-#         return jsonify({
-#             "status": "success",
-#             "data": {
-#                 "rooms": [dict(room) for room in rooms],
-#                 "count": len(rooms)
-#             }
-#         })
-#     finally:
-#         conn.close()
-        
-        
 @app.route('/api/hotels/<int:hotel_id>/available-rooms', methods=['GET'])
 def get_available_rooms(hotel_id):
-    """
-    Ottiene tutte le camere disponibili in un hotel specifico
-    Parametri:
-    - check_in (opzionale): data di check-in (YYYY-MM-DD)
-    - check_out (opzionale): data di check-out (YYYY-MM-DD)
-    - room_type (opzionale): filtra per tipo camera (single, double, suite, family)
-    - min_capacity (opzionale): capacità minima della camera
-    """
-    # Validazione parametri
     check_in = request.args.get('check_in')
     check_out = request.args.get('check_out')
     room_type = request.args.get('room_type')
     min_capacity = request.args.get('min_capacity', type=int)
     
-    # Verifica che l'hotel esista
     conn = get_db_connection()
-    hotel = conn.execute('SELECT id FROM hotels WHERE id = ?', (hotel_id,)).fetchone()
-    if not hotel:
-        return jsonify({
-            "status": "error",
-            "code": "HOTEL_NOT_FOUND",
-            "message": "Hotel non trovato"
-        }), 404
-
     try:
-        # Costruzione query base
+        
+        hotels= conn.execute('SELECT * FROM hotels WHERE id = ?', (hotel_id,)).fetchone()
+        if not hotels:
+            return jsonify({
+                "status": "error",
+                "code": "HOTEL_NOT_FOUND",
+                "message": "Hotel non trovato"
+            }), 404
+        
+        
+        # Query base per tutte le stanze dell'hotel
         query = '''
-        SELECT CASE WHEN EXISTS (
-            SELECT 1 FROM bookings b
-            WHERE b.room_id = ?
-            AND b.status = 'confirmed'
-            AND (
-                (b.check_in < ? AND b.check_out > ?) OR
-                (b.check_in >= ? AND b.check_in < ?)
-            )
-        ) THEN 0 ELSE 1 END as is_available
+        SELECT r.*, h.name as hotel_name
+        FROM rooms r
+        JOIN hotels h ON r.hotel_id = h.id
+        WHERE r.hotel_id = ?
         '''
         params = [hotel_id]
 
-        # Aggiungi filtri opzionali
+        # Filtri opzionali
         if room_type:
             query += ' AND r.room_type = ?'
             params.append(room_type)
@@ -612,11 +618,11 @@ def get_available_rooms(hotel_id):
             query += ' AND r.capacity >= ?'
             params.append(min_capacity)
 
-        # Filtro per disponibilità nelle date specificate
+        # Se sono specificate le date, filtra per disponibilità
         if check_in and check_out:
             query += '''
-            AND r.id NOT IN (
-                SELECT b.room_id FROM bookings b
+            AND NOT EXISTS (
+                SELECT 1 FROM bookings b
                 WHERE b.room_id = r.id
                 AND b.status = 'confirmed'
                 AND (
@@ -624,10 +630,10 @@ def get_available_rooms(hotel_id):
                     (b.check_in >= ? AND b.check_in < ?) OR
                     (b.check_out > ? AND b.check_out <= ?)
                 )
+            )
             '''
             params.extend([check_out, check_in, check_in, check_out, check_in, check_out])
 
-        # Esecuzione query
         rooms = conn.execute(query, params).fetchall()
         
         return jsonify({
@@ -635,82 +641,96 @@ def get_available_rooms(hotel_id):
             "data": {
                 "hotel_id": hotel_id,
                 "available_rooms": [dict(room) for room in rooms],
-                "count": len(rooms),
-                "filters": {
-                    "check_in": check_in,
-                    "check_out": check_out,
-                    "room_type": room_type,
-                    "min_capacity": min_capacity
-                }
+                "count": len(rooms)
             }
         })
-
-    except ValueError as e:
-        return jsonify({
-            "status": "error",
-            "code": "INVALID_DATE_FORMAT",
-            "message": "Formato data non valido. Usare YYYY-MM-DD"
-        }), 400
-        
-    except Exception as e:
-        return jsonify({
-            "status": "error",
-            "code": "SERVER_ERROR",
-            "message": str(e)
-        }), 500
-        
     finally:
         conn.close()
         
-@app.route('/api/users/bookings', methods=['GET'])
-@role_required(['guest', 'reception', 'admin'])  # Decoratore per controllare i permessi
-def get_user_bookings():
-    """
-    Ottiene lo storico completo delle prenotazioni di un utente
-    Parametri opzionali:
-    - user_id: (solo admin/reception) ID dell'utente da cercare
-    - status: filtra per stato (confirmed, canceled, completed)
-    - limit: numero massimo di risultati
-    - offset: paginazione
-    """
-    # Verifica permessi e ottieni user_id corretto
-    if session['role'] in ['admin', 'reception'] and 'user_id' in request.args:
-        user_id = request.args.get('user_id', type=int)
         
-    else:
-        user_id = session['user_id']
+@app.route('/api/bookings', methods=['POST'])
+@role_required(['admin','guest', 'reception'])
+def create_booking_request():
+    data = request.get_json()
+    
+    print(data)
+    
+    required_fields = ['check_in', 'check_out']
+    if not all(field in data for field in required_fields):
+        return jsonify({"status": "error", "message": "Campi mancanti"}), 400
 
     conn = get_db_connection()
     try:
-        # Query base
-        query = '''
-        SELECT b.id, b.check_in, b.check_out, b.total_price, b.status, b.created_at,
-               r.room_number, r.room_type, r.description as room_description,
-               h.name as hotel_name, h.address as hotel_address, h.city as hotel_city,
-               CASE WHEN b.is_offer = 1 THEN 'yes' ELSE 'no' END as was_offer
-        FROM bookings b
-        JOIN rooms r ON b.room_id = r.id
-        JOIN hotels h ON r.hotel_id = h.id
-        WHERE b.guest_id = ? AND b.status != 'pending'
-        '''
+        
+        if data.get('room_id'):
+            
+            room = conn.execute('SELECT * FROM rooms WHERE id = ?', (data['room_id'],)).fetchone()
+            if not room:
+                return jsonify({"status": "error", "message": "Stanza non trovata"}), 404
+            data['room_id'] = room['id']
+        
+        if data.get('hotel_name') and data.get("room_number"):
+            
+            hotel_id = conn.execute('SELECT id FROM hotels WHERE name = ?', (data['hotel_name'],)).fetchone()
+            if not hotel_id:
+                return jsonify({"status": "error", "message": "Hotel non trovato"}), 404
+            
+            room = conn.execute('''
+            SELECT * FROM rooms 
+            WHERE room_number = ? AND hotel_id = ?
+            ''', (data['room_number'], hotel_id['id'])).fetchone()
+            if not room:
+                return jsonify({"status": "error", "message": "Stanza non trovata per l'hotel specificato"}), 404
+            data['room_id'] = room['id']
+            
+        
+        
+        # Verifica disponibilità stanza (controlla solo prenotazioni esistenti)
+        overlapping = conn.execute('''
+        SELECT 1 FROM bookings 
+        WHERE room_id = ? 
+        AND status = 'confirmed'
+        AND (
+            (check_in < ? AND check_out > ?) OR
+            (check_in >= ? AND check_in < ?) OR
+            (check_out > ? AND check_out <= ?)
+        )
+        ''', (
+            data['room_id'],
+            data['check_out'], data['check_in'], 
+            data['check_in'], data['check_out'],  
+            data['check_in'], data['check_out']   
+        )).fetchone()
 
-        # Esecuzione query
-        bookings = conn.execute(query, [user_id]).fetchall()
+        if overlapping:
+            return jsonify({"status": "error", "message": "Stanza non disponibile per le date selezionate"}), 400
 
+        # Calcola prezzo e crea prenotazione
+        room = conn.execute('SELECT price_per_night FROM rooms WHERE id = ?', 
+                          (data['room_id'],)).fetchone()
+        nights = (datetime.strptime(data['check_out'], '%Y-%m-%d') - 
+                 datetime.strptime(data['check_in'], '%Y-%m-%d')).days
+        total_price = nights * room['price_per_night']
+
+        conn.execute('''
+        INSERT INTO bookings (room_id, guest_id, check_in, check_out, total_price, status)
+        VALUES (?, ?, ?, ?, ?, 'pending')
+        ''', (
+            data['room_id'],
+            session['user_id'],
+            data['check_in'],
+            data['check_out'],
+            total_price
+        ))
+
+        conn.commit()
         return jsonify({
             "status": "success",
-            "data": {
-                "bookings": [dict(booking) for booking in bookings],
-                }
-            })
-
+            "message": "Richiesta prenotazione inviata"
+        }), 201
     except Exception as e:
-        return jsonify({
-            "status": "error",
-            "code": "SERVER_ERROR",
-            "message": str(e)
-        }), 500
-        
+        conn.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
     finally:
         conn.close()
         
@@ -729,35 +749,41 @@ def get_pending_bookings():
         hotel_id = request.args.get('hotel_id', type=int)
         from_date = request.args.get('from_date')
         limit = request.args.get('limit', default=50, type=int)
-
+        
         conn = get_db_connection()
         
-        # Query base con JOIN per ottenere tutti i dettagli
+        user_role = session['role']
+        user_hotel_id = None
+        
+        # Se è un receptionist, ottieni solo le prenotazioni del suo hotel
+        if user_role == 'reception':
+            user_hotel_id = conn.execute(
+                'SELECT hotel_id FROM users WHERE id = ?', 
+                (session['user_id'],)
+            ).fetchone()['hotel_id']
+        
         query = '''
-        SELECT b.id, b.check_in, b.check_out, b.total_price, b.created_at,
-               r.room_number, r.room_type, r.capacity,
-               h.name as hotel_name, h.id as hotel_id,
-               u.full_name as guest_name, u.id as guest_id
+        SELECT b.*, r.*, h.name as hotel_name
         FROM bookings b
         JOIN rooms r ON b.room_id = r.id
         JOIN hotels h ON r.hotel_id = h.id
-        JOIN users u ON b.guest_id = u.id
         WHERE b.status = 'pending'
         '''
         params = []
-
-        # Filtri aggiuntivi
-        if hotel_id:
-            query += ' AND r.hotel_id = ?'
-            params.append(hotel_id)
         
+        if user_hotel_id:
+            query += ' AND r.hotel_id = ?'
+            params.append(user_hotel_id)
+        
+
         if from_date:
+
             query += ' AND DATE(b.created_at) >= ?'
             params.append(from_date)
 
 
         # Esecuzione query
-        pending_bookings = conn.execute(query).fetchall()
+        pending_bookings = conn.execute(query, params).fetchall()
 
         return jsonify({
             "status": "success",
@@ -770,6 +796,32 @@ def get_pending_bookings():
         return jsonify({
             "status": "error",
             "message": f"Errore nel recupero prenotazioni: {str(e)}"
+        }), 500
+    finally:
+        conn.close()
+        
+@app.route('/api/hotels/<int:hotel_id>/receptionists', methods=['GET'])
+@role_required(['admin', 'reception'])
+def get_hotel_receptionists(hotel_id):
+    conn = get_db_connection()
+    try:
+        receptionists = conn.execute('''
+            SELECT id, username, full_name, email, phone 
+            FROM users 
+            WHERE role = 'reception' AND hotel_id = ?
+        ''', (hotel_id,)).fetchall()
+        
+        return jsonify({
+            "status": "success",
+            "data": {
+                "receptionists": [dict(receptionist) for receptionist in receptionists],
+                "count": len(receptionists)
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Errore recupero receptionist: {str(e)}"
         }), 500
     finally:
         conn.close()

@@ -1,7 +1,7 @@
 export interface AddHotelData {
     name?: string,
-    address?: string,
     city?: string,
+    address?: string,
     latitude?: number,
     longitude?: number,
     description?: string

@@ -1,3 +1,87 @@
-<ion-content [fullscreen]="true">
-  <ion-title>Le tue prenotazioni</ion-title>
+<ion-content [fullscreen]="false" style="--ion-background-color:#f8fafc;">
+  <div style="height:900px; position: relative; overflow: hidden;">
+    <!-- fill con NgOptimizedImage richiede position:relative nel parent -->
+
+    <!-- Immagine di sfondo con effetto opaco -->
+    <div
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 1;">
+    </div>
+
+    <img ngSrc="../../assets/background-image.jpg" style="object-fit: cover; filter: brightness(0.7);" fill priority />
+    <!--object-fit: cover mantiene le proporzioni dell'immagine evitando distorsioni-->
+
+    <!-- Contenuto testuale -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                text-align: center; color: white; z-index: 2; width: 90%; max-width: 800px; 
+                padding: 20px;">
+
+      <ion-text style="font-size: 2.8rem; letter-spacing: 2px; 
+                 overflow-wrap: break-word;text-transform: uppercase;">
+        Benvenuti all'Hotel Forese
+      </ion-text> <!--Non uso IonTitle perché non supporta il break-word-->
+
+      <div style="width: 100px; height: 2px; background: #d4af37; margin: 25px auto 25px;"></div>
+
+      <ion-text style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px; 
+                font-family: 'Georgia', serif; display: block;">
+        Un'oasi di lusso dove l'eleganza incontra il comfort. Lasciati coccolare dalla nostra
+        ospitalità esclusiva e da servizi su misura.
+      </ion-text>
+
+      <ion-button size="large" style="--background: #d4af37; --border-radius: 30px; 
+                  --padding-start: 40px; --padding-end: 40px; font-weight: 600;" [routerLink]="['/bookings']" 
+          routerLinkActive="active">
+        Prenota Ora
+      </ion-button>
+    </div>
+  </div>
+  <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;margin-bottom: 30px;">
+    <ion-text style="padding: 20px">
+      <h1>Perché Scegliere Il Nostro Hotel?</h1>
+    </ion-text>
+  </div>
+  <ion-card style="margin-bottom:120px; background-color: white;">
+    <!-- <ion-card-header><ion-card-title class="ion-text-center"><h1>Perché Scegliere Il Nostro Hotel?</h1></ion-card-title></ion-card-header>
+     -->
+    <ion-card-content style="color: black; padding-left: 40px; padding-right: 40px;">
+      <ion-grid>
+        <ion-row> <!--La size totale di una row è 12-->
+          <ion-col size="4" style="height: 500px;margin-left: 0;margin-right: 5%;">
+            <img ngSrc="../../assets/example-room.jpg" fill style="object-fit: cover; border-radius: 30px;">
+          </ion-col>
+          <ion-col size="7" style="align-content: center;">
+            <ion-text style="font-size: 1.5rem; line-height: 1.6; margin-bottom: 25px; 
+                font-family: 'Georgia', serif" class="ion-justify-content-start">
+              L'Hotel Forese è un luogo accogliente per grandi e piccini.<br /><br />
+              Grazie alle nostre ampie camere ricche di ogni comfort e ad un personale esperto ed altamente qualificato,
+              il nostro hotel può vantare clienti sempre soddisfatti ed un servizio fuori dall'ordinario!<br /><br />
+              Vuoi rilassarti? Divertirti? Svagarti? Abbiamo tutto ciò che fa per te!<br />
+              Vieni a trovarci, e vivi un soggiorno da sogno!
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <section style="padding-left: 16px; padding-right: 16px;margin-bottom: 100px;">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" style="align-content: center; text-align: center;">
+          <ion-text class="ion-justify-content-start">
+            <h1 style="margin-bottom: 0px;">Sei ancora indeciso?</h1><br />
+          </ion-text>
+          <ion-button 
+          size="large" 
+          style="--background: #4737d4; --border-radius: 30px; font-weight: 600;" 
+          [routerLink]="['/rooms']" 
+          routerLinkActive="active">
+            Visualizza Le Nostre Stanze
+          </ion-button>
+        </ion-col>
+        <ion-col size="7" style="margin-right: 0; margin-left: 5%; height: 500px;">
+          <img ngSrc="../../assets/example-pool.jpg" fill style="object-fit: cover; border-radius: 30px;">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
 </ion-content>

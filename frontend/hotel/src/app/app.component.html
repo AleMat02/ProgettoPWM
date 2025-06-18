@@ -1,5 +1,62 @@
 <ion-app>
-  <app-navbar></app-navbar>
-  <app-sidebar></app-sidebar>
-  <ion-router-outlet [class.expanded]="isSidebarExpanded"></ion-router-outlet>
+  @if(showPersonnelLayout) {
+  <ion-split-pane contentId="main-content" when="md"> <!--Su mobile compare un hamburger menu-->
+    <ion-menu contentId="main-content" type="overlay">
+      <!--Vogliamo che il contenuto venga coperto dal menù una volta aperto-->
+      <ion-content>
+        <ion-list lines="none">
+
+          <ion-item button routerLink="/personnel/dashboard" routerLinkActive="active">
+            <ion-icon name="home-outline" slot="start"></ion-icon>
+            <ion-label>Dashboard</ion-label>
+          </ion-item>
+
+          <ion-item button routerLink="/personnel/add-user" routerLinkActive="active">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            <ion-label>Crea Utente</ion-label>
+          </ion-item>
+
+          <ion-item button routerLink="/personnel/hotels" routerLinkActive="active">
+            <ion-icon name="business-outline" slot="start"></ion-icon>
+            <ion-label>Hotel</ion-label>
+          </ion-item>
+
+          <ion-item button routerLink="/personnel/rooms" routerLinkActive="active">
+            <ion-icon name="bed-outline" slot="start"></ion-icon>
+            <ion-label>Stanze</ion-label>
+          </ion-item>
+
+          <ion-item button routerLink="/nearby-hotels" routerLinkActive="active">
+            <ion-icon name="compass-outline" slot="start"></ion-icon>
+            <ion-label>Hotel nelle vicinanze</ion-label>
+          </ion-item>
+
+          <ion-item button routerLink="/bookings" routerLinkActive="active">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label>Prenotazioni</ion-label>
+          </ion-item>
+
+          <!-- *<ion-item button> Deve essere spostata alla navbar
+            <ion-icon name="log-out-outline" slot="start"></ion-icon>
+            <ion-label class="logout">Esci</ion-label>
+          </ion-item> -->
+
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <div class="ion-page" id="main-content">
+      <app-navbar></app-navbar>
+      <ion-router-outlet></ion-router-outlet>
+    </div>
+
+  </ion-split-pane>
+  }
+  @else {
+  <div class="ion-page">
+    <app-navbar></app-navbar>
+    <ion-router-outlet></ion-router-outlet>
+  </div>
+  }
+
 </ion-app>

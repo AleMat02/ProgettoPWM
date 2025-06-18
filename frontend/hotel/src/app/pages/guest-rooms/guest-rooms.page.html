@@ -1,0 +1,74 @@
+<ion-content>
+
+  <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
+
+
+    <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_name')">
+      <ion-label position="floating">Hotel</ion-label>
+      <ion-select formControlName="hotel_name" interface="popover" value="single">
+         <ion-select-option *ngFor="let hotel of hotels" [value]="hotel.name">
+        {{ hotel.name }}
+        </ion-select-option>
+      </ion-select>
+      <ion-text *ngIf="isFormFieldInvalid('hotel_name')" color="danger">
+        {{getFormErrorMessage("hotel_name")}}
+      </ion-text>
+    </ion-item>
+
+    <ion-item [class.invalid-item]="isFormFieldInvalid('check_in')">
+      <ion-label position="floating">check_in</ion-label>
+      <ion-input type="date" formControlName="check_in" [min]="today"></ion-input>
+    </ion-item>
+    <ng-container *ngIf="isFormFieldInvalid('check_in')">
+      <ion-text color="danger">{{getFormErrorMessage('check_in')}}</ion-text>
+    </ng-container>
+
+    <ion-item [class.invalid-item]="isFormFieldInvalid('check_out')">
+      <ion-label position="floating">check_out</ion-label>
+      <ion-input type="date" formControlName="check_out" [min]="availabilityForm.get('check_in')?.value"></ion-input>
+    </ion-item>
+    <ng-container *ngIf="isFormFieldInvalid('check_out')">
+      <ion-text color="danger">{{getFormErrorMessage('check_out')}}</ion-text>
+    </ng-container>
+
+    <ion-item [class.invalid-item]="isFormFieldInvalid('room_type')">
+      <ion-label position="floating">Tipo Stanza</ion-label>
+      <ion-select formControlName="room_type" interface="popover" value="single">
+        <ion-select-option *ngFor="let roomType of roomTypes;" [value]="roomType">
+          {{roomType | titlecase}}
+        </ion-select-option>
+      </ion-select>
+      <ion-text *ngIf="isFormFieldInvalid('room_type')" color="danger">
+        {{getFormErrorMessage("room_type")}}
+      </ion-text>
+    </ion-item>
+
+
+
+    <ion-button type="submit" expand="block" [disabled]="availabilityForm.invalid">
+      filtra
+    </ion-button>
+  </form>
+
+  <div style="text-align: center; margin-top: 32px;">
+    <ion-title>Le nostre stanze</ion-title>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let room of rooms">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Stanza {{ room.room_number }}</ion-card-title>
+            <ion-card-subtitle>{{ room.room_type }} - Capienza: {{ room.capacity }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div>Prezzo a notte: {{ room.price_per_night }}€</div>
+            <div>Descrizione: {{ room.description || 'N/A' }}</div>
+            <div>Hotel: {{ room.hotel_name }}</div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

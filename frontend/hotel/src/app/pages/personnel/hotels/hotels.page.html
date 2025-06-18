@@ -1,0 +1,66 @@
+<ion-content [fullscreen]="false">
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end"> <!--Forse è il caso di mettere tutto da ion-fab fino all'ultimo else in un componente? Lo uso anche in rooms-->
+    <ion-fab-button [routerLink]="['./add']" color="secondary">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  @if (loading) {
+  <ion-list>
+    @for (item of [1, 2, 3]; track item) {
+    <ion-card class="skeleton-card">
+      <ion-card-header>
+        <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  } @else {
+  @if (!hotels || hotels.length === 0) {
+  <div class="empty-state">
+    <ion-icon name="sad-outline" color="medium"></ion-icon>
+    <h1>Nessun hotel trovato</h1>
+    <p>Inizia creandone uno.</p>
+  </div>
+  } @else {
+  <ion-list>
+    @for (hotel of hotels; track hotel.id) {
+    <ion-card class="hotel-card">
+      <ion-card-header>
+        <ion-card-title>Nome: {{ hotel.name || 'Nessun nome' }}</ion-card-title>
+        <ion-card-subtitle>ID: {{ hotel.id }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>
+            <p><strong>Città:</strong> {{ hotel.city || 'Nessuna città'}}</p>
+            <p><strong>Indirizzo:</strong> {{ hotel.address || 'Nessun indirizzo'}}</p>
+            <p><strong>Descrizione:</strong> {{ hotel.description || 'Nessuna descrizione' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-chip color="primary" slot="start" style="margin-left: 0px;">
+            Latitudine: {{ hotel.latitude || 'Nessuna' }}
+          </ion-chip>
+          <ion-chip color="secondary" slot="start" style="margin-left: 0px;">
+            Longitudine: {{ hotel.longitude || 'Nessuna' }}
+          </ion-chip>
+          <ion-buttons slot="end">
+            <ion-button color="danger" (click)="deleteHotel(hotel.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+  }
+  }
+</ion-content>

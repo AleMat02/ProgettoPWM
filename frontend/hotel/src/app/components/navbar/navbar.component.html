@@ -1,9 +1,28 @@
-<ion-header [translucent]="false" [class.expanded]="isExpanded">
-  <ion-toolbar *ngIf="(breadcrumbs$ | async)?.length">
-    <ion-breadcrumbs>
-      <ion-breadcrumb *ngFor="let crumb of (breadcrumbs$ | async)" [routerLink]="crumb.url">
-        <ion-label>{{ crumb.label }}</ion-label>
-      </ion-breadcrumb>
-    </ion-breadcrumbs>
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button [routerLink]="['/']" routerLinkActive="active">
+        <ion-icon name="home-outline" />
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="tertiary" fill="solid" [routerLink]="['/rooms']" routerLinkActive="active">
+        Le nostre stanze
+      </ion-button>
+      <ion-button color="tertiary" fill="solid" [routerLink]="['/bookings']" routerLinkActive="active">
+        Prenota subito
+      </ion-button>
+      @if(isLoggedIn) {
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+      }
+      @else {
+      <ion-button id="login" color="tertiary" fill="solid" [routerLink]="['/login']" routerLinkActive="active">
+        Accedi / Registrati
+      </ion-button>
+      }
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>

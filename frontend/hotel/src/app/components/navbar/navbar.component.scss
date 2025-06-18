@@ -1,65 +1,10 @@
 ion-header {
-  position: fixed;
-  top: 0;
-  left: var(--sidebar-width-collapsed);
-  right: 0;
-  height: var(--navbar-height); // Esplicita l'altezza
-  transition: left var(--sidebar-transition-duration) ease;
-  z-index: 999; // Leggermente inferiore alla sidebar se si sovrappongono
-  box-shadow: none; // Come da tuo codice
-  margin-bottom: var(--navbar-height);
-
-  &.expanded {
-    left: var(--sidebar-width-expanded);
+  ion-icon {
+    scale: 1.5;
   }
 
-  ion-toolbar {
-    --background: #527fcd;
-    min-height: var(--navbar-height); // Assicura che la toolbar riempia l'header
-    align-content: center;
-  }
-}
-
-ion-breadcrumbs {
-
-  // Seleziona tutte le ion-breadcrumb TRANNE l'ultima
-  ion-breadcrumb:not(:last-child) {
-
-    // 1. Cursore a puntatore
-    cursor: pointer;
-
-    // Stilizza la parte 'native' (il contenitore interno)
-    &::part(native) {
-      // Transizione per un effetto morbido
-      transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
-      // Arrotondo gli angoli
-      border-radius: 4px;
-      // Aggiungo un po' di padding interno per dare spazio all'alone
-      padding: 4px 8px;
-      // Sposta leggermente per compensare il padding e non distruggere l'allineamento
-      margin-left: 3px;
-    }
-
-    // Effetto "alone" (background) al passaggio del mouse
-    &:hover::part(native) {
-      background-color: #6392e4;
-    }
-
-    // Effetto "alone" quando è attivo (cliccato)
-    &:active::part(native) {
-      background-color: #74a3f3;
-    }
-
-    ion-label {
-      color: #ecf0f1;
-    }
-  }
-
-  ion-breadcrumb::part(separator) {
-    color: #ecf0f1;
-  }
-
-  ion-label {
-    color: white;
+  #login {
+    --padding-end: 20px;
+    --padding-start: 20px;
   }
 }

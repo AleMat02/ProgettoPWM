@@ -1,29 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonLabel, IonMenu, IonItem, IonIcon, IonContent, IonList } from '@ionic/angular/standalone';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { distinctUntilChanged, filter, map, mergeMap, Subscription } from 'rxjs';
-import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
-import { NavbarService } from './services/navbar.service';
-import { SidebarService } from './services/sidebar.service';
+import { filter, Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, lockClosedOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet, SidebarComponent, NavbarComponent],
+  styleUrl: 'app.component.scss',
+  imports: [IonLabel, IonSplitPane, IonApp, IonRouterOutlet, NavbarComponent, IonMenu, IonItem, IonIcon, IonContent, IonList, RouterModule], //Senza router module non funzionerebbero le rotte nell'html
 })
 export class AppComponent implements OnInit, OnDestroy {
-  isSidebarExpanded = false;
-  private sidebarSub!: Subscription;
+  showPersonnelLayout = false;
   private routerSub!: Subscription;
 
   constructor(
-    private sidebarService: SidebarService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private navbarService: NavbarService
+    private activatedRoute: ActivatedRoute
   ) {
     //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
     addIcons({
@@ -37,37 +32,22 @@ export class AppComponent implements OnInit, OnDestroy {
       logOutOutline,
       calendarOutline,
       personAddOutline,
-      businessOutline
+      businessOutline,
+      addOutline,
+      trashOutline,
+      sadOutline,
+      personCircleOutline,
+      lockClosedOutline
     })
   }
 
-  ngOnInit() {
-    this.sidebarSub = this.sidebarService.sidebarState$.subscribe(
-      state => (this.isSidebarExpanded = state)
-    );
-
-    this.routerSub = this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd), // Type guard per NavigationEnd
-      map(() => {
-        let route = this.activatedRoute;
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      }),
-      filter(route => route.outlet === 'primary'),
-      mergeMap(route => route.data), // route.data è Observable<Data>
-      // Evita emissioni multiple se i breadcrumbs non cambiano
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev['breadcrumbs']) === JSON.stringify(curr['breadcrumbs']))
-    ).subscribe((eventData: Data) => {
-      this.navbarService.setBreadcrumbs(eventData['breadcrumbs'] || []);
-    });
+  async ngOnInit() {
+      this.routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+        this.showPersonnelLayout = event.urlAfterRedirects.startsWith('/personnel/')
+      })
   }
 
   ngOnDestroy() {
-    if (this.sidebarSub) {
-      this.sidebarSub.unsubscribe();
-    }
     if (this.routerSub) {
       this.routerSub.unsubscribe();
     }

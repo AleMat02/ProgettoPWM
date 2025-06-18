@@ -10,21 +10,22 @@
         <ion-text color="danger">{{getFormErrorMessage("name")}}</ion-text>
         }
 
-        <ion-item [class.invalid-item]="isFormFieldInvalid('address')"> <!--* Forse è meglio switchare di posto city e address-->
-            <ion-label position="floating">Indirizzo</ion-label>
-            <ion-input formControlName="address"></ion-input>
-            @if(isFormFieldInvalid("address"))
-            {
-            <ion-text color="danger">{{getFormErrorMessage("address")}}</ion-text>
-            }
-        </ion-item>
-
         <ion-item [class.invalid-item]="isFormFieldInvalid('city')">
             <ion-label position="floating">Città</ion-label>
             <ion-input formControlName="city"></ion-input>
             @if(isFormFieldInvalid("city"))
             {
             <ion-text color="danger">{{getFormErrorMessage("city")}}</ion-text>
+            }
+        </ion-item>
+
+        <ion-item [class.invalid-item]="isFormFieldInvalid('address')">
+            <!--* Forse è meglio switchare di posto city e address-->
+            <ion-label position="floating">Indirizzo</ion-label>
+            <ion-input formControlName="address"></ion-input>
+            @if(isFormFieldInvalid("address"))
+            {
+            <ion-text color="danger">{{getFormErrorMessage("address")}}</ion-text>
             }
         </ion-item>
 

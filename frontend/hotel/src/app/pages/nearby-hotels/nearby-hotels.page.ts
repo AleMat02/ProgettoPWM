@@ -1,104 +1,105 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonCard, IonCardContent } from '@ionic/angular/standalone';
-import { map, tileLayer, icon, Marker, CircleMarker } from 'leaflet';
+import {
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonButton,
+  
+} from '@ionic/angular/standalone';
+import { HttpClient } from '@angular/common/http';
+import { RouterLink} from '@angular/router';
+import { Geolocation } from '@capacitor/geolocation';
+import { PositionData } from '../../interfaces/nearby-hotels.interface';
 import { NearbyHotelsService } from 'src/app/services/nearby-hotels.service';
 
-
-var zoom = 10;
 @Component({
   selector: 'app-map',
   templateUrl: './nearby-hotels.page.html',
   styleUrls: ['./nearby-hotels.page.scss'],
-  imports: [IonCard, IonContent, CommonModule, FormsModule, IonCardContent],
+  imports: [
+    IonCard,
+    IonContent,
+    CommonModule,
+    FormsModule,
+    IonCard,
+    IonCardContent,
+    IonButton,
+    RouterLink
+  ],
   standalone: true,
 })
 export class NearbyHotelsPage implements OnInit {
-
-  title = "MAPPA SERVIZI";
-  map: any;
-  flag = false;
-  value: number = 0;
-
-  markerOptions = {
-    title: "MyLocation",
-    clickable: true,
-    draggable: true
+  positionData: PositionData = {
+    lat: 0,
+    lng: 0,
+    radius: 0,
   };
 
-  circleOptions = {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 10 * zoom
-  };
+  hotels: any[] = [];
 
-  marker = new Marker([38.11563326486042, 13.361414037625677], this.markerOptions);
-  circle = new CircleMarker([0, 0], this.circleOptions);
+  constructor(
+    private http: HttpClient,
+    private nearbyHotelsService: NearbyHotelsService
+  ) {}
 
-  lista: any[] = [];
-  lista_new: any[] = [];
-
-  markerIcon = icon({
-    iconUrl: 'assets/pin.svg',
-    iconSize: [32, 32],
-  });
-
-  constructor(private nearbyHotelsService: NearbyHotelsService) {
-    this.marker.setTooltipContent("Edificio 6");
-    this.marker.bindPopup("<a href='https://www.google.com'>link</a>");
+  ngOnInit(): void {
+    this.getCurrentPosition()
+      .then((positionData: PositionData) => {
+        this.fetchNearbyHotels(positionData);
+      })
+      .catch((error) => {
+        console.error('Errore durante la geolocalizzazione:', error);
+      });
   }
 
-  ngOnInit() {
-    this.nearbyHotelsService.getCurrentPosition().then((position: GeolocationPosition) => {
-      this.marker.setLatLng([position.coords.latitude, position.coords.longitude]);
-      this.circle.setLatLng([position.coords.latitude, position.coords.longitude]);
-      this.circle.setRadius(10 * zoom);
-      this.lista_new = this.convert(this.nearbyHotelsService.getNearbyHotels());
-      console.log(this.lista_new);
-    });
+  async getCurrentPosition(): Promise<PositionData> {
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      this.positionData.lat = position.coords.latitude;
+      this.positionData.lng = position.coords.longitude; // Corretto da 'lang' a 'lng'
+      this.positionData.radius = 5; // Imposta un raggio predefinito di 20 km
+      return this.positionData;
+    } catch (error) {
+      console.error('Errore nella geolocalizzazione:', error);
+      throw error;
+    }
   }
 
-  ionViewDidEnter() {
-    this.initMap();
+  onRadiusChange(newRadius: number) {
+    this.getCurrentPosition()
+      .then((positionData: PositionData) => {
+        positionData.radius = newRadius;
+        this.fetchNearbyHotels(positionData);
+      })
+      .catch((error) => {
+        console.error('Errore durante la geolocalizzazione:', error);
+      });
   }
 
-  convert(obj: any): any {
-    return Object.keys(obj).map(key => ({
-      value: obj[key],
-    }));
+  fetchNearbyHotels(positionData: PositionData) {
+    this.nearbyHotelsService.getNearbyHotels(positionData).subscribe(
+      (response: any) => {
+        // Svuota la lista prima di aggiungere nuovi hotel
+        this.hotels = [];
+        // Verifica che la risposta abbia la struttura attesa
+        if (response && response.data && Array.isArray(response.data.hotels)) {
+          this.hotels = response.data.hotels;
+          console.log('Hotel trovati:', this.hotels);
+        } else {
+          console.warn('Nessun hotel trovato o risposta non valida:', response);
+        }
+      },
+      (error: any) => {
+        console.error('Errore durante il recupero degli hotel:', error);
+      }
+    );
+    // Log per debug
+    console.log('Chiamata fetchNearbyHotels con:', positionData);
   }
 
-  ionViewWillLeave() {
-    this.map.remove();
+  trackByHotelId(index: number, hotel: any) {
+    return hotel.id;
   }
-
-  initMap() {
-    this.map = map('map').setView(this.marker.getLatLng(), zoom);
-    tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(this.map);
-
-    this.lista_new.forEach((element: any) => {
-      var el = new Marker([element.value.lat, element.value.long], this.markerOptions);
-      el.bindPopup(
-        `<div>Servizio: ${element.value.Tipologia}</div>` +
-        `<div>Telefono: ${element.value.Telefono}</div>` +
-        `<div>OrariSer: ${element.value.OrariSer}</div>` +
-        "<a href=" + element.value.Web + "> Web: </a>"
-      );
-      var lat1 = Number(this.marker.getLatLng().lat) / 57.29577951;
-      var long1 = Number(this.marker.getLatLng().lng) / 57.29577951;
-      var lat2 = element.value.lat / 57.29577951;
-      var long2 = element.value.long / 57.29577951;
-      var d = 3963.0 * Math.acos((Math.sin(lat1) * Math.sin(lat2)) + Math.cos(lat1) * Math.cos(lat2) * Math.cos((long2 - long1)));
-      d = d * 1.609344; // miglia a km
-      el.addTo(this.map);
-    });
-  }
-
-
-
 }
