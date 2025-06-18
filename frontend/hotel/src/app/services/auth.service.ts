@@ -42,7 +42,7 @@ export class AuthService {
     }
 
     async logout() {
-        await Preferences.remove({ key: 'authData' }); //reindirizza alla pagina di login dalla navbar
+        await Preferences.remove({ key: 'userData' }); //reindirizza alla pagina di login dalla navbar
         this.userSubject.next(null);
     }
 
@@ -50,5 +50,4 @@ export class AuthService {
         const user = await Preferences.get({key: 'userData'})
         if(user.value) this.userSubject.next(JSON.parse(user.value))
     }
-
 }

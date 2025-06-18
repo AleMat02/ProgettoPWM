@@ -1,5 +1,5 @@
 <ion-content [fullscreen]="false">
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end"> <!--Forse è il caso di mettere tutto da ion-fab fino all'ultimo else in un componente? Lo uso anche in rooms-->
     <ion-fab-button [routerLink]="['./add']" color="secondary">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
@@ -20,42 +20,39 @@
     }
   </ion-list>
   } @else {
-  @if (!rooms || rooms.length === 0) {
+  @if (!hotels || hotels.length === 0) {
   <div class="empty-state">
     <ion-icon name="sad-outline" color="medium"></ion-icon>
-    <h1>Nessuna stanza trovata</h1>
-    <p>Inizia creandone una.</p>
+    <h1>Nessun hotel trovato</h1>
+    <p>Inizia creandone uno.</p>
   </div>
   } @else {
   <ion-list>
-    @for (room of rooms; track room.id) {
-    <ion-card class="room-card">
+    @for (hotel of hotels; track hotel.id) {
+    <ion-card class="hotel-card">
       <ion-card-header>
-        <ion-card-title>Stanza N° {{ room.room_number }}</ion-card-title>
-        <ion-card-subtitle>ID: {{ room.id }}</ion-card-subtitle>
-        <ion-card-subtitle>Hotel ID: {{room.hotel_id}}</ion-card-subtitle>
+        <ion-card-title>Nome: {{ hotel.name || 'Nessun nome' }}</ion-card-title>
+        <ion-card-subtitle>ID: {{ hotel.id }}</ion-card-subtitle>
       </ion-card-header>
 
       <ion-card-content>
         <ion-item lines="none">
           <ion-label>
-            <p><strong>Tipo:</strong> {{ room.room_type }}</p>
-            <p><strong>Capienza:</strong> {{ room.capacity === 1 ? room.capacity + ' persona' : room.capacity + '
-              persone' }}</p>
-            <p><strong>Prezzo/Notte:</strong> {{ room.price_per_night | currency:'EUR' }}</p>
-            <p><strong>Descrizione:</strong> {{ room.description || 'Nessuna descrizione' }}</p>
+            <p><strong>Città:</strong> {{ hotel.city || 'Nessuna città'}}</p>
+            <p><strong>Indirizzo:</strong> {{ hotel.address || 'Nessun indirizzo'}}</p>
+            <p><strong>Descrizione:</strong> {{ hotel.description || 'Nessuna descrizione' }}</p>
           </ion-label>
         </ion-item>
 
         <ion-item lines="none">
-          <ion-chip [color]="room.is_available === 1 ? 'success' : 'danger'" slot="start" style="margin-left: 0px;">
-            {{ room.is_available === 1 ? 'Disponibile' : 'Non Disponibile' }}
-          </ion-chip>
           <ion-chip color="primary" slot="start" style="margin-left: 0px;">
-            {{ room.created_at }}
+            Latitudine: {{ hotel.latitude || 'Nessuna' }}
+          </ion-chip>
+          <ion-chip color="secondary" slot="start" style="margin-left: 0px;">
+            Longitudine: {{ hotel.longitude || 'Nessuna' }}
           </ion-chip>
           <ion-buttons slot="end">
-            <ion-button color="danger" (click)="deleteRoom(room.id)">
+            <ion-button color="danger" (click)="deleteHotel(hotel.id)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
           </ion-buttons>

@@ -14,8 +14,10 @@ def create_database():
         role TEXT NOT NULL CHECK(role IN ('admin', 'reception', 'guest')),
         full_name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
+        hotel_id INTEGER,
         phone TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (hotel_id) REFERENCES hotels(id)
     )
     ''')
 

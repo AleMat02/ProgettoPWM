@@ -4,8 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { filter, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, bagOutline, lockClosedOutline } from 'ionicons/icons';
-import { AuthService } from './services/auth.service';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, lockClosedOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private activatedRoute: ActivatedRoute
   ) {
     //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
     addIcons({
@@ -47,8 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
         this.showPersonnelLayout = event.urlAfterRedirects.startsWith('/personnel/')
       })
-
-      await this.authService.loadUser()
   }
 
   ngOnDestroy() {

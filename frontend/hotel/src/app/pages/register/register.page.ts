@@ -12,7 +12,6 @@ import { UserData } from 'src/app/interfaces/user.interface';
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
-  standalone: true,
   imports: [
     IonContent,
     CommonModule,
