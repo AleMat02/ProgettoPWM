@@ -1,41 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonInput, IonItem, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { Router, RouterLink } from '@angular/router'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IonContent, IonInput, IonItem, IonButton, IonIcon, IonLabel, IonText } from '@ionic/angular/standalone';
+import { Router, RouterLink } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { AuthService } from 'src/app/services/auth.service';
+import * as Utils from 'src/app/utils';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [ IonContent, CommonModule, FormsModule, IonInput, IonItem, IonButton, RouterLink]
+  imports: [IonText, IonLabel, IonContent, FormsModule, IonInput, IonItem, IonButton, RouterLink, ReactiveFormsModule]
 })
+
 export class LoginPage implements OnInit {
-  email: string = '';
-  password: string = '';
+  userForm!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {}
+  constructor(private authService: AuthService, private router: Router, private toastService: ToastService, private fb: FormBuilder,) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userForm = this.fb.group(
+      {
+        username: ['', [Validators.required,]],
+        password: ['', [Validators.required,]],
+      }
+    );
+  }
 
-  login() {
-    this.authService.login(this.email, this.password).subscribe({
+  onSubmit() {
+    const { username, password } = this.userForm.value;
+    this.authService.login(username, password).subscribe({
       next: (data: any) => {
         this.toastService.presentSuccessToast(data.message);
         this.router.navigate(['']); // Reindirizza alla landing page dopo il login
+        this.userForm.reset();
       },
       error: (err: any) => {
-        this.toastService.handleErrorToast(err)
+        this.toastService.presentErrorToast("Errore durante l'accesso");
+        console.error("Errore durante l'accesso: ", err)
       },
     });
   }
 
-  logut() {
-    localStorage.removeItem('user');
-    console.log("Logout effettuato con successo.");
-    this.router.navigate(['/dashboard']);
+  isFormFieldInvalid(field: string) {
+    return Utils.isFormFieldInvalid(this.userForm, field)
+  }
+
+  getFormErrorMessage(field: string) {
+    return Utils.getFormErrorMessage(this.userForm, field)
   }
 }

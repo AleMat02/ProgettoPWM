@@ -36,9 +36,4 @@ export class ToastService {
         };
         this.presentToast(options);
     }
-
-    handleErrorToast(err: any) {
-        const errorMessage = err?.error?.message || 'Si è verificato un errore.';
-        this.presentErrorToast(errorMessage);
-    }
 }

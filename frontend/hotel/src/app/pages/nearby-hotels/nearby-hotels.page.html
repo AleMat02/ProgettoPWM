@@ -20,8 +20,10 @@
         <p>Distanza: {{hotel.distance | number:'1.0-2'}} km</p>
       </div>
     </ion-card-content>
-
-    <ion-button [routerLink]="['/guest-rooms', hotel.id]" >Stanze disponibili</ion-button>
+    @if(isLoggedIn){
+      <ion-button [routerLink]="['/guest-rooms', hotel.id]" >Stanze disponibili</ion-button>
+    }
+    
   </ion-card>
   } } @else {
   <ion-card>

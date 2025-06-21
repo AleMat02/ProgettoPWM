@@ -12,7 +12,6 @@ export function roleGuard(requiredRoles: UserRole[]): CanActivateFn {
         return authService.user$.pipe(
             take(1), //Come raccomandato dalla documentazione rxjs, usiamo take(1) per prendere solo il primo valore emesso dalla sottoscrizione, evitando leak di memoria
             map(user => {
-                console.log(user)
                 if (!user) {
                     router.navigate(['/login']);
                     return false;

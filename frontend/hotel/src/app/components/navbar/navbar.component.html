@@ -2,16 +2,13 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
-      <ion-button [routerLink]="['/']" routerLinkActive="active">
+      <ion-button [routerLink]="['/']" routerLinkActive="active" (click)="scrollToTop($event)">
         <ion-icon name="home-outline" />
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="tertiary" fill="solid" [routerLink]="['/rooms']" routerLinkActive="active">
-        Le nostre stanze
-      </ion-button>
-      <ion-button color="tertiary" fill="solid" [routerLink]="['/bookings']" routerLinkActive="active">
-        Prenota subito
+      <ion-button color="tertiary" fill="solid" [routerLink]="['/nearby-hotels']" routerLinkActive="active">
+        Hotel nelle vicinanze
       </ion-button>
       @if(isLoggedIn) {
       <ion-button (click)="presentPopover($event)">

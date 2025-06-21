@@ -5,6 +5,7 @@ import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, Ion
 import * as Utils from 'src/app/utils';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserData, UserRole } from 'src/app/interfaces/user.interface';
+import { HotelsService } from 'src/app/services/hotels.service';
 
 @Component({
   selector: 'app-user-creation-form',
@@ -32,7 +33,7 @@ export class UserCreationFormComponent implements OnInit {
   @Output() formSubmit = new EventEmitter<UserData>();
 
   userForm!: FormGroup;
-
+  hotels: any[] = [];
   roles = Object.values(UserRole) //Mettendo keys sarebbe stato indifferente in quanto avremmo comunque tenuto la pipe "Titlecase" per scelta nell'html
 
   matchPasswords(passwordKey: string, confirmPasswordKey: string): ValidatorFn {
@@ -51,8 +52,19 @@ export class UserCreationFormComponent implements OnInit {
     };
   }
 
+  hotelIdRequiredIfReception(): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (!control.parent) return null;
+      const role = control.parent.get('role')?.value;
+      if (role === UserRole.Reception && !control.value) {
+        return { required: true };
+      }
+      return null;
+    };
+  }
+
   //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
-  constructor(private fb: FormBuilder, private toastService: ToastService) { }
+  constructor(private fb: FormBuilder, private toastService: ToastService, private hotelService: HotelsService) { }
 
   //Anche se nel backend full_name, phone e role non sono obbligatori, qui lo sono per una migliore identificazione e gestione del cliente.
   //Inseriamo più regole rispetto al backend per scelta personale
@@ -65,12 +77,27 @@ export class UserCreationFormComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         full_name: ['', [Validators.required, Validators.minLength(3)]],
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]], //il campo deve contenere solo numeri, ed avere una lunghezza di 10 numeri
-        role: [UserRole.Guest, Validators.required]
+        role: [UserRole.Guest, Validators.required],
+        hotel_id: [null, this.hotelIdRequiredIfReception()]
       },
       {
         validators: this.matchPasswords('password', 'confirmPassword')
       }
     );
+
+    this.userForm.get('role')?.valueChanges.subscribe(() => {
+      this.userForm.get('hotel_id')?.updateValueAndValidity();
+    });
+
+    this.hotelService.getHotels().subscribe({
+      next: (res: any) => {
+        this.hotels = res.data.hotels;
+      },
+      error: (err : any) => {
+        this.toastService.presentErrorToast("Errore nel recupero degli hotel");
+        console.error("Errore nel recupero degli hotel: ", err);
+      }
+    });
   }
 
   onSubmit() {
@@ -81,7 +108,6 @@ export class UserCreationFormComponent implements OnInit {
     }
 
     const { confirmPassword, ...userFormData } = this.userForm.value;
-    console.log("Dati per la creazione dell'utente inviati:", userFormData)
 
     this.formSubmit.emit(userFormData as UserData)
   }

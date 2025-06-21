@@ -27,12 +27,12 @@ export class ProfileMenuComponent {
     }
 
     goToBookings() {
-        this.router.navigate(['/bookings/personal']); //TODO: Sistemare l'url
+        this.router.navigate(['user-booking-history']);
         this.popoverController.dismiss();
     }
 
     goToPersonnel() {
-        this.router.navigate(['/personnel/dashboard']);
+        this.router.navigate(['/personnel/booking-management']);
         this.popoverController.dismiss();
     }
 

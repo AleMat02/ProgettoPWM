@@ -14,7 +14,6 @@ export class NearbyHotelsService {
 
   
   getNearbyHotels(positionData: PositionData): Observable<any> {
-    console.log(`${this.apiUrl}?lat=${positionData.lat}&lng=${positionData.lng}&radius=${positionData.radius}`);
     return this.http.get(`${this.apiUrl}?lat=${positionData.lat}&lng=${positionData.lng}&radius=${positionData.radius}`);
   }
 }

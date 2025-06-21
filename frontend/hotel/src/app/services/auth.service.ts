@@ -21,13 +21,14 @@ export class AuthService {
         role: UserRole,
         full_name: string,
         phone: string, //nel db è un campo string
-        email: string
+        email: string,
+        hotel_id: number //nel db è un campo integer
     ): Observable<any> {
-        return this.http.post(this.registerApiUrl, { username, password, role, full_name, email, phone });
+        return this.http.post(this.registerApiUrl, { username, password, role, full_name, email, phone, hotel_id });
     }
 
     login(username: string, password: string): Observable<any> {
-        return this.http.post(this.loginApiUrl, { username, password }).pipe(tap(
+        return this.http.post(this.loginApiUrl, { username, password }).pipe(tap( //tap ci permette di eseguire diverse operazioni con i dati ricevuti in risposta
             async (res: any) => {
                 const user = res.data;
 

@@ -1,0 +1,56 @@
+<ion-content [fullscreen]="true">
+  <ion-title>Prenotazioni in stato di approvazione</ion-title>
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <ion-item [class.invalid-item]="isFormFieldInvalid('status')">
+      <ion-label position="floating">Status</ion-label>
+      <ion-select formControlName="status" interface="popover" value="single">
+        <ion-select-option
+          *ngFor="let status of ['confirmed', 'rejected', 'pending']"
+          [value]="status"
+        >
+          {{ status }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="isFormFieldInvalid('status')">
+      {{ getFormErrorMessage("status") }}
+    </ion-text>
+
+    @if(!showUserIdInput){
+    <ion-item [class.invalid-item]="isFormFieldInvalid('user_id')">
+      <ion-label position="floating">user_id</ion-label>
+      <ion-input
+        type="number"
+        formControlName="user_id"
+        ngDefaultControl
+      ></ion-input>
+      @if(isFormFieldInvalid('user_id')){
+      <ion-text color="danger"> {{ getFormErrorMessage("user_id") }}</ion-text>
+      }
+    </ion-item>
+
+    }
+    <ion-button
+      type="submit"
+      expand="block"
+      [disabled]="searchForm.invalid && !showUserIdInput"
+    >
+      filtra
+    </ion-button>
+
+    @if(userBookingsDisplayed.length > 0){ @for(booking of userBookingsDisplayed; track
+    booking.id){
+    <ion-item>
+      {{userBookingsDisplayed.length}}
+      Nome hotel: {{ booking.hotel_name }}<br />
+      Numero stanza: {{ booking.room_number }}<br />
+      Check_in: {{ booking.check_in }}<br />
+      Check_out: {{ booking.check_out }}<br />
+      Descrizione stanza: {{ booking.room_description }}<br />
+      Prezzo totale: {{ booking.total_price }} €
+    </ion-item>
+    } }@else{
+    <ion-item>Nessuna prenotazione trovata</ion-item>
+    }
+  </form></ion-content
+>

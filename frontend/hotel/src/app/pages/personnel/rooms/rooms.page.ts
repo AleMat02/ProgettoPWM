@@ -26,14 +26,13 @@ export class RoomsPage {
   getRooms() {
     this.roomsService.getRooms().subscribe({
       next: (res: any) => {
-        console.log("Stanze recuperate con successo.");
         this.rooms = res.data;
         this.loading = false;
-        console.log(res)
       },
       error: async (err: any) => {
+        this.toastService.presentErrorToast("Errore durante il recupero delle stanze");
         console.error("Errore durante il recupero delle stanze: ", err);
-        this.loading = false; //TODO: Forse bisognerebbe aggiungere un this.error per visualizzazione custom in caso di errore
+        this.loading = false;
       }
     })
   }
@@ -44,10 +43,10 @@ export class RoomsPage {
         this.toastService.presentSuccessToast(res.message)
         this.loading = false;
         this.getRooms(); //aggiorniamo le stanze disponibili dopo la cancellazione
-        console.log(res)
       },
       error: async (err: any) => {
-        console.error("Errore durante il recupero delle stanze: ", err);
+        this.toastService.presentErrorToast("Errore durante la cancellazione delle stanze");
+        console.error("Errore durante la cancellazione delle stanze: ", err);
         this.loading = false;
       }
     })

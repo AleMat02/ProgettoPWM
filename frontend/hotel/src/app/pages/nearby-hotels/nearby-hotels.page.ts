@@ -6,13 +6,16 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
-  
+
 } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
-import { RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { PositionData } from '../../interfaces/nearby-hotels.interface';
 import { NearbyHotelsService } from 'src/app/services/nearby-hotels.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
+
 
 @Component({
   selector: 'app-map',
@@ -37,12 +40,19 @@ export class NearbyHotelsPage implements OnInit {
     radius: 0,
   };
 
+  isLoggedIn = false;
   hotels: any[] = [];
 
   constructor(
     private http: HttpClient,
-    private nearbyHotelsService: NearbyHotelsService
-  ) {}
+    private authService: AuthService,
+    private nearbyHotelsService: NearbyHotelsService,
+    private toastService: ToastService
+  ) {
+    this.authService.user$.subscribe(user => {
+      this.isLoggedIn = !!user; // true se l'utente è loggato, false altrimenti
+    });
+  }
 
   ngOnInit(): void {
     this.getCurrentPosition()
@@ -50,7 +60,8 @@ export class NearbyHotelsPage implements OnInit {
         this.fetchNearbyHotels(positionData);
       })
       .catch((error) => {
-        console.error('Errore durante la geolocalizzazione:', error);
+        this.toastService.presentErrorToast('Errore durante la geolocalizzazione');
+        console.error('Errore durante la geolocalizzazione: ', error);
       });
   }
 
@@ -58,11 +69,10 @@ export class NearbyHotelsPage implements OnInit {
     try {
       const position = await Geolocation.getCurrentPosition();
       this.positionData.lat = position.coords.latitude;
-      this.positionData.lng = position.coords.longitude; // Corretto da 'lang' a 'lng'
+      this.positionData.lng = position.coords.longitude;
       this.positionData.radius = 5; // Imposta un raggio predefinito di 20 km
       return this.positionData;
     } catch (error) {
-      console.error('Errore nella geolocalizzazione:', error);
       throw error;
     }
   }
@@ -74,30 +84,28 @@ export class NearbyHotelsPage implements OnInit {
         this.fetchNearbyHotels(positionData);
       })
       .catch((error) => {
-        console.error('Errore durante la geolocalizzazione:', error);
+        this.toastService.presentErrorToast('Errore durante la geolocalizzazione');
+        console.error('Errore durante la geolocalizzazione: ', error)
       });
   }
 
   fetchNearbyHotels(positionData: PositionData) {
-    this.nearbyHotelsService.getNearbyHotels(positionData).subscribe(
-      (response: any) => {
-        // Svuota la lista prima di aggiungere nuovi hotel
+    this.nearbyHotelsService.getNearbyHotels(positionData).subscribe({
+      next: (response) => {
         this.hotels = [];
-        // Verifica che la risposta abbia la struttura attesa
-        if (response && response.data && Array.isArray(response.data.hotels)) {
+        if (response?.data?.hotels && Array.isArray(response.data.hotels)) {
           this.hotels = response.data.hotels;
-          console.log('Hotel trovati:', this.hotels);
         } else {
           console.warn('Nessun hotel trovato o risposta non valida:', response);
         }
       },
-      (error: any) => {
-        console.error('Errore durante il recupero degli hotel:', error);
+      error: (error) => {
+        this.toastService.presentErrorToast('Errore durante il recupero degli hotel');
+        console.error('Errore durante il recupero degli hotel:', error)
       }
-    );
-    // Log per debug
-    console.log('Chiamata fetchNearbyHotels con:', positionData);
+    })
   }
+
 
   trackByHotelId(index: number, hotel: any) {
     return hotel.id;

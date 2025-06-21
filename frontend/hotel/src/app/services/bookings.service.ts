@@ -7,12 +7,17 @@ import { AddBookingData} from '../interfaces/add-booking.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class AddBookingService {
-  apiUrl = `${environment.backendUrl}/api/bookings`;
+export class BookingsService {
+  apiUrl = `${environment.backendUrl}/api`;
 
   constructor(private http: HttpClient) { }
 
   createBookingRequest(addBookingData: AddBookingData): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, { ...addBookingData });
+    return this.http.post(`${this.apiUrl}/bookings`, { ...addBookingData });
   }
+
+  getBookings(user_id: number){
+    return this.http.get(`${this.apiUrl}/users/bookings`, { params: { user_id: user_id} });
+  }
+
 }

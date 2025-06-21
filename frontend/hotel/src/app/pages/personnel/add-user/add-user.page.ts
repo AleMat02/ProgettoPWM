@@ -24,14 +24,15 @@ export class AddUserPage {
   constructor(private authService: AuthService, private toastService: ToastService) { }
 
   createUser(userData: UserData) {
-    this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email).subscribe({
+    this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email, userData.hotel_id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(`Utente ${userData.username} aggiunto con successo!`);
 
         this.userCreationForm.resetForm()
       },
       error: (err: any) => {
-        this.toastService.handleErrorToast(err)
+        this.toastService.presentErrorToast("Errore nella creazione dell'utente");
+        console.error("Errore nella creazione dell'utente: ", err)
       }
     });
   }

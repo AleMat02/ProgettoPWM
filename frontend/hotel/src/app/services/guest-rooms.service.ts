@@ -4,25 +4,16 @@ import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { CheckAvailabilityData } from 'src/app/interfaces/guest-rooms.interface';
 
-
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class GuestRoomsService {
-  
   apiUrl = `${environment.backendUrl}/api`;
-
 
   constructor(private http: HttpClient) { }
 
   getAviableRoomsByHotelId(checkAviabilityData: CheckAvailabilityData, hotel_id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/hotels/${hotel_id}/available-rooms`, { params: {...checkAviabilityData} });
-  }
-
-  getAllHotels(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get_hotels`);
   }
 
 }
