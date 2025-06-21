@@ -30,10 +30,19 @@
   <ion-list>
     @for (room of rooms; track room.id) {
     <ion-card class="room-card">
-      <ion-card-header>
-        <ion-card-title>Stanza N° {{ room.room_number }}</ion-card-title>
-        <ion-card-subtitle>ID: {{ room.id }}</ion-card-subtitle>
-        <ion-card-subtitle>Hotel ID: {{room.hotel_id}}</ion-card-subtitle>
+      <ion-card-header class="main-header">
+        <div class="main-header-row">
+          <div>
+            <ion-card-title>Stanza N° {{ room.room_number }}</ion-card-title>
+            <ion-card-subtitle>ID: {{ room.id }}</ion-card-subtitle>
+            <ion-card-subtitle>Hotel ID: {{room.hotel_id}}</ion-card-subtitle>
+          </div>
+          <ion-buttons>
+            <ion-button color="danger" (click)="deleteRoom(room.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </div>
       </ion-card-header>
 
       <ion-card-content>
@@ -54,11 +63,6 @@
           <ion-chip color="primary" slot="start" style="margin-left: 0px;">
             {{ room.created_at }}
           </ion-chip>
-          <ion-buttons slot="end">
-            <ion-button color="danger" (click)="deleteRoom(room.id)">
-              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
         </ion-item>
       </ion-card-content>
     </ion-card>

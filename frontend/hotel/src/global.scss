@@ -45,11 +45,31 @@ ion-router-outlet {
     margin-top: var(--navbar-height);
 }
 
+ion-content {
+  --ion-background-color: #f8fafc; //Colore di background di tutte le pagine
+}
+
+.skeleton-card {
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+
+ion-card {
+  --background: white; // Colore di sfondo delle card
+  border-radius: 12px; // Angoli arrotondati per le card
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombra delicata per le card
+}
+
+ion-card-content ion-item {
+  --background: transparent; // Rimuove lo sfondo dagli item interni alle card
+}
+
+
 .custom-toast {
 
   // Usiamo ::part per stilizzare in modo sicuro gli elementi interni del componente Ionic
   // Questo è l'approccio raccomandato e più robusto.
-
 
   &::part(message) {
     // Assicura che il testo del messaggio sia allineato correttamente

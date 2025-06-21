@@ -1,33 +1,34 @@
-// Stili globali per il componente form
-:host {
-  display: block; // Assicura che il componente prenda lo spazio necessario
+form {
+  padding: 10px 32px 24px 32px;
 }
 
-form {
-  padding: 16px; // Padding attorno al form per dare respiro
+.user-form-card {
+  max-width: 600px;
+  margin: 48px auto;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10); //Ombra più accentuata rispetto alla card di default
 }
 
 ion-title {
   text-align: center;
-  padding-top: 16px; // Spazio sopra il titolo
-  padding-bottom: 24px; // Spazio sotto il titolo
-  font-size: 1.6em; // Dimensione del titolo leggermente più grande
-  font-weight: bold; // Titolo in grassetto
+  padding-top: 16px; //Spazio sopra il titolo
+  padding-bottom: 24px; //Spazio sotto il titolo
+  font-size: 1.6em;
+  font-weight: bold;
 }
 
 ion-item {
-  // Stile quando l'item contiene un input non valido e toccato/sporco
+
+  //Stile quando l'item contiene un input non valido
   &.invalid-item {
-    --border-color: var(--ion-color-danger); // Bordo rosso per errore
-    --highlight-color-focused: var(--ion-color-danger); // Mantiene il bordo rosso anche al focus se non valido
+    --border-color: var(--ion-color-danger); //Bordo rosso
 
     ion-label {
-      color: var(--ion-color-danger) !important; // Etichetta rossa
+      color: var(--ion-color-danger) !important; //Etichetta rossa
     }
   }
 }
 
-// Stile per i messaggi di errore
+//Stile per i messaggi di errore
 ion-text {
   display: block; // Assicura che il messaggio vada a capo
   font-size: 0.8em; // Testo dell'errore più piccolo
@@ -47,4 +48,17 @@ ion-button {
 ion-input {
   --background: var(--ion-color-light-tint);
   z-index: -5;
+}
+
+ion-card-content {
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  .user-form-card {
+    margin: 0;
+    box-shadow: none;
+    height: 100vh; //Adattiamo la carda a tutto lo schermo
+    width: 100vw;
+  }
 }

@@ -1,13 +1,12 @@
-// Rimuove gli stili della tabella precedente
-// ion-col { border: none; }
+.main-header .main-header-row {
+  display: flex;
+  justify-content: space-between;
+}
 
-// Stile per le card delle stanze
 .room-card {
   margin-left: 16px;
   margin-right: 16px;
   margin-bottom: 16px;
-  border-radius: 12px; // Angoli più arrotondati
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombra delicata
 }
 
 .room-card ion-card-title {
@@ -16,8 +15,16 @@
 }
 
 .room-card ion-card-content ion-item {
-  --background: transparent; // Rimuove lo sfondo dagli item interni
-  --inner-padding-end: 0; // Allinea i bottoni al bordo
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.room-card ion-chip {
+  margin-bottom: 4px;
+  max-width: 100%;
+  white-space: normal;
 }
 
 .room-card p {
@@ -41,8 +48,3 @@
 }
 
 // Stile per lo skeleton loading
-.skeleton-card {
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-bottom: 16px;
-}

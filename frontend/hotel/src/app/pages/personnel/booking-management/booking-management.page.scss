@@ -3,15 +3,14 @@ form {
   flex-direction: row;
   align-items: flex-end;
   gap: 1rem;
+  
 
   ion-item {
     flex: 1 1 0;
     margin-bottom: 0;
   }
 
-  ion-button[type="submit"] {
-    margin-left: 1rem;
-    align-self: flex-end;
+  ion-button {
     height: 40px;
   }
 }
@@ -20,4 +19,8 @@ form {
 ion-content {
   --padding-start: 0;
   --padding-end: 0;
+}
+
+@media (max-width: 767px) { 
+
 }

@@ -1,34 +1,30 @@
 <ion-content [fullscreen]="false">
-  <div class="flex-container">
-    <div class="login-box">
-      <div class="login-title">Accedi al tuo account</div>
+    <ion-card class="login-card">
+      <ion-card-content>
+        <ion-title>Accedi al tuo account</ion-title>
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <ion-item [class.invalid-item]="isFormFieldInvalid('username')">
+            <ion-label position="floating">Username</ion-label>
+            <ion-input formControlName="username"></ion-input>
+          </ion-item>
+          @if(isFormFieldInvalid("username")){
+          <ion-text color="danger">{{getFormErrorMessage("username")}}</ion-text>
+          }
 
-      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <ion-item [class.invalid-item]="isFormFieldInvalid('username')">
-          <ion-label position="floating">Username</ion-label>
-          <ion-input formControlName="username"></ion-input>
-        </ion-item>
-        @if(isFormFieldInvalid("username")){
-        <ion-text color="danger">{{getFormErrorMessage("username")}}</ion-text>
-        }
-
-        <ion-item [class.invalid-item]="isFormFieldInvalid('password')">
-          <ion-label position="floating">Password</ion-label>
-          <ion-input formControlName="password" type="password"></ion-input>
+          <ion-item [class.invalid-item]="isFormFieldInvalid('password')">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input formControlName="password" type="password"></ion-input>
+          </ion-item>
           @if(isFormFieldInvalid("password")){
           <ion-text color="danger">{{getFormErrorMessage("password")}}</ion-text>
           }
-        </ion-item>
 
-
-
-        <ion-button type="submit" expand="block" [disabled]="userForm.invalid">Login</ion-button>
-        <ion-button type="button" class="signup-btn" expand="block" size="full" fill="clear"
-          [routerLink]="['/register']" routerLinkActive="active">
-          Sign up!
-        </ion-button>
-      </form>
-    </div>
-
-  </div>
+          <ion-button type="submit" expand="block" [disabled]="userForm.invalid">Accedi</ion-button>
+          <ion-button type="button" class="signup-btn" expand="block" size="full" fill="clear"
+            [routerLink]="['/register']" routerLinkActive="active">
+            Registrati
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
 </ion-content>
