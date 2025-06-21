@@ -1,9 +1,12 @@
+.main-header .main-header-row {
+  display: flex;
+  justify-content: space-between;
+}
+
 .hotel-card {
   margin-left: 16px;
   margin-right: 16px;
   margin-bottom: 16px;
-  border-radius: 12px; // Angoli più arrotondati
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombra delicata
 }
 
 .hotel-card ion-card-title {
@@ -11,9 +14,10 @@
   font-weight: bold;
 }
 
-.hotel-card ion-card-content ion-item {
-  --background: transparent; // Rimuove lo sfondo dagli item interni
-  --inner-padding-end: 0; // Allinea i bottoni al bordo
+.hotel-card ion-chip {
+  margin-bottom: 4px;
+  max-width: 100%;
+  white-space: normal;
 }
 
 .hotel-card p {

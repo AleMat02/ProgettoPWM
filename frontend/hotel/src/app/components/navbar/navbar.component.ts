@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
   }
 
   scrollContentToTop = () => {
-    const content = document.querySelector('#main-content');
+    const content = document.querySelector('#landing-page');
     if (content) {
       (content as any).scrollToTop(500); // Ionic: scrollToTop(duration)
     }

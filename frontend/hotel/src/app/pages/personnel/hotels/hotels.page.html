@@ -30,9 +30,18 @@
   <ion-list>
     @for (hotel of hotels; track hotel.id) {
     <ion-card class="hotel-card">
-      <ion-card-header>
-        <ion-card-title>Nome: {{ hotel.name || 'Nessun nome' }}</ion-card-title>
-        <ion-card-subtitle>ID: {{ hotel.id }}</ion-card-subtitle>
+      <ion-card-header class="main-header">
+        <div class="main-header-row">
+          <div>
+            <ion-card-title>Nome: {{ hotel.name || 'Nessun nome' }}</ion-card-title>
+            <ion-card-subtitle>ID: {{ hotel.id }}</ion-card-subtitle>
+          </div>
+          <ion-buttons>
+            <ion-button color="danger" (click)="deleteHotel(hotel.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </div>
       </ion-card-header>
 
       <ion-card-content>
@@ -51,11 +60,6 @@
           <ion-chip color="secondary" slot="start" style="margin-left: 0px;">
             Longitudine: {{ hotel.longitude || 'Nessuna' }}
           </ion-chip>
-          <ion-buttons slot="end">
-            <ion-button color="danger" (click)="deleteHotel(hotel.id)">
-              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
         </ion-item>
       </ion-card-content>
     </ion-card>

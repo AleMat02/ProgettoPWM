@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
     selector: 'app-profile-menu',
     templateUrl: './profile-menu.component.html',
     styleUrls: ['./profile-menu.component.scss'],
-    imports: [IonLabel, IonIcon, IonList, IonItem],
+    imports: [IonIcon, IonList, IonItem],
 })
 export class ProfileMenuComponent {
     isGuest: boolean = true;

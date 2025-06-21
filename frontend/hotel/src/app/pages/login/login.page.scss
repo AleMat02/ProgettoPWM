@@ -1,0 +1,60 @@
+.login-card {
+    max-width: 600px;
+    margin: 48px auto;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10); //Ombra più accentuata rispetto alla card di default
+}
+
+ion-card-content {
+    padding: 0;
+}
+
+form {
+    padding: 32px 32px 24px 32px;
+}
+
+ion-title {
+    text-align: center;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    font-size: 1.6em;
+    font-weight: bold;
+}
+
+ion-item {
+    &.invalid-item {
+        --border-color: var(--ion-color-danger);
+
+        ion-label {
+            color: var(--ion-color-danger) !important;
+        }
+    }
+}
+
+ion-text {
+    display: block;
+    font-size: 0.8em;
+    padding-top: 6px;
+    padding-bottom: 2px;
+    padding-left: 16px;
+}
+
+ion-button {
+    margin-top: 28px;
+    --border-radius: 8px;
+    height: 48px;
+    font-weight: bold;
+}
+
+ion-input {
+    --background: var(--ion-color-light-tint);
+    z-index: -5;
+}
+
+@media (max-width: 767px) {
+    .login-card {
+        margin: 0;
+        box-shadow: none;
+        height: 100vh; //Adattiamo la carda a tutto lo schermo
+        width: 100vw;
+    }
+}

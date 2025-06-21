@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonTitle, IonText } from '@ionic/angular/standalone';
+import { IonItem, IonButton, IonInput, IonSelect, IonSelectOption, IonLabel, IonTitle, IonText, IonCard, IonCardContent } from '@ionic/angular/standalone';
 import * as Utils from 'src/app/utils';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserData, UserRole } from 'src/app/interfaces/user.interface';
@@ -21,6 +21,8 @@ import { HotelsService } from 'src/app/services/hotels.service';
     IonButton,
     IonSelect,
     IonSelectOption,
+    IonCard,
+    IonCardContent,
     CommonModule,
     ReactiveFormsModule // Abbiamo deciso di utilizzare i Reactive Forms al posto dei Template-Driven Forms in quanto ci permettono un controllo programmatico maggiore non dipendente dall'HTML, come per esempio per l'implementazione della validazione
   ]
