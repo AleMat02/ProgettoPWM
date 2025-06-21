@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.scss'],
   standalone: true,
-  imports: [IonCardHeader, IonCardContent, IonCardTitle, IonCard, IonCol, IonRow, IonGrid, IonContent, IonTitle, IonText, CommonModule, NgOptimizedImage, IonButton, RouterModule] //Angular raccomanda di utilizzare NgOptimizedImage per gestire le immagini al meglio
+  imports: [IonCardContent, IonCard, IonCol, IonRow, IonGrid, IonContent, IonText, CommonModule, NgOptimizedImage, IonButton, RouterModule] //Angular raccomanda di utilizzare NgOptimizedImage per gestire le immagini al meglio
 })
 export class LandingPage {
   constructor() { }

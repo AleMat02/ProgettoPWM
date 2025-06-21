@@ -26,14 +26,13 @@ export class HotelsPage {
   getHotels() {
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
-        console.log("Hotel recuperati con successo.");
         this.hotels = res.data.hotels;
         this.loading = false;
-        console.log(res)
       },
       error: async (err: any) => {
+        this.toastService.presentErrorToast("Errore durante il recupero degli hotel")
         console.error("Errore durante il recupero degli hotel: ", err);
-        this.loading = false; //TODO: Forse bisognerebbe aggiungere un this.error per visualizzazione custom in caso di errore
+        this.loading = false;
       }
     })
   }
@@ -44,10 +43,10 @@ export class HotelsPage {
         this.toastService.presentSuccessToast(res.message)
         this.loading = false;
         this.getHotels(); //aggiorniamo gli hotel disponibili dopo la cancellazione
-        console.log(res)
       },
       error: async (err: any) => {
-        console.error("Errore durante il recupero degli hotel: ", err);
+        this.toastService.presentErrorToast("Errore durante la cancellazione degli hotel")
+        console.error("Errore durante la cancellazione degli hotel: ", err);
         this.loading = false;
       }
     })

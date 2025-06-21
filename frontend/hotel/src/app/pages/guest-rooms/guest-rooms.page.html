@@ -1,17 +1,15 @@
 <ion-content>
 
   <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
-
-
-    <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_name')">
+    <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
       <ion-label position="floating">Hotel</ion-label>
-      <ion-select formControlName="hotel_name" interface="popover" value="single">
-         <ion-select-option *ngFor="let hotel of hotels" [value]="hotel.name">
+      <ion-select formControlName="hotel_id" interface="popover" value="single">
+         <ion-select-option *ngFor="let hotel of hotels" [value]="hotel.id">
         {{ hotel.name }}
         </ion-select-option>
       </ion-select>
-      <ion-text *ngIf="isFormFieldInvalid('hotel_name')" color="danger">
-        {{getFormErrorMessage("hotel_name")}}
+      <ion-text *ngIf="isFormFieldInvalid('hotel_id')" color="danger">
+        {{getFormErrorMessage("hotel_id")}}
       </ion-text>
     </ion-item>
 
@@ -60,13 +58,28 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>Stanza {{ room.room_number }}</ion-card-title>
-            <ion-card-subtitle>{{ room.room_type }} - Capienza: {{ room.capacity }}</ion-card-subtitle>
+            <ion-card-subtitle
+              >{{ room.room_type }} - Capienza: {{ room.capacity
+              }}</ion-card-subtitle
+            >
           </ion-card-header>
           <ion-card-content>
             <div>Prezzo a notte: {{ room.price_per_night }}€</div>
             <div>Descrizione: {{ room.description || 'N/A' }}</div>
             <div>Hotel: {{ room.hotel_name }}</div>
           </ion-card-content>
+            @if (availabilityForm.get('check_in')?.valid &&
+              availabilityForm.get('check_out')?.valid &&
+              availabilityForm.get('check_in')?.value &&
+              availabilityForm.get('check_out')?.value)
+              {
+              <ion-button (click)="addBookingPending(room.id)">
+                Prenota nelle date selezionate
+              </ion-button>
+            }@else{
+              <ion-item>Inserisci le date per scoprire se puoi prenotare!</ion-item>
+            }
+        
         </ion-card>
       </ion-col>
     </ion-row>

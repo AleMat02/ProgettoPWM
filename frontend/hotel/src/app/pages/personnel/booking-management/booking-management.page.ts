@@ -15,12 +15,15 @@ import {
   IonLabel,
   IonText,
   IonList,
+  IonSelectOption,
+  IonSelect
 } from '@ionic/angular/standalone';
 import { ToastService } from 'src/app/services/toast.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as Utils from 'src/app/utils';
 import { SearchData } from 'src/app/interfaces/booking-management.interface';
 import { BookingManagementService } from 'src/app/services/booking-management.service';
+import { HotelsService } from 'src/app/services/hotels.service';
 
 @Component({
   selector: 'app-booking-management',
@@ -38,69 +41,75 @@ import { BookingManagementService } from 'src/app/services/booking-management.se
     IonButton,
     ReactiveFormsModule,
     IonList,
+    IonSelectOption,
+    IonSelect
   ],
 })
 export class BookingManagementPage {
   searchForm: FormGroup = new FormGroup({});
-
+  searchFormData!: SearchData;
   pendingBookings: any[] = []; // Array per memorizzare le prenotazioni in attesa
+  availabilityForm: FormGroup = new FormGroup({}); // Inizializzazione vuota per evitare undefined
+  hotels: any[] = [];
+  hotelsName: any[] = [];
 
   //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
   constructor(
     private fb: FormBuilder,
     private bookingManagementService: BookingManagementService,
     private toastService: ToastService,
-    private router: Router // aggiungi Router come dipendenza
-  ) {}
+    private hotelsService: HotelsService
+  ) { }
 
-  searchFormData!: SearchData;
-  //Inseriamo più regole rispetto al backend per scelta personale
-  ngOnInit(): void {
+  ngOnInit() {
     this.searchForm = this.fb.group({
-      hotel_id: [null, [Validators.min(0)]],
+      hotel_id: [0, { validators: [Validators.required, Validators.min(0)] }],
       from_date: ['', []],
       limit: [50, [Validators.min(50)]], // coerente con la select
     });
 
-    // Invia richiesta al backend anche senza filtro
-    this.bookingManagementService
-      .getPendingBookings(this.searchForm.value)
-      .subscribe({
-        next: (res: any) => {
-          console.log('Prenotazioni in attesa:', res);
 
-          for (const booking of res.data.bookings) {
-            // Aggiungi la prenotazione all'array
-            this.pendingBookings.push(booking);
-          }
-        },
-        error: (err: any) => {
-          this.toastService.handleErrorToast(err);
-        },
-      });
+    this.hotelsService.getHotels().subscribe({
+      next: (res: any) => {
+        this.hotels = res.data.hotels;
+        if (this.hotels.length > 0) {
+          this.searchForm.get('hotel_id')?.setValue(this.hotels[0].id);
+        }
+      },
+      error: (err: any) => {
+        this.toastService.presentErrorToast("Errore nel recupero degli hotel");
+        console.error("Errore nel recupero degli hotel: ", err)
+      },
+    });
+
+
+    this.bookingManagementService.getPendingBookings(this.searchFormData).subscribe({
+      next: (res: any) => {
+        for (const booking of res.data.bookings) {
+          this.pendingBookings.push(booking);
+        }
+      },
+      error: (err: any) => {
+        this.toastService.presentErrorToast("Errore nel recupero delle prenotazioni");
+        console.error("Errore nel recupero delle prenotazioni: ", err)
+      },
+    });
   }
-
-  // Funzione che resetta check_out se la data di check-in è superiore a quella di check-out
 
   onSubmit() {
     this.pendingBookings = []; // Svuota l'array delle prenotazioni in attesa
-    this.searchFormData = this.searchForm.value;
-    this.bookingManagementService
-      .getPendingBookings(this.searchFormData)
-      .subscribe({
-        next: (res: any) => {
-          this.toastService.presentSuccessToast(
-            'Filtro applicato con successo'
-          );
-          console.log('Prenotazioni in attesa:', res);
-          for (const booking of res.data.bookings) {
-            this.pendingBookings.push(booking);
-          }
-        },
-        error: (err: any) => {
-          this.toastService.handleErrorToast(err);
-        },
-      });
+    this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
+      next: (res: any) => {
+        this.toastService.presentSuccessToast('Filtro applicato con successo');
+
+        for (const booking of res.data.bookings) {
+          this.pendingBookings.push(booking);
+        }
+      },
+      error: (err: any) => {
+        this.toastService.presentErrorToast(err);
+      },
+    });
   }
 
   isFormFieldInvalid(field: string) {
@@ -114,24 +123,23 @@ export class BookingManagementPage {
   manageBooking(bookingId: number, decision: string) {
     this.bookingManagementService
       .manageBookingRequest(bookingId, decision)
-      .subscribe({
-        next: (res: any) => {
-          if (decision === 'accept') {
-            this.toastService.presentSuccessToast(
-              'Prenotazione accettata con successo'
+      .subscribe(
+        {
+          next: (res: any) => {
+            if (decision === 'approve') {
+              this.toastService.presentSuccessToast('Prenotazione accettata con successo');
+            } else if (decision === 'reject') {
+              this.toastService.presentSuccessToast('Prenotazione rifiutata con successo');
+            }
+            this.pendingBookings = this.pendingBookings.filter(
+              (booking) => booking.id !== bookingId
             );
-          } else if (decision === 'reject') {
-            this.toastService.presentSuccessToast(
-              'Prenotazione rifiutata con successo'
-            );
-          }
-          this.pendingBookings = this.pendingBookings.filter(
-            (booking) => booking.id !== bookingId
-          );
-        },
-        error: (err: any) => {
-          this.toastService.handleErrorToast(err);
-        },
-      });
+          },
+          error: (err: any) => {
+            this.toastService.presentErrorToast("Errore nella gestione della prenotazione");
+            console.error("Errore nella gestione della prenotazione: ", err)
+          },
+        }
+      );
   }
 }

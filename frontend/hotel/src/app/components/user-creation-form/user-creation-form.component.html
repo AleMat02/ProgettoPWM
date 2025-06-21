@@ -70,6 +70,22 @@
     }
   </ion-item>
   }
+  
+  @if(userForm.get('role')?.value === roles[1]){
+  <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
+    <ion-label position="floating">Hotel di appartenenza</ion-label>
+    <ion-select formControlName="hotel_id" interface="popover" value="guest">
+      @for(hotel of hotels; track hotel)
+      {
+      <ion-select-option [value]="hotel.id">{{hotel.name | titlecase}}</ion-select-option>
+      }
+    </ion-select>
+    @if(isFormFieldInvalid("hotel_id"))
+    {
+    <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
+    }
+  </ion-item>
+  }
 
   <ion-button type="submit" expand="block" [disabled]="userForm.invalid">
     {{ submitButtonText }}

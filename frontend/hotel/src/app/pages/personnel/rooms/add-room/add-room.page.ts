@@ -58,7 +58,6 @@ export class AddRoomPage implements OnInit {
         }
 
         const addRoomData: AddRoomData = this.roomForm.getRawValue() //includo anche i valori dei campi disabilitati (capacity)
-        console.log("Dati per la creazione della stanza inviati:", addRoomData)
 
         this.addRoomService.addRoom(addRoomData.room_number, addRoomData.room_type, addRoomData.capacity, addRoomData.price_per_night, addRoomData.hotel_id, addRoomData.description).subscribe({
             next: (res: any) => {
@@ -75,7 +74,8 @@ export class AddRoomPage implements OnInit {
                 });
             },
             error: (err: any) => {
-                this.toastService.handleErrorToast(err)
+                this.toastService.presentErrorToast("Errore nella creazione della stanza")
+                console.error("Errore nella creazione della stanza: ", err)
             }
         })
     }

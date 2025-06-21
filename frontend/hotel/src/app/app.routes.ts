@@ -16,17 +16,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/guest-rooms/guest-rooms.page').then(m => m.GuestRoomsPage)
   },
   {
-    path: 'bookings',
-    loadComponent: () => import('./pages/bookings/bookings.page').then(m => m.BookingsPage)
+    path: 'user-booking-history',
+    loadComponent: () => import('./pages/user-booking-history/user-booking-history.page').then( m => m.UserBookingHistoryPage)
   },
   {
-    path: 'add-booking',
-    loadComponent: () => import('./pages/bookings/add-booking/add-booking.page').then(m => m.AddBookingPage)
-  },
-  {
-    path: 'personnel/dashboard', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
-    loadComponent: () => import('./pages/personnel/dashboard/dashboard.page').then(m => m.DashboardPage),
-    canActivate: [roleGuard([UserRole.Admin, UserRole.Reception])] //* Forse conviene direttamente togliere la dashboard e far andare subito alle stanze
+    path: 'personnel/bookings-history', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
+    loadComponent: () => import('./pages/personnel/bookings-history/bookings-history.page').then(m => m.BookingsHistoryPage),
+    canActivate: [roleGuard([UserRole.Admin, UserRole.Reception])]
   },
   {
     path: 'personnel/add-user',
@@ -54,7 +50,7 @@ export const routes: Routes = [
     canActivate: [roleGuard([UserRole.Admin])]
   },
   {
-    path: 'nearby-hotels', //Sarà personnel?
+    path: 'nearby-hotels',
     loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
   },
   {

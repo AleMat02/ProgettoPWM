@@ -1,21 +1,27 @@
 <ion-content>
   <ion-title>Prenotazioni in stato di approvazione</ion-title>
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+ 
     <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
-      <ion-label position="floating">ID Hotel</ion-label>
-      <ion-input type="number" formControlName="hotel_id"></ion-input>
+      <ion-label position="floating">Hotel</ion-label>
+      <ion-select formControlName="hotel_id" interface="popover" value="single">
+         <ion-select-option *ngFor="let hotel of hotels" [value]="hotel.id">
+        {{ hotel.name }}
+        </ion-select-option>
+      </ion-select>
     </ion-item>
     @if(isFormFieldInvalid("hotel_id")) {
-    <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
+      <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
     }
 
-    <ion-item [class.invalid-item]="isFormFieldInvalid('check_in')">
+    <ion-item [class.invalid-item]="isFormFieldInvalid('from_date')">
       <ion-label position="floating">A partire da</ion-label>
       <ion-input type="date" formControlName="from_date" > </ion-input>
     </ion-item>
     @if(isFormFieldInvalid("from_date")) {
     <ion-text color="danger">{{getFormErrorMessage("from_date")}}</ion-text>
     }
+    
     <ion-item [class.invalid-item]="isFormFieldInvalid('limit')">
       <ion-label position="floating">Limite</ion-label>
       <ion-input type="number" formControlName="limit" > </ion-input>
@@ -36,7 +42,7 @@
           <ion-label>
             Prenotazione ID: {{booking.id}} - Hotel ID: {{booking.hotel_id}} - Data Inizio: {{booking.check_in}}
           </ion-label>
-          <ion-button fill="outline" slot="end" (click)="manageBooking(booking.id, 'accept')">Approva</ion-button>
+          <ion-button fill="outline" slot="end" (click)="manageBooking(booking.id, 'approve')">Approva</ion-button>
           <ion-button fill="outline" color="danger" slot="end" (click)="manageBooking(booking.id, 'reject')">Rifiuta</ion-button>
         </ion-item>
       }

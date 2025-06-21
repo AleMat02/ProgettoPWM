@@ -41,7 +41,6 @@ export class AddHotelPage {
         }
 
         const hotelFormData: AddHotelData = this.hotelForm.value;
-        console.log("Dati per la creazione dell'utente inviati:", hotelFormData)
 
         this.addHotelService.addHotel(hotelFormData).subscribe({
             next: (res: any) => {
@@ -58,7 +57,8 @@ export class AddHotelPage {
                 });
             },
             error: (err: any) => {
-                this.toastService.handleErrorToast(err)
+                this.toastService.presentErrorToast("Errore nella creazione dell'hotel")
+                console.error("Errore nella creazione dell'hotel: ", err)
             }
         })
     }

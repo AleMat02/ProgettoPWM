@@ -4,7 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { filter, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, lockClosedOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, lockClosedOutline, albumsOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +37,8 @@ export class AppComponent implements OnInit, OnDestroy {
       trashOutline,
       sadOutline,
       personCircleOutline,
-      lockClosedOutline
+      lockClosedOutline,
+      albumsOutline
     })
   }
 

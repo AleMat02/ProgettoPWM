@@ -26,13 +26,14 @@ export class RegisterPage {
   constructor(private authService: AuthService, private router: Router, private toastService: ToastService) { }
 
   registerUser(userData: UserData) {
-    this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email).subscribe({
+    this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email, userData.hotel_id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(`Registrazione avvenuta con successo!`);
         this.router.navigate(['/login'])
       },
       error: (err: any) => {
-        this.toastService.handleErrorToast(err)
+        this.toastService.presentErrorToast("Errore durante la registrazione")
+        console.error("Errore durante la registrazione: ", err)
       }
     });
   }

@@ -1,8 +1,12 @@
 ion-header {
   ion-icon {
-    scale: 1.5;
+    scale: 2;
+    padding: 6px;
   }
 
+  ion-label{
+    padding-left: 8px;
+  }
   #login {
     --padding-end: 20px;
     --padding-start: 20px;
