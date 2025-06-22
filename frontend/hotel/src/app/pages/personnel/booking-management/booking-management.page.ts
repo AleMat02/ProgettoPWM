@@ -52,6 +52,7 @@ export class BookingManagementPage {
   availabilityForm: FormGroup = new FormGroup({}); // Inizializzazione vuota per evitare undefined
   hotels: any[] = [];
   hotelsName: any[] = [];
+  today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
 
   //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
   constructor(
@@ -64,8 +65,7 @@ export class BookingManagementPage {
   ngOnInit() {
     this.searchForm = this.fb.group({
       hotel_id: [0, { validators: [Validators.required, Validators.min(0)] }],
-      from_date: ['', []],
-      limit: [50, [Validators.min(50)]], // coerente con la select
+      from_date: [this.today, []],
     });
 
 
@@ -82,12 +82,14 @@ export class BookingManagementPage {
       },
     });
 
+    this.searchForm.valueChanges.subscribe(() => {
+      this.onSubmit();
+    });
+
 
     this.bookingManagementService.getPendingBookings(this.searchFormData).subscribe({
       next: (res: any) => {
-        for (const booking of res.data.bookings) {
-          this.pendingBookings.push(booking);
-        }
+        this.pendingBookings = res.data.bookings; // Assegna le prenotazioni in attesa
       },
       error: (err: any) => {
         this.toastService.presentErrorToast("Errore nel recupero delle prenotazioni");
@@ -100,11 +102,7 @@ export class BookingManagementPage {
     this.pendingBookings = []; // Svuota l'array delle prenotazioni in attesa
     this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
       next: (res: any) => {
-        this.toastService.presentSuccessToast('Filtro applicato con successo');
-
-        for (const booking of res.data.bookings) {
-          this.pendingBookings.push(booking);
-        }
+        this.pendingBookings = res.data.bookings;
       },
       error: (err: any) => {
         this.toastService.presentErrorToast(err);

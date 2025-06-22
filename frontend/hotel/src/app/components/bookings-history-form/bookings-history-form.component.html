@@ -28,15 +28,8 @@
       <ion-text color="danger"> {{ getFormErrorMessage("user_id") }}</ion-text>
       }
     </ion-item>
-
     }
-    <ion-button
-      type="submit"
-      expand="block"
-      [disabled]="searchForm.invalid && !showUserIdInput"
-    >
-      filtra
-    </ion-button>
+
 
     @if(userBookingsDisplayed.length > 0){ @for(booking of userBookingsDisplayed; track
     booking.id){

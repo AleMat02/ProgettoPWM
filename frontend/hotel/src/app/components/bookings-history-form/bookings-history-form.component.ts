@@ -37,7 +37,6 @@ import * as Utils from 'src/app/utils';
     IonSelectOption,
     IonItem,
     ReactiveFormsModule,
-    IonButton,
     IonLabel,
     IonTitle,
   ],
@@ -71,21 +70,25 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
         });
       }
     });
+  
+    this.searchForm.valueChanges.subscribe(() => {
+      this.onSubmit();
+    });
+
   }
+    ngOnDestroy() {
+      this.userSub.unsubscribe();
+    }
 
-  ngOnDestroy() {
-    this.userSub.unsubscribe();
-  }
+    isFormFieldInvalid(field: string) {
+      return Utils.isFormFieldInvalid(this.searchForm, field);
+    }
 
-  isFormFieldInvalid(field: string) {
-    return Utils.isFormFieldInvalid(this.searchForm, field);
-  }
+    getFormErrorMessage(field: string) {
+      return Utils.getFormErrorMessage(this.searchForm, field);
+    }
 
-  getFormErrorMessage(field: string) {
-    return Utils.getFormErrorMessage(this.searchForm, field);
-  }
-
-
+  
 
   onSubmit() {
     const currentUserId = this.searchForm.value.user_id;

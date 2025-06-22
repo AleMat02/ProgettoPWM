@@ -1,6 +1,6 @@
 <ion-content>
 
-  <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="availabilityForm">
     <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
       <ion-label position="floating">Hotel</ion-label>
       <ion-select formControlName="hotel_id" interface="popover" value="single">
@@ -31,7 +31,7 @@
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('room_type')">
       <ion-label position="floating">Tipo Stanza</ion-label>
-      <ion-select formControlName="room_type" interface="popover" value="single">
+      <ion-select formControlName="room_type" interface="popover" >
         <ion-select-option *ngFor="let roomType of roomTypes;" [value]="roomType">
           {{roomType | titlecase}}
         </ion-select-option>
@@ -40,12 +40,6 @@
         {{getFormErrorMessage("room_type")}}
       </ion-text>
     </ion-item>
-
-
-
-    <ion-button type="submit" expand="block" [disabled]="availabilityForm.invalid">
-      filtra
-    </ion-button>
   </form>
 
   <div style="text-align: center; margin-top: 32px;">
@@ -71,7 +65,8 @@
             @if (availabilityForm.get('check_in')?.valid &&
               availabilityForm.get('check_out')?.valid &&
               availabilityForm.get('check_in')?.value &&
-              availabilityForm.get('check_out')?.value)
+              availabilityForm.get('check_out')?.value && 
+              roomAvailability[room.id])
               {
               <ion-button (click)="addBookingPending(room.id)">
                 Prenota nelle date selezionate
