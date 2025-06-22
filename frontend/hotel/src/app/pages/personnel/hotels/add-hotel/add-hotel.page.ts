@@ -23,12 +23,12 @@ export class AddHotelPage {
     ngOnInit(): void {
         this.hotelForm = this.fb.group(
             {
-                name: ['', [Validators.minLength(4), Validators.maxLength(30)]], //I campi sono tutti opzionali, ma se l'utente digita qualcosa, allora l'input deve rispettare la lunghezza qui specificata
-                address: ['', [Validators.minLength(6), Validators.maxLength(40)]],
-                city: ['', [Validators.minLength(4), Validators.maxLength(30)]],
-                latitude: ['', Validators.maxLength(15)], //Il fatto che alcuni campi debbano essere solo numeri viene controllato dall'ion-input nell'html tramite la proprietà "type" 
-                longitude: ['', Validators.maxLength(15)],
-                description: ['', Validators.maxLength(100)], //il campo deve contenere solo numeri, ed avere una lunghezza di 10 numeri
+                name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+                address: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
+                city: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+                latitude: ['',[Validators.required,Validators.maxLength(15)]],
+                longitude: ['', [Validators.required, Validators.maxLength(15)]],
+                description: ['', [Validators.maxLength(100)]],
             }
         );
     }

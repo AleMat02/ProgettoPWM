@@ -79,7 +79,7 @@ export class UserCreationFormComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         full_name: ['', [Validators.required, Validators.minLength(3)]],
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]], //il campo deve contenere solo numeri, ed avere una lunghezza di 10 numeri
-        role: [UserRole.Guest, Validators.required],
+        role: [UserRole.Guest, [Validators.required]],
         hotel_id: [null, this.hotelIdRequiredIfReception()]
       },
       {

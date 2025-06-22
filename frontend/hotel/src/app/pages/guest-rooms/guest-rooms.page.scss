@@ -1,23 +1,77 @@
 form {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  justify-content: center;
   gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 0 1rem;
 
   ion-item {
-    flex: 1 1 0;
-    margin-bottom: 0;
-  }
-
-  ion-button[type="submit"] {
-    margin-left: 1rem;
-    align-self: flex-end;
-    height: 40px;
+    //flex-grow: 0 -> non si allargano per riempire lo spazio
+    //flex-shrink: 1 -> possono restringersi se non c'è abbastanza spazio
+    //flex-basis: 250px -> la loro larghezza "ideale"
+    flex: 1 1 250px;
+    border-radius: 4px; //Angoli arrotondati
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    background: #fff;
+    border: 1.2px solid #bdbdbd;
+    transition: box-shadow 0.2s;
+    --border-width: 0 !important;
+    --highlight-height: 0 !important;
+    --inner-border-width: 0 !important;
+    --border-color: transparent !important;
+    --background: #fff;
   }
 }
 
-// Per evitare padding extra su ion-content
-ion-content {
-  --padding-start: 0;
-  --padding-end: 0;
+.room-card {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+
+  ion-card-title {
+    color: var(--ion-color-primary);
+    font-weight: bold;
+  }
+
+  img {
+    // Stile di base per tutte le immagini nelle card
+    display: block;
+    width: 100%;
+  }
+}
+
+.card-image-container {
+  position: relative; //Serve per far funzionare la proprietà fill di NgOptimizedImage
+  width: 100%;
+  height: 300px;
+
+  img {
+    object-fit: cover; //Assicura che l'immagine copra l'area senza distorsioni
+    object-position: bottom; // Allinea l'immagine in basso nel contenitore
+  }
+}
+
+// Stili per mobile
+@media (max-width: 767px) {
+  .room-card {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  form {
+    flex-direction: column;
+    align-items: stretch;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    gap: 0.6rem;
+  }
+
+  form ion-item {
+    max-width: 100%;
+    flex: 1 1 100%;
+    border-radius: 4px; // Angoli arrotondati
+  }
 }

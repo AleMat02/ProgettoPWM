@@ -4,12 +4,11 @@
     <ion-item [class.invalid-item]="isFormFieldInvalid('status')">
       <ion-label position="floating">Status</ion-label>
       <ion-select formControlName="status" interface="popover" value="single">
-        <ion-select-option
-          *ngFor="let status of ['confirmed', 'rejected', 'pending']"
-          [value]="status"
-        >
-          {{ status }}
-        </ion-select-option>
+        @for(status of ['confirmed', 'rejected', 'pending']; track status) {
+          <ion-select-option [value]="status">
+            {{ status }}
+          </ion-select-option>
+        }
       </ion-select>
     </ion-item>
     <ion-text color="danger" *ngIf="isFormFieldInvalid('status')">

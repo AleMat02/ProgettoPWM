@@ -12,12 +12,21 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
+    path: 'guest-rooms',
+    loadComponent: () => import('./pages/guest-rooms/guest-rooms.page').then(m => m.GuestRoomsPage)
+  },
+  {
     path: 'guest-rooms/:hotelId',
     loadComponent: () => import('./pages/guest-rooms/guest-rooms.page').then(m => m.GuestRoomsPage)
   },
   {
+    path: 'nearby-hotels',
+    loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
+  },
+  {
     path: 'user-booking-history',
-    loadComponent: () => import('./pages/user-booking-history/user-booking-history.page').then( m => m.UserBookingHistoryPage)
+    loadComponent: () => import('./pages/user-booking-history/user-booking-history.page').then(m => m.UserBookingHistoryPage),
+    canActivate: [roleGuard([UserRole.Guest])]
   },
   {
     path: 'personnel/bookings-history', //Usiamo le shared urls al posto delle nested urls come consigliato dalla documentazione Ionic
@@ -50,12 +59,9 @@ export const routes: Routes = [
     canActivate: [roleGuard([UserRole.Admin])]
   },
   {
-    path: 'nearby-hotels',
-    loadComponent: () => import('./pages/nearby-hotels/nearby-hotels.page').then(m => m.NearbyHotelsPage),
-  },
-  {
     path: 'personnel/booking-management',
-    loadComponent: () => import('./pages/personnel/booking-management/booking-management.page').then(m => m.BookingManagementPage)
+    loadComponent: () => import('./pages/personnel/booking-management/booking-management.page').then(m => m.BookingManagementPage),
+    canActivate: [roleGuard([UserRole.Admin, UserRole.Reception])]
   },
   {
     path: 'unauthorized',

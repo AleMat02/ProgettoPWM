@@ -5,14 +5,8 @@ import { IonButton, IonItem, IonSelect, IonSelectOption, IonContent, IonInput, I
 import { AddRoomData } from 'src/app/interfaces/add-room.interface';
 import * as Utils from 'src/app/utils'
 import { ToastService } from 'src/app/services/toast.service';
-import { RoomType } from 'src/app/interfaces/room.interface';
+import { RoomType, ROOM_CAPACITIES } from 'src/app/interfaces/room.interface';
 import { AddRoomService } from 'src/app/services/add-room.service';
-
-const ROOM_CAPACITIES: { [key in RoomType]: number } = {
-    [RoomType.Single]: 1,
-    [RoomType.Double]: 2,
-    [RoomType.Family]: 4,
-};
 
 @Component({
     selector: 'app-add-room',
@@ -33,10 +27,10 @@ export class AddRoomPage implements OnInit {
         this.roomForm = this.fb.group(
             {
                 room_number: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{0,2}$/)]], // Es. 1-999, non inizia con 0
-                room_type: [RoomType.Single, Validators.required],
+                room_type: [RoomType.Single, [Validators.required]],
                 capacity: [{ value: ROOM_CAPACITIES[RoomType.Single], disabled: true }, [Validators.required, Validators.max(4)]],
                 price_per_night: ['', [Validators.required, Validators.maxLength(4)]],
-                hotel_id: ['', [Validators.required, Validators.max(10)]],
+                hotel_id: ['', [Validators.required, Validators.max(20)]],
                 description: ['', [Validators.maxLength(100)]]
             }
         );

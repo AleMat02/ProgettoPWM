@@ -1,12 +1,12 @@
 <ion-content id="landing-page" [fullscreen]="false">
   <div class="hero-section">
     <div class="hero-overlay"></div>
-    <img ngSrc="../../assets/background-image.jpg" class="hero-background-image" fill priority />
+    <img ngSrc="../../assets/background-image.jpg" alt="Hotel Forese" class="hero-background-image" fill priority />
 
     <div class="hero-text-container">
       <ion-text class="hero-title">
         Benvenuti all'Hotel Forese
-      </ion-text>
+      </ion-text> <!--Non uso IonTitle perché non supporta il break-word-->
 
       <div class="gold-divider"></div>
 
@@ -15,7 +15,7 @@
         ospitalità esclusiva e da servizi su misura.
       </ion-text>
 
-      <ion-button size="large" class="button primary" [routerLink]="['/bookings']" routerLinkActive="active">
+      <ion-button size="large" class="button primary" [routerLink]="['/guest-rooms']" routerLinkActive="active">
         Prenota Ora
       </ion-button>
     </div>
@@ -33,7 +33,7 @@
         <ion-row class="ion-align-items-center">
           <ion-col size="12" size-md="4" class="card-image-col">
              <div class="image-wrapper">
-                <img ngSrc="../../assets/example-room.jpg" class="rounded-image" fill>
+                <img ngSrc="../../assets/family-room.jpg" alt="Stanza Familiare" class="rounded-image" fill>
              </div>
           </ion-col>
           <ion-col size="12" size-md="7" offset-md="1" class="card-text-col">
@@ -55,13 +55,13 @@
       <ion-row class="ion-align-items-center">
         <ion-col size="12" size-md="4" class="rooms-text-col">
           <h1>Sei ancora indeciso?</h1>
-          <ion-button size="large" class="button secondary" [routerLink]="['/guest-rooms/1']" routerLinkActive="active">
+          <ion-button size="large" class="button secondary" [routerLink]="['/guest-rooms']" routerLinkActive="active">
             Visualizza Le Nostre Stanze
           </ion-button>
         </ion-col>
         <ion-col size="12" size-md="7" offset-md="1" class="rooms-image-col">
            <div class="image-wrapper">
-              <img ngSrc="../../assets/example-pool.jpg" class="rounded-image" fill>
+              <img ngSrc="../../assets/example-pool.jpg" alt="Piscina" class="rounded-image" fill>
            </div>
         </ion-col>
       </ion-row>

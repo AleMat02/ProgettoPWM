@@ -37,7 +37,7 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 :root {
-    --navbar-height: 56px; // Altezza standard ion-toolbar
+    --navbar-height: 56px; //Altezza standard ion-toolbar
     --sidebar-width: 100px; //Larghezza del side-menu nelle rotte /personnel/
 }
 
@@ -56,24 +56,36 @@ ion-content {
 }
 
 ion-card {
-  --background: white; // Colore di sfondo delle card
-  border-radius: 12px; // Angoli arrotondati per le card
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombra delicata per le card
+  --background: white; //Colore di sfondo delle card
+  border-radius: 12px; //Angoli arrotondati per le card
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); //Ombra delicata per le card
 }
 
 ion-card-content ion-item {
-  --background: transparent; // Rimuove lo sfondo dagli item interni alle card
+  --background: transparent; //Rimuove lo sfondo dagli item interni alle card
 }
 
+.empty-state { //Stili per skeleton content e pagine che restituiscono array vuoti
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  text-align: center;
+}
+
+.empty-state ion-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
 
 .custom-toast {
-
-  // Usiamo ::part per stilizzare in modo sicuro gli elementi interni del componente Ionic
-  // Questo è l'approccio raccomandato e più robusto.
+  //Usiamo ::part per stilizzare in modo sicuro gli elementi interni del componente Ionic
+  //Questo è l'approccio raccomandato e più robusto.
 
   &::part(message) {
-    // Assicura che il testo del messaggio sia allineato correttamente
-    // e non abbia stili che interferiscono con flexbox.
+    //Assicura che il testo del messaggio sia allineato correttamente
+    //e non abbia stili che interferiscano con flexbox.
     text-align: center;
   }
 }

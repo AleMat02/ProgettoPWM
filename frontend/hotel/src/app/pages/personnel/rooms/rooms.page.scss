@@ -31,20 +31,3 @@
   font-size: 1rem;
   line-height: 1.4;
 }
-
-// Stile per lo stato vuoto/errore
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 80%;
-  text-align: center;
-}
-
-.empty-state ion-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-// Stile per lo skeleton loading

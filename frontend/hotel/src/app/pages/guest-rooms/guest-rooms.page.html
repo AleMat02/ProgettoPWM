@@ -1,82 +1,100 @@
 <ion-content>
-
+  @if(hotels && hotels.length > 0) {
   <form [formGroup]="availabilityForm">
     <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
       <ion-label position="floating">Hotel</ion-label>
       <ion-select formControlName="hotel_id" interface="popover" value="single">
-         <ion-select-option *ngFor="let hotel of hotels" [value]="hotel.id">
-        {{ hotel.name }}
+        @for(hotel of hotels; track hotel.id) {
+        <ion-select-option [value]="hotel.id">
+          {{ hotel.name }}
         </ion-select-option>
+        }
       </ion-select>
-      <ion-text *ngIf="isFormFieldInvalid('hotel_id')" color="danger">
-        {{getFormErrorMessage("hotel_id")}}
-      </ion-text>
+      @if(isFormFieldInvalid("hotel_id")) {
+      <ion-text color="danger"> {{getFormErrorMessage("hotel_id")}} </ion-text>
+      }
     </ion-item>
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('check_in')">
       <ion-label position="floating">check_in</ion-label>
       <ion-input type="date" formControlName="check_in" [min]="today"></ion-input>
     </ion-item>
-    <ng-container *ngIf="isFormFieldInvalid('check_in')">
-      <ion-text color="danger">{{getFormErrorMessage('check_in')}}</ion-text>
-    </ng-container>
+    @if(isFormFieldInvalid('check_in')) {
+    <ion-text color="danger">{{getFormErrorMessage('check_in')}}</ion-text>
+    }
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('check_out')">
       <ion-label position="floating">check_out</ion-label>
       <ion-input type="date" formControlName="check_out" [min]="availabilityForm.get('check_in')?.value"></ion-input>
     </ion-item>
-    <ng-container *ngIf="isFormFieldInvalid('check_out')">
-      <ion-text color="danger">{{getFormErrorMessage('check_out')}}</ion-text>
-    </ng-container>
+    @if(isFormFieldInvalid('check_out')) {
+    <ion-text color="danger">{{getFormErrorMessage('check_out')}}</ion-text>
+    }
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('room_type')">
       <ion-label position="floating">Tipo Stanza</ion-label>
-      <ion-select formControlName="room_type" interface="popover" >
-        <ion-select-option *ngFor="let roomType of roomTypes;" [value]="roomType">
+      <ion-select formControlName="room_type" interface="popover">
+        @for(roomType of roomTypes; track roomType) {
+        <ion-select-option [value]="roomType">
           {{roomType | titlecase}}
         </ion-select-option>
+        }
       </ion-select>
-      <ion-text *ngIf="isFormFieldInvalid('room_type')" color="danger">
-        {{getFormErrorMessage("room_type")}}
-      </ion-text>
+      @if(isFormFieldInvalid("room_type")) {
+      <ion-text color="danger"> {{getFormErrorMessage("room_type")}} </ion-text>
+      }
     </ion-item>
   </form>
 
-  <div style="text-align: center; margin-top: 32px;">
+  <div style="text-align: center; margin-top: 32px">
     <ion-title>Le nostre stanze</ion-title>
   </div>
-
+  @if(rooms.length > 0){
   <ion-grid>
     <ion-row>
-      <ion-col size="6" *ngFor="let room of rooms">
-        <ion-card>
+      @for(room of rooms; track room.id) {
+      <ion-col size=12 size-md="6">
+        <ion-card class="room-card">
+          <div class="card-image-container">
+            <img [ngSrc]="getRoomImage(room.room_type)" fill priority
+              alt="Immagine della stanza {{ room.room_type | titlecase }}" />
+          </div>
           <ion-card-header>
             <ion-card-title>Stanza {{ room.room_number }}</ion-card-title>
-            <ion-card-subtitle
-              >{{ room.room_type }} - Capienza: {{ room.capacity
-              }}</ion-card-subtitle
-            >
+            <ion-card-subtitle>
+              {{ room.room_type | titlecase }} - Capienza: {{ room.capacity }}
+            </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <div>Prezzo a notte: {{ room.price_per_night }}€</div>
             <div>Descrizione: {{ room.description || 'N/A' }}</div>
             <div>Hotel: {{ room.hotel_name }}</div>
           </ion-card-content>
-            @if (availabilityForm.get('check_in')?.valid &&
-              availabilityForm.get('check_out')?.valid &&
-              availabilityForm.get('check_in')?.value &&
-              availabilityForm.get('check_out')?.value && 
-              roomAvailability[room.id])
-              {
-              <ion-button (click)="addBookingPending(room.id)">
-                Prenota nelle date selezionate
-              </ion-button>
-            }@else{
-              <ion-item>Inserisci le date per scoprire se puoi prenotare!</ion-item>
-            }
-        
+          @if (
+          availabilityForm.get('check_in')?.valid &&
+          availabilityForm.get('check_out')?.valid &&
+          availabilityForm.get('check_in')?.value &&
+          availabilityForm.get('check_out')?.value
+          ) {
+          <ion-button (click)="addPendingBooking(room.id)">
+            Prenota ora!
+          </ion-button>
+          } @else {
+          <ion-item>Inserisci le date per scoprire se puoi prenotare!</ion-item>
+          }
         </ion-card>
       </ion-col>
+      }
     </ion-row>
   </ion-grid>
+  }
+  @else {
+  <ion-item color="medium" style="text-align: center; margin-top: 32px;">
+    Nessuna stanza disponibile per le date selezionate, in questo hotel.
+  </ion-item>
+  }
+  }
+  @else {
+  <app-no-data [title]="'Non abbiamo ancora hotel che ospitino stanze prenotabili'"></app-no-data>
+  }
 </ion-content>

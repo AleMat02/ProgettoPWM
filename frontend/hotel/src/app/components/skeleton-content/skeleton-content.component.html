@@ -1,0 +1,13 @@
+<ion-list>
+    @for (item of [1, 2, 3]; track item) {
+    <ion-card class="skeleton-card">
+        <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        </ion-card-content>
+    </ion-card>
+    }
+</ion-list>

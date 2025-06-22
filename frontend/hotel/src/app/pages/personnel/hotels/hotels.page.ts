@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonItem, IonFab, IonIcon, IonList, IonCard, IonCardContent, IonCardHeader, IonSkeletonText, IonCardTitle, IonCardSubtitle, IonLabel, IonChip, IonButtons, IonButton } from '@ionic/angular/standalone';
@@ -6,6 +6,9 @@ import { RouterLink } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { HotelData } from 'src/app/interfaces/hotel.interface';
 import { HotelsService } from 'src/app/services/hotels.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserRole } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-hotels',
@@ -14,10 +17,16 @@ import { HotelsService } from 'src/app/services/hotels.service';
   standalone: true,
   imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink]
 })
-export class HotelsPage {
+export class HotelsPage implements OnDestroy {
   hotels: HotelData[] = [];
   loading: boolean = true;
-  constructor(private hotelsService: HotelsService, private toastService: ToastService) { }
+  userSub!: Subscription
+  isAdmin: boolean = false;
+  constructor(private hotelsService: HotelsService, private toastService: ToastService, private authService: AuthService) {
+    this.userSub = this.authService.user$.subscribe(user =>
+      this.isAdmin = user ? user.role === UserRole.Admin : false
+    );
+  }
 
   ionViewWillEnter() { //ionViewWillEnter fa sì che ogni volta che si entri nella pagina, il contenuto venga aggiornato. ngOnInit invece funziona solo quando la pagina viene inizializzata per la prima volta e non è adatta a ciò che ci serve
     this.getHotels()
@@ -52,5 +61,8 @@ export class HotelsPage {
     })
   }
 
+  ngOnDestroy(): void {
+      this.userSub.unsubscribe()
+  }
 }
 
