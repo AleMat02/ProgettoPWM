@@ -70,7 +70,7 @@ ion-card-content ion-item {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80%;
+  height: 90%;
   text-align: center;
 }
 
@@ -86,7 +86,7 @@ ion-card-content ion-item {
 
   &::part(message) {
     //Assicura che il testo del messaggio sia allineato correttamente
-    //e non abbia stili che interferiscono con flexbox.
+    //e non abbia stili che interferiscano con flexbox.
     text-align: center;
   }
 }

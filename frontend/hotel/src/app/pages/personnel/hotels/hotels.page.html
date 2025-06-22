@@ -38,11 +38,13 @@
             <ion-card-title>Nome: {{ hotel.name || 'Nessun nome' }}</ion-card-title>
             <ion-card-subtitle>ID: {{ hotel.id }}</ion-card-subtitle>
           </div>
+          @if(isAdmin) {
           <ion-buttons>
             <ion-button color="danger" (click)="deleteHotel(hotel.id)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
+          }
         </div>
       </ion-card-header>
 
