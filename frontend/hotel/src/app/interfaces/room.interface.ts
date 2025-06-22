@@ -4,6 +4,12 @@ export enum RoomType {
     Family = "family" //Capienza di 4 persone
 }
 
+export const ROOM_CAPACITIES: { [key in RoomType]: number } = {
+    [RoomType.Single]: 1,
+    [RoomType.Double]: 2,
+    [RoomType.Family]: 4,
+};
+
 export interface RoomData {
     id: string,
     room_number: number,

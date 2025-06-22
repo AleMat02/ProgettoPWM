@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
@@ -20,7 +20,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -36,6 +36,7 @@ import { BookingsService } from 'src/app/services/bookings.service';
 import { HotelsService } from 'src/app/services/hotels.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
 
 @Component({
   selector: 'app-guest-rooms',
@@ -63,12 +64,13 @@ import { AuthService } from 'src/app/services/auth.service';
     IonText,
     IonSelect,
     IonSelectOption,
+    NoDataComponent,
+    NgOptimizedImage
   ],
 })
 export class GuestRoomsPage implements OnInit, OnDestroy {
-  availabilityForm: FormGroup = new FormGroup({}); // Inizializzazione vuota per evitare undefined
+  availabilityForm: FormGroup = new FormGroup({});
   rooms: any[] = [];
-  hotelId: string | null = null;
   hotels: any[] = [];
   hotelsName: any[] = [];
   roomTypes = Object.values(RoomType);
@@ -76,55 +78,59 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
   userSub!: Subscription;
   currentUser: boolean = false;
 
-  readonly ROOM_CAPACITIES: { [key in RoomType]: number } = {
-    [RoomType.Single]: 1,
-    [RoomType.Double]: 2,
-    [RoomType.Family]: 4,
-  };
-
   constructor(
     private fb: FormBuilder,
     private guestRoomsService: GuestRoomsService,
     private toastService: ToastService,
-    private route: ActivatedRoute,
     private bookingsService: BookingsService,
     private hotelsService: HotelsService,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
-    this.hotelId = this.route.snapshot.paramMap.get('hotelId');
+    let initialHotelId: number | null = null;
+    const routeHotelId = this.route.snapshot.paramMap.get('hotelId');
+    if (routeHotelId && !isNaN(Number(routeHotelId))) {
+      initialHotelId = Number(routeHotelId);
+    }
+
     this.availabilityForm = this.fb.group({
-      hotel_id: [
-        this.hotelId !== null && !isNaN(Number(this.hotelId))
-          ? Number(this.hotelId)
-          : 1,
-        [Validators.required],
-      ],
+      hotel_id: [initialHotelId, [Validators.required]],
       check_in: ['', []],
       check_out: ['', []],
       room_type: ['', []],
     });
 
-    this.onSubmit();
-
-    this.userSub = this.authService.user$.subscribe(user => this.currentUser = !!user)
-
-    this.availabilityForm.valueChanges.subscribe(() => {
-      this.resetCheckOutIfInvalid();
-      this.onSubmit();
-    });
+    this.userSub = this.authService.user$.subscribe(user => this.currentUser = !!user);
 
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
         if (res && res.data && Array.isArray(res.data.hotels)) {
           this.hotels = res.data.hotels;
+
+          //Se c'è un hotelId dalla route seleziona quello, altrimenti il primo
+          if (this.hotels.length > 0) {
+            let hotelIdToSet = initialHotelId;
+
+            if (!hotelIdToSet || !this.hotels.some(h => h.id === hotelIdToSet)) {
+              hotelIdToSet = this.hotels.slice().sort((a, b) => a.id - b.id)[0].id;
+            }
+
+            this.availabilityForm.get('hotel_id')?.setValue(hotelIdToSet);
+            this.onSubmit();
+          }
         }
       },
       error: (err: any) => {
         this.toastService.presentErrorToast('Errore nel recupero degli hotel');
       },
+    });
+
+    this.availabilityForm.valueChanges.subscribe(() => {
+      this.resetCheckOutIfInvalid();
+      this.onSubmit();
     });
   }
 
@@ -143,10 +149,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
           this.rooms = res.data.available_rooms;
         },
         error: async (err: any) => {
-          this.toastService.presentErrorToast(
-            "Erorre nell'applicazione del filtro"
-          );
-          console.error("Erorre nell'applicazione del filtro: ", err);
+          console.error("Errore nell'applicazione del filtro: ", err); //Non inseriamo un toast di errore perché dal backend la funzione restituisce 404 se non trova stanze, e non vogliamo che l'utente lo veda
         },
       });
   }
@@ -164,7 +167,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
   }
 
   addPendingBooking(room_id: number) {
-    if(!this.currentUser) {
+    if (!this.currentUser) {
       this.router.navigate(['/login']);
       return;
     }
@@ -199,7 +202,20 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
     return Utils.getFormErrorMessage(this.availabilityForm, field);
   }
 
+  getRoomImage(roomType: RoomType): string {
+    switch (roomType) {
+      case RoomType.Single:
+        return 'assets/single-room.jpg';
+      case RoomType.Double:
+        return 'assets/double-room.jpg';
+      case RoomType.Family:
+        return 'assets/family-room.jpg';
+      default:
+        return 'assets/family-room.jpg';
+    }
+  }
+
   ngOnDestroy(): void {
-      this.userSub.unsubscribe()
+    this.userSub.unsubscribe()
   }
 }

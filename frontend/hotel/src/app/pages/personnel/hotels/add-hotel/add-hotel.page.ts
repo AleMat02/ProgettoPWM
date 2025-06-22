@@ -26,9 +26,9 @@ export class AddHotelPage {
                 name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
                 address: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
                 city: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-                latitude: ['',Validators.required,Validators.maxLength(15)],
-                longitude: ['', Validators.required, Validators.maxLength(15)],
-                description: ['', Validators.maxLength(100)],
+                latitude: ['',[Validators.required,Validators.maxLength(15)]],
+                longitude: ['', [Validators.required, Validators.maxLength(15)]],
+                description: ['', [Validators.maxLength(100)]],
             }
         );
     }
