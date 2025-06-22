@@ -1,15 +1,18 @@
 <ion-content>
   <!-- Selettore per il raggio -->
-  <div style="padding: 1em; display: flex; align-items: center; gap: 1em">
-    <label for="radius-select">Raggio di ricerca (km):</label>
-    <select
-      id="radius-select"
+  <ion-item>
+    <ion-label position="fixed">Raggio di ricerca (km):</ion-label>
+    <ion-select
+      name="radius"
       [ngModel]="positionData.radius"
       (ngModelChange)="onRadiusChange($event)"
+      interface="popover"
     >
-      <option *ngFor="let r of [5,10,15,20,25,30]" [value]="r">{{r}}</option>
-    </select>
-  </div>
+      <ion-select-option *ngFor="let r of [10,15,20,25,30,40,50]" [value]="r">
+        {{ r }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
 
   @if (hotels.length > 0) { @for (hotel of hotels; track hotel.id) {
   <ion-card class="hotel-card">
@@ -22,6 +25,8 @@
     </ion-card-content>
     @if(isLoggedIn){
       <ion-button [routerLink]="['/guest-rooms', hotel.id]" >Stanze disponibili</ion-button>
+    }@else {
+      <ion-item>Accedi per prenotare!</ion-item>
     }
     
   </ion-card>

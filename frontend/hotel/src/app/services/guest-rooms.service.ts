@@ -13,7 +13,10 @@ export class GuestRoomsService {
   constructor(private http: HttpClient) { }
 
   getAviableRoomsByHotelId(checkAviabilityData: CheckAvailabilityData, hotel_id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/hotels/${hotel_id}/available-rooms`, { params: {...checkAviabilityData} });
+    return this.http.get(`${this.apiUrl}/hotels/${hotel_id}/available-rooms`, { params: { ...checkAviabilityData } });
   }
 
+  getRoomAvailability(room_id: number, check_in: string, check_out: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/rooms/${room_id}/availability`, { params: { check_in, check_out } });
+  }
 }

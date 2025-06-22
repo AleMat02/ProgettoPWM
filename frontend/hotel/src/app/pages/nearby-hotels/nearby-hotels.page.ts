@@ -5,9 +5,11 @@ import {
   IonContent,
   IonCard,
   IonCardContent,
-  IonButton,
-
-} from '@ionic/angular/standalone';
+  IonButton, 
+  IonLabel, 
+  IonItem,
+  IonSelect,
+  IonSelectOption, IonText, IonTitle } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -17,11 +19,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 
+
 @Component({
   selector: 'app-map',
   templateUrl: './nearby-hotels.page.html',
   styleUrls: ['./nearby-hotels.page.scss'],
-  imports: [
+  imports: [IonTitle, IonText, IonItem, IonLabel, 
     IonCard,
     IonContent,
     CommonModule,
@@ -29,7 +32,9 @@ import { ToastService } from 'src/app/services/toast.service';
     IonCard,
     IonCardContent,
     IonButton,
-    RouterLink
+    RouterLink,
+    IonSelectOption,
+    IonSelect
   ],
   standalone: true,
 })
@@ -70,7 +75,7 @@ export class NearbyHotelsPage implements OnInit {
       const position = await Geolocation.getCurrentPosition();
       this.positionData.lat = position.coords.latitude;
       this.positionData.lng = position.coords.longitude;
-      this.positionData.radius = 5; // Imposta un raggio predefinito di 20 km
+      this.positionData.radius = 10; // Imposta un raggio predefinito di 20 km
       return this.positionData;
     } catch (error) {
       throw error;
@@ -90,6 +95,7 @@ export class NearbyHotelsPage implements OnInit {
   }
 
   fetchNearbyHotels(positionData: PositionData) {
+    console.log('Fetching nearby hotels with position data:', positionData);
     this.nearbyHotelsService.getNearbyHotels(positionData).subscribe({
       next: (response) => {
         this.hotels = [];

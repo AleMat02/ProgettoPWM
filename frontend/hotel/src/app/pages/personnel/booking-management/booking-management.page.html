@@ -16,22 +16,12 @@
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('from_date')">
       <ion-label position="floating">A partire da</ion-label>
-      <ion-input type="date" formControlName="from_date" > </ion-input>
+      <ion-input type="date" formControlName="from_date" [max] = "today"> </ion-input>
     </ion-item>
     @if(isFormFieldInvalid("from_date")) {
     <ion-text color="danger">{{getFormErrorMessage("from_date")}}</ion-text>
     }
     
-    <ion-item [class.invalid-item]="isFormFieldInvalid('limit')">
-      <ion-label position="floating">Limite</ion-label>
-      <ion-input type="number" formControlName="limit" > </ion-input>
-      @if(isFormFieldInvalid("limit")) {
-      <ion-text color="danger">{{getFormErrorMessage("limit")}}</ion-text>
-      }
-    </ion-item>
-    <ion-button type="submit" expand="block" [disabled]="searchForm.invalid">
-      filtra
-    </ion-button>
   </form>
 
 

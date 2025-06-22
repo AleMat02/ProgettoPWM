@@ -71,6 +71,7 @@ export class GuestRoomsPage implements OnInit {
   hotelsName: any[] = [];
   roomTypes = Object.values(RoomType);
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
+  roomAvailability: { [roomId: number]: boolean } = {};
 
   readonly ROOM_CAPACITIES: { [key in RoomType]: number } = {
     [RoomType.Single]: 1,
@@ -83,91 +84,123 @@ export class GuestRoomsPage implements OnInit {
     private guestRoomsService: GuestRoomsService,
     private toastService: ToastService,
     private route: ActivatedRoute,
-    private bookingsService : BookingsService,
+    private bookingsService: BookingsService,
     private hotelsService: HotelsService
   ) {}
 
   ngOnInit() {
     this.hotelId = this.route.snapshot.paramMap.get('hotelId');
     this.availabilityForm = this.fb.group({
-      hotel_id: [this.hotelId !== null && !isNaN(Number(this.hotelId)) ? Number(this.hotelId) :  1,[Validators.required]],
+      hotel_id: [
+        this.hotelId !== null && !isNaN(Number(this.hotelId))
+          ? Number(this.hotelId)
+          : 1,
+        [Validators.required],
+      ],
       check_in: ['', []],
       check_out: ['', []],
-      room_type: ['',[]],
+      room_type: ['', []],
     });
 
-    this.availabilityForm.get('check_in')?.valueChanges.subscribe(() => {
-      this.resetCheckOutIfInvalid();
-    });
+    this.onSubmit();
 
-    this.availabilityForm.get('check_out')?.valueChanges.subscribe(() => {
+    this.availabilityForm.valueChanges.subscribe(() => {
       this.resetCheckOutIfInvalid();
+      this.onSubmit();
     });
 
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
         if (res && res.data && Array.isArray(res.data.hotels)) {
           this.hotels = res.data.hotels;
-        }     
+        }
       },
-       error: (err: any) => {
+      error: (err: any) => {
         this.toastService.presentErrorToast('Errore nel recupero degli hotel');
-        console.error('Errore nel recupero degli hotel: ', err);
       },
     });
   }
 
   onSubmit() {
+    this.rooms = [];
     const formData = this.availabilityForm.value;
     const payload = {
-      check_in : formData.check_in,
-      check_out : formData.check_out,
-      room_type : formData.room_type
-    }
-      this.guestRoomsService.getAviableRoomsByHotelId(payload, formData.hotel_id).subscribe({
-          next: (res: any) => {
-            for (let room of res.data.available_rooms) {
-              this.rooms.push(room);
-            }
-            this.toastService.presentSuccessToast('Filtro applicato con successo');
-          },
-          error: async (err: any) => {
-            this.toastService.presentErrorToast("Erorre nell'applicazione del filtro");
-            console.error("Erorre nell'applicazione del filtro: ", err)
-          },
-        });
-    } 
+      check_in: formData.check_in,
+      check_out: formData.check_out,
+      room_type: formData.room_type,
+    };
+    this.guestRoomsService
+      .getAviableRoomsByHotelId(payload, formData.hotel_id)
+      .subscribe({
+        next: (res: any) => {
+          this.rooms = res.data.available_rooms;
+          for (const room of this.rooms) {
+            this.getRoomAvailability(room.id);
+          }
+        },
+        error: async (err: any) => {
+          this.toastService.presentErrorToast(
+            "Erorre nell'applicazione del filtro"
+          );
+          console.error("Erorre nell'applicazione del filtro: ", err);
+        },
+      });
+  }
+
+  getRoomAvailability(room_id: number) {
+    const checkInValue = this.availabilityForm.get('check_in')?.value;
+    const checkOutValue = this.availabilityForm.get('check_out')?.value;
+    this.guestRoomsService
+      .getRoomAvailability(room_id, checkInValue, checkOutValue)
+      .subscribe({
+        next: (res: any) => {
+          this.roomAvailability[room_id] = res.data.is_available;
+        },
+        error: (err: any) => {
+          this.toastService.presentErrorToast(
+            'Errore nel recupero della disponibilità della camera'
+          );
+          console.error(
+            'Errore nel recupero della disponibilità della camera: ',
+            err
+          );
+        },
+      });
+  }
 
   resetCheckOutIfInvalid() {
     const checkInValue = this.availabilityForm.get('check_in')?.value;
     const checkOutValue = this.availabilityForm.get('check_out')?.value;
-      if (checkInValue && checkOutValue) {
-        const checkInDate = new Date(checkInValue);
-        const checkOutDate = new Date(checkOutValue);
-          if (checkInDate > checkOutDate) {
-            this.availabilityForm.get('check_out')?.setValue('');
-          }
-       }
+    if (checkInValue && checkOutValue) {
+      const checkInDate = new Date(checkInValue);
+      const checkOutDate = new Date(checkOutValue);
+      if (checkInDate > checkOutDate) {
+        this.availabilityForm.get('check_out')?.setValue('');
+      }
     }
+  }
 
-    addBookingPending(room_id: number){
+  addBookingPending(room_id: number) {
     const bookingData: AddBookingData = {
-        room_id : room_id,
-        check_in : this.availabilityForm.get('check_in')?.value,
-        check_out : this.availabilityForm.get('check_out')?.value
+      room_id: room_id,
+      check_in: this.availabilityForm.get('check_in')?.value,
+      check_out: this.availabilityForm.get('check_out')?.value,
     };
     this.bookingsService.createBookingRequest(bookingData).subscribe({
       next: (res: any) => {
-        this.toastService.presentSuccessToast('Prenotazione riuscita con successo');
-        this.rooms = this.rooms.filter(room => room.id !== bookingData.room_id);
+        this.toastService.presentSuccessToast(
+          'Prenotazione effettuata con successo'
+        );
+        this.rooms = this.rooms.filter(
+          (room) => room.id !== bookingData.room_id
+        );
       },
       error: (err: any) => {
         this.toastService.presentErrorToast('Prenotazione fallita');
-        console.error('Prenotazione fallita: ', err)
-      }
+        console.error('Prenotazione fallita: ', err);
+      },
     });
   }
-  
 
   isFormFieldInvalid(field: string) {
     return Utils.isFormFieldInvalid(this.availabilityForm, field);
