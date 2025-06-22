@@ -1,9 +1,11 @@
 <ion-content [fullscreen]="false">
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end"> <!--Forse è il caso di mettere tutto da ion-fab fino all'ultimo else in un componente? Lo uso anche in rooms-->
+  @if(isAdmin) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button [routerLink]="['./add']" color="secondary">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  }
 
   @if (loading) {
   <ion-list>

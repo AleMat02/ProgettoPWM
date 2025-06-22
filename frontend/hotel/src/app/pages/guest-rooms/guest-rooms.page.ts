@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -20,7 +20,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -34,6 +34,8 @@ import { ToastService } from 'src/app/services/toast.service';
 import { AddBookingData } from 'src/app/interfaces/add-booking.interface';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { HotelsService } from 'src/app/services/hotels.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-guest-rooms',
@@ -63,7 +65,7 @@ import { HotelsService } from 'src/app/services/hotels.service';
     IonSelectOption,
   ],
 })
-export class GuestRoomsPage implements OnInit {
+export class GuestRoomsPage implements OnInit, OnDestroy {
   availabilityForm: FormGroup = new FormGroup({}); // Inizializzazione vuota per evitare undefined
   rooms: any[] = [];
   hotelId: string | null = null;
@@ -71,7 +73,8 @@ export class GuestRoomsPage implements OnInit {
   hotelsName: any[] = [];
   roomTypes = Object.values(RoomType);
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
-  roomAvailability: { [roomId: number]: boolean } = {};
+  userSub!: Subscription;
+  currentUser: boolean = false;
 
   readonly ROOM_CAPACITIES: { [key in RoomType]: number } = {
     [RoomType.Single]: 1,
@@ -85,7 +88,9 @@ export class GuestRoomsPage implements OnInit {
     private toastService: ToastService,
     private route: ActivatedRoute,
     private bookingsService: BookingsService,
-    private hotelsService: HotelsService
+    private hotelsService: HotelsService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -103,6 +108,8 @@ export class GuestRoomsPage implements OnInit {
     });
 
     this.onSubmit();
+
+    this.userSub = this.authService.user$.subscribe(user => this.currentUser = !!user)
 
     this.availabilityForm.valueChanges.subscribe(() => {
       this.resetCheckOutIfInvalid();
@@ -130,40 +137,16 @@ export class GuestRoomsPage implements OnInit {
       room_type: formData.room_type,
     };
     this.guestRoomsService
-      .getAviableRoomsByHotelId(payload, formData.hotel_id)
+      .getAvailableRoomsByHotelId(payload, formData.hotel_id)
       .subscribe({
         next: (res: any) => {
           this.rooms = res.data.available_rooms;
-          for (const room of this.rooms) {
-            this.getRoomAvailability(room.id);
-          }
         },
         error: async (err: any) => {
           this.toastService.presentErrorToast(
             "Erorre nell'applicazione del filtro"
           );
           console.error("Erorre nell'applicazione del filtro: ", err);
-        },
-      });
-  }
-
-  getRoomAvailability(room_id: number) {
-    const checkInValue = this.availabilityForm.get('check_in')?.value;
-    const checkOutValue = this.availabilityForm.get('check_out')?.value;
-    this.guestRoomsService
-      .getRoomAvailability(room_id, checkInValue, checkOutValue)
-      .subscribe({
-        next: (res: any) => {
-          this.roomAvailability[room_id] = res.data.is_available;
-        },
-        error: (err: any) => {
-          this.toastService.presentErrorToast(
-            'Errore nel recupero della disponibilità della camera'
-          );
-          console.error(
-            'Errore nel recupero della disponibilità della camera: ',
-            err
-          );
         },
       });
   }
@@ -180,12 +163,18 @@ export class GuestRoomsPage implements OnInit {
     }
   }
 
-  addBookingPending(room_id: number) {
+  addPendingBooking(room_id: number) {
+    if(!this.currentUser) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const bookingData: AddBookingData = {
       room_id: room_id,
       check_in: this.availabilityForm.get('check_in')?.value,
       check_out: this.availabilityForm.get('check_out')?.value,
     };
+
     this.bookingsService.createBookingRequest(bookingData).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(
@@ -208,5 +197,9 @@ export class GuestRoomsPage implements OnInit {
 
   getFormErrorMessage(field: string) {
     return Utils.getFormErrorMessage(this.availabilityForm, field);
+  }
+
+  ngOnDestroy(): void {
+      this.userSub.unsubscribe()
   }
 }

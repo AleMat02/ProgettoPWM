@@ -5,11 +5,12 @@ import {
   IonContent,
   IonCard,
   IonCardContent,
-  IonButton, 
-  IonLabel, 
+  IonButton,
+  IonLabel,
   IonItem,
   IonSelect,
-  IonSelectOption, IonText, IonTitle } from '@ionic/angular/standalone';
+  IonSelectOption
+} from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -18,13 +19,13 @@ import { NearbyHotelsService } from 'src/app/services/nearby-hotels.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 
-
-
 @Component({
   selector: 'app-map',
   templateUrl: './nearby-hotels.page.html',
   styleUrls: ['./nearby-hotels.page.scss'],
-  imports: [IonTitle, IonText, IonItem, IonLabel, 
+  imports: [
+    IonItem,
+    IonLabel,
     IonCard,
     IonContent,
     CommonModule,
@@ -95,7 +96,6 @@ export class NearbyHotelsPage implements OnInit {
   }
 
   fetchNearbyHotels(positionData: PositionData) {
-    console.log('Fetching nearby hotels with position data:', positionData);
     this.nearbyHotelsService.getNearbyHotels(positionData).subscribe({
       next: (response) => {
         this.hotels = [];
