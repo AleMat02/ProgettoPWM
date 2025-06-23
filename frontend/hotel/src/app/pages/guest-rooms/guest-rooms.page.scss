@@ -11,7 +11,7 @@ form {
     //flex-shrink: 1 -> possono restringersi se non c'è abbastanza spazio
     //flex-basis: 250px -> la loro larghezza "ideale"
     flex: 1 1 250px;
-    border-radius: 4px; //Angoli arrotondati
+    border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     background: #fff;
     border: 1.2px solid #bdbdbd;
@@ -37,7 +37,6 @@ form {
   }
 
   img {
-    // Stile di base per tutte le immagini nelle card
     display: block;
     width: 100%;
   }
@@ -50,7 +49,7 @@ form {
 
   img {
     object-fit: cover; //Assicura che l'immagine copra l'area senza distorsioni
-    object-position: bottom; // Allinea l'immagine in basso nel contenitore
+    object-position: bottom; //Allinea l'immagine in basso nel contenitore
   }
 }
 
@@ -72,6 +71,6 @@ form {
   form ion-item {
     max-width: 100%;
     flex: 1 1 100%;
-    border-radius: 4px; // Angoli arrotondati
+    border-radius: 4px;
   }
 }

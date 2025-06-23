@@ -5,12 +5,11 @@ import {
   IonContent,
   IonCard,
   IonCardContent,
-  IonButton,
-  IonLabel,
+  IonButton, 
+  IonLabel, 
   IonItem,
   IonSelect,
-  IonSelectOption
-} from '@ionic/angular/standalone';
+  IonSelectOption, IonText, IonTitle } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -18,24 +17,25 @@ import { PositionData } from '../../interfaces/nearby-hotels.interface';
 import { NearbyHotelsService } from 'src/app/services/nearby-hotels.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { HotelPositionData } from 'src/app/interfaces/nearby-hotels.interface';
+
+
 
 @Component({
   selector: 'app-map',
   templateUrl: './nearby-hotels.page.html',
   styleUrls: ['./nearby-hotels.page.scss'],
-  imports: [
-    IonItem,
-    IonLabel,
+  imports: [IonItem, IonLabel, 
     IonCard,
     IonContent,
     CommonModule,
     FormsModule,
     IonCard,
-    IonCardContent,
     IonButton,
     RouterLink,
     IonSelectOption,
-    IonSelect
+    IonSelect,
+    IonText
   ],
   standalone: true,
 })
@@ -47,7 +47,7 @@ export class NearbyHotelsPage implements OnInit {
   };
 
   isLoggedIn = false;
-  hotels: any[] = [];
+  hotels: HotelPositionData[] = [];
 
   constructor(
     private http: HttpClient,
@@ -97,12 +97,10 @@ export class NearbyHotelsPage implements OnInit {
 
   fetchNearbyHotels(positionData: PositionData) {
     this.nearbyHotelsService.getNearbyHotels(positionData).subscribe({
-      next: (response) => {
+      next: (res) => {
         this.hotels = [];
-        if (response?.data?.hotels && Array.isArray(response.data.hotels)) {
-          this.hotels = response.data.hotels;
-        } else {
-          console.warn('Nessun hotel trovato o risposta non valida:', response);
+        if (res.data.hotels && Array.isArray(res.data.hotels)) {
+          this.hotels = res.data.hotels;
         }
       },
       error: (error) => {

@@ -1,40 +1,47 @@
 <ion-content>
-  <!-- Selettore per il raggio -->
-  <ion-item>
-    <ion-label position="fixed">Raggio di ricerca (km):</ion-label>
-    <ion-select
-      name="radius"
-      [ngModel]="positionData.radius"
-      (ngModelChange)="onRadiusChange($event)"
-      interface="popover"
-    >
-      <ion-select-option *ngFor="let r of [10,15,20,25,30,40,50]" [value]="r">
-        {{ r }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  <div class="flax-container">
+    <ion-item>
+      <ion-label position="floating">Raggio in km</ion-label>
+      <ion-select
+        interface="popover"
+        [ngModel]="positionData.radius"
+        (ionChange)="onRadiusChange($event.detail.value)"
+      >
+        @for(radius of [10,20,30,40,50]; track radius) {
+        <ion-select-option [value]="radius"> {{ radius }} </ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+  </div>
 
   @if (hotels.length > 0) { @for (hotel of hotels; track hotel.id) {
   <ion-card class="hotel-card">
-    <ion-card-content>
-      <h2>{{hotel.name}}</h2>
-      <p>{{hotel.address}}</p>
-      <div class="hotel-details">
-        <p>Distanza: {{hotel.distance | number:'1.0-2'}} km</p>
+    <div class="hotel-row">
+      <div class="hotel-main">
+        <div class="hotel-title">{{hotel.name}}</div>
+        <div class="hotel-city">{{hotel.city}}</div>
+        <div class="hotel-address">{{hotel.address}}</div>
+        <div class="hotel-distance">{{hotel.distance | number:'1.0-2'}} km</div>
       </div>
-    </ion-card-content>
-    @if(isLoggedIn){
-      <ion-button [routerLink]="['/guest-rooms', hotel.id]" >Stanze disponibili</ion-button>
-    }@else {
-      <ion-item>Accedi per prenotare!</ion-item>
-    }
-    
-  </ion-card>
-  } } @else {
-  <ion-card>
-    <div style="padding: 1em; text-align: center">
-      Nessun hotel nelle vicinanze trovato
+      <div class="hotel-side">
+        @if(isLoggedIn){
+        <ion-button
+          size="small"
+          class="hotel-btn"
+          [routerLink]="['/guest-rooms', hotel.id]"
+          >Prenota ora</ion-button
+        >
+        }@else{
+        <ion-text class="hotel-btn" style="margin-top: 8px"
+          >Accedi per prenotare!</ion-text
+        >
+        }
+      </div>
     </div>
   </ion-card>
+  } } @else {
+  <div style="padding: 1em; text-align: center">
+    Nessun hotel nelle vicinanze trovato
+  </div>
   }
 </ion-content>

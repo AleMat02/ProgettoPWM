@@ -49,7 +49,7 @@ export class RoomsPage implements OnDestroy {
     })
   }
 
-  deleteRoom(id: string) { //* in caso mettere un modal di conferma
+  deleteRoom(id: number) {
     this.roomsService.deleteRoom(id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(res.message)

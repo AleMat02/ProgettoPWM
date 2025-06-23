@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonButton,
   IonItem,
   IonLabel,
   IonSelectOption,
   IonSelect,
   IonText,
-  IonTitle,
+  IonCard
 } from '@ionic/angular/standalone';
 import {
   ReactiveFormsModule,
@@ -22,13 +21,14 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { BookingsService } from 'src/app/services/bookings.service';
 import * as Utils from 'src/app/utils';
+import { BookingData } from 'src/app/interfaces/booking-management.interface';
 
 @Component({
   selector: 'app-bookings-history-form',
   templateUrl: './bookings-history-form.component.html',
   styleUrls: ['./bookings-history-form.component.scss'],
   standalone: true,
-  imports: [
+  imports: [IonCard,
     IonText,
     IonContent,
     CommonModule,
@@ -38,57 +38,56 @@ import * as Utils from 'src/app/utils';
     IonItem,
     ReactiveFormsModule,
     IonLabel,
-    IonTitle,
+    IonCard
   ],
 })
 export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
-  
-  @Input() showUserIdInput: boolean = false; // Inizialmente impostato a true, cambia in base al ruolo
+  @Input() hideUserIdInput: boolean = false; //Inizialmente impostato a true, cambia in base al ruolo
 
   userSub!: Subscription;
   searchForm!: FormGroup;
-  userBookings: any[] = []; // Array per memorizzare le prenotazioni
+  userBookings: BookingData[] = [];
   userBookingsDisplayed: any[] = [];
-  lastFetchedUserId: number | null = null; 
+  lastFetchedUserId: number | null = null;
 
   constructor(
     private authService: AuthService,
     private toastService: ToastService,
     private bookingsService: BookingsService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.userSub = this.authService.user$.subscribe((user) => {
       if (user) {
         this.searchForm = this.fb.group({
           user_id: [
-            this.showUserIdInput ? user.id : null,
+            this.hideUserIdInput ? user.id : null,
             { validators: [Validators.required, Validators.min(0)] },
           ],
           status: ['pending', []],
         });
       }
     });
-  
+
     this.searchForm.valueChanges.subscribe(() => {
       this.onSubmit();
     });
 
   }
-    ngOnDestroy() {
-      this.userSub.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+  }
 
-    isFormFieldInvalid(field: string) {
-      return Utils.isFormFieldInvalid(this.searchForm, field);
-    }
+  isFormFieldInvalid(field: string) {
+    return Utils.isFormFieldInvalid(this.searchForm, field);
+  }
 
-    getFormErrorMessage(field: string) {
-      return Utils.getFormErrorMessage(this.searchForm, field);
-    }
+  getFormErrorMessage(field: string) {
+    return Utils.getFormErrorMessage(this.searchForm, field);
+  }
 
-  
+
 
   onSubmit() {
     const currentUserId = this.searchForm.value.user_id;

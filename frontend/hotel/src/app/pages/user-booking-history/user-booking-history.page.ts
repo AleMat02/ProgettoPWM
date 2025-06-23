@@ -10,7 +10,7 @@ import { BookingsHistoryFormComponent } from "../../components/bookings-history-
   templateUrl: './user-booking-history.page.html',
   styleUrls: ['./user-booking-history.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, BookingsHistoryFormComponent]
+  imports: [CommonModule, FormsModule, BookingsHistoryFormComponent, IonContent]
 })
 export class UserBookingHistoryPage implements OnInit {
 

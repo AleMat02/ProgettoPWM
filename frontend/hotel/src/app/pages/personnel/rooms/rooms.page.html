@@ -47,9 +47,6 @@
         </ion-item>
 
         <ion-item lines="none">
-          <ion-chip [color]="room.is_available === 1 ? 'success' : 'danger'" slot="start" style="margin-left: 0px;">
-            {{ room.is_available === 1 ? 'Disponibile' : 'Non Disponibile' }}
-          </ion-chip>
           <ion-chip color="primary" slot="start" style="margin-left: 0px;">
             {{ room.created_at }}
           </ion-chip>

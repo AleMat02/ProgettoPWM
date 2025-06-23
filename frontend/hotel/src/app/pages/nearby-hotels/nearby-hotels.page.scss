@@ -1,0 +1,96 @@
+ion-item {
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 150px;
+    border-radius: 12px;
+    box-shadow: var(--ion-box-shadow);
+    border: 1.2px solid #bdbdbd;
+    --inner-border-width: 0 !important;
+    --border-color: transparent !important;
+    --background: #fff;
+}
+
+.hotel-card {
+    margin: 15px;
+    box-shadow: var(--ion-box-shadow, 0 4px 8px rgba(0, 0, 0, 0.1));
+    background: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem 1.2rem 1.2rem;
+}
+
+.hotel-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.hotel-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.hotel-title {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #111;
+    margin-bottom: 0.15rem;
+}
+
+.hotel-city {
+    font-size: 1.5rem;
+    color: #2e2e2e;
+    margin-bottom: 0.15rem;
+    font-weight: 400;
+}
+
+.hotel-address {
+    font-size: 1.25rem;
+    color: #444;
+    margin-bottom: 0.2rem;
+}
+
+.hotel-distance {
+    font-size: 1.5rem;
+    color: #2ecc40;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.hotel-btn {
+    margin-top: 0.2rem;
+    font-size: 1.25rem;
+    --background: #2196f3;
+    --color: #fff;
+    --border-radius: 12px;
+    --box-shadow: none;
+    padding: 0 1.2rem;
+    height: 2.2rem;
+}
+
+@media (max-width: 767px) {
+    ion-item {
+        width: 150px;
+        min-width: 0px;
+        flex: 1 1 100%;
+        margin-right: 20px;
+    }
+
+    .hotel-card {
+        margin-left: 15px;
+        margin-right: 15px;
+        position: relative;
+        padding-bottom: 2px;
+        min-height: 140px;
+    }
+
+    .hotel-btn {
+        margin-top: 0.2rem;
+        font-size: 0.60rem;
+        --background: #2196f3;
+        --color: #fff;
+        --border-radius: 12px;
+        --box-shadow: none;
+    }
+}

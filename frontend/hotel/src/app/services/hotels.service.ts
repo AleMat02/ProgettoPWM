@@ -16,7 +16,7 @@ export class HotelsService {
         return this.http.get(this.getHotelsUrl);
     }
 
-    deleteHotel(id: string): Observable<any> {
+    deleteHotel(id: number): Observable<any> {
         return this.http.delete(`${this.deleteHotelUrl}/${id}`);
     }
 }

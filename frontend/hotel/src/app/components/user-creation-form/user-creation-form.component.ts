@@ -6,6 +6,7 @@ import * as Utils from 'src/app/utils';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserData, UserRole } from 'src/app/interfaces/user.interface';
 import { HotelsService } from 'src/app/services/hotels.service';
+import { HotelData } from 'src/app/interfaces/hotel.interface';
 
 @Component({
   selector: 'app-user-creation-form',
@@ -35,7 +36,7 @@ export class UserCreationFormComponent implements OnInit {
   @Output() formSubmit = new EventEmitter<UserData>();
 
   userForm!: FormGroup;
-  hotels: any[] = [];
+  hotels: HotelData[] = [];
   roles = Object.values(UserRole) //Mettendo keys sarebbe stato indifferente in quanto avremmo comunque tenuto la pipe "Titlecase" per scelta nell'html
 
   matchPasswords(passwordKey: string, confirmPasswordKey: string): ValidatorFn {

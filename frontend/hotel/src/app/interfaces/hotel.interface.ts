@@ -1,5 +1,5 @@
 export interface HotelData {
-    id: string,
+    id: number,
     name: string,
     city: string,
     address: string,
