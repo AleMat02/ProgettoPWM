@@ -11,7 +11,7 @@ export const ROOM_CAPACITIES: { [key in RoomType]: number } = {
 };
 
 export interface RoomData {
-    id: string,
+    id: number,
     room_number: number,
     room_type: RoomType,
     capacity: number, //dipende da room_type

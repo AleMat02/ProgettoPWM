@@ -19,14 +19,13 @@ export class AddRoomPage implements OnInit {
 
     roomTypes = Object.values(RoomType) //Mettendo keys sarebbe stato indifferente in quanto avremmo comunque tenuto la pipe "Titlecase" per scelta nell'html
 
-    //loading: boolean = true;
     constructor(private fb: FormBuilder, private addRoomService: AddRoomService, private toastService: ToastService) { }
 
     //Inseriamo più regole rispetto al backend per scelta personale
     ngOnInit(): void {
         this.roomForm = this.fb.group(
             {
-                room_number: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{0,2}$/)]], // Es. 1-999, non inizia con 0
+                room_number: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{0,2}$/)]], //Es. 1-999, non inizia con 0
                 room_type: [RoomType.Single, [Validators.required]],
                 capacity: [{ value: ROOM_CAPACITIES[RoomType.Single], disabled: true }, [Validators.required, Validators.max(4)]],
                 price_per_night: ['', [Validators.required, Validators.maxLength(4)]],
@@ -37,7 +36,7 @@ export class AddRoomPage implements OnInit {
 
         this.roomForm.get('room_type')?.valueChanges.subscribe((selectedRoomType: RoomType) => {
             const formCapacity = this.roomForm.get('capacity');
-            if (selectedRoomType && formCapacity) { // selectedRoomType potrebbe essere null se il campo è resettato
+            if (selectedRoomType && formCapacity) { //selectedRoomType potrebbe essere null se il campo è resettato
                 const newCapacity = ROOM_CAPACITIES[selectedRoomType];
                 formCapacity.setValue(newCapacity);
             }
@@ -57,7 +56,7 @@ export class AddRoomPage implements OnInit {
             next: (res: any) => {
                 this.toastService.presentSuccessToast(`Stanza ${addRoomData.room_number} aggiunta con successo!`);
 
-                // Resetta il form dopo il successo
+                //Resetta il form dopo il successo
                 this.roomForm.reset({
                     room_number: '',
                     room_type: RoomType.Single,

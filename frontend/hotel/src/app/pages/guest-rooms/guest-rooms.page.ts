@@ -29,7 +29,7 @@ import {
 } from '@angular/forms';
 import * as Utils from 'src/app/utils';
 import { GuestRoomsService } from 'src/app/services/guest-rooms.service';
-import { RoomType } from 'src/app/interfaces/room.interface';
+import { RoomData, RoomType } from 'src/app/interfaces/room.interface';
 import { ToastService } from 'src/app/services/toast.service';
 import { AddBookingData } from 'src/app/interfaces/add-booking.interface';
 import { BookingsService } from 'src/app/services/bookings.service';
@@ -37,6 +37,7 @@ import { HotelsService } from 'src/app/services/hotels.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
+import { HotelData } from 'src/app/interfaces/hotel.interface';
 
 @Component({
   selector: 'app-guest-rooms',
@@ -70,9 +71,9 @@ import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
 })
 export class GuestRoomsPage implements OnInit, OnDestroy {
   availabilityForm: FormGroup = new FormGroup({});
-  rooms: any[] = [];
-  hotels: any[] = [];
-  hotelsName: any[] = [];
+  rooms: RoomData[] = [];
+  hotels: HotelData[] = [];
+  hotelsName: string[] = [];
   roomTypes = Object.values(RoomType);
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
   userSub!: Subscription;

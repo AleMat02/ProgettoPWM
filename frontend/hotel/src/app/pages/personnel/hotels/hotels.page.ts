@@ -9,13 +9,14 @@ import { HotelsService } from 'src/app/services/hotels.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserRole } from 'src/app/interfaces/user.interface';
+import { SkeletonContentComponent } from 'src/app/components/skeleton-content/skeleton-content.component';
 
 @Component({
   selector: 'app-hotels',
   templateUrl: './hotels.page.html',
   styleUrls: ['./hotels.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink]
+  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink, SkeletonContentComponent]
 })
 export class HotelsPage implements OnDestroy {
   hotels: HotelData[] = [];
@@ -46,7 +47,7 @@ export class HotelsPage implements OnDestroy {
     })
   }
 
-  deleteHotel(id: string) { //* in caso mettere un modal di conferma
+  deleteHotel(id: number) { //* in caso mettere un modal di conferma
     this.hotelsService.deleteHotel(id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(res.message)

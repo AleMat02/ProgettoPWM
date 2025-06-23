@@ -1,0 +1,82 @@
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 1.2rem;
+  margin-left: 1.2rem;
+  flex-wrap: wrap;
+
+  ion-item {
+    max-width: 22%;
+    min-height: 64px;
+    border-radius: 10px;
+    box-shadow: var(--ion-box-shadow); 
+    border: 1.2px solid #bdbdbd;
+    --inner-border-width: 0 !important;
+    --border-color: transparent !important;
+    --background: #fff;
+  }
+
+}
+
+.booking-card {
+  margin-left: 20px;
+  margin-right: 16px;
+  box-shadow: var(--ion-box-shadow, 0 4px 8px rgba(0, 0, 0, 0.1));
+  background: #fff;
+  border: none;
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+// Responsive: mobile adattamento
+@media (max-width: 767px) {
+  form {
+    flex-direction: column;
+    align-items: stretch;
+    margin-left: var(--ion-margin, 0.5rem);
+    margin-right: var(--ion-margin, 0.5rem);
+    gap: 0.6rem;
+  }
+
+  form ion-item {
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .booking-card {
+    margin-left: var(--ion-margin, 0.5rem);
+    margin-right: var(--ion-margin, 0.5rem);
+    position: relative;
+    padding-bottom: 2px;
+    min-height: 140px;
+    padding: 1.2rem 1.2rem;
+  }
+}
+
+.empty-booking-item {
+  --background: transparent;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+  --inner-border-width: 0 !important;
+
+  ion-label {
+    text-align: center;
+    color: var(--ion-color-medium, #888);
+  }
+
+}
+
+.booking-info strong {
+  color: #000 !important;
+}
+
+.booking-info > div {
+  margin-bottom: 4px;
+  font-size: 15px;
+}

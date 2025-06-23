@@ -16,7 +16,7 @@ export class RoomsService {
         return this.http.get(this.getRoomsUrl);
     }
 
-    deleteRoom(id: string): Observable<any> {
+    deleteRoom(id: number): Observable<any> {
         return this.http.delete(`${this.deleteRoomUrl}/${id}`);
     }
 }
