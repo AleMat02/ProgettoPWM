@@ -1,4 +1,7 @@
 <ion-content>
+  @if(loading){ 
+    <app-skeleton-content></app-skeleton-content>
+  }@else{
   <div class="flax-container">
     <ion-item>
       <ion-label position="floating">Raggio in km</ion-label>
@@ -43,5 +46,5 @@
   <div style="padding: 1em; text-align: center">
     Nessun hotel nelle vicinanze trovato
   </div>
-  }
+  } }
 </ion-content>

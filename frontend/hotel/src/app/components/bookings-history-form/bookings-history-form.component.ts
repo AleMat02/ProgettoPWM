@@ -22,6 +22,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { BookingsService } from 'src/app/services/bookings.service';
 import * as Utils from 'src/app/utils';
 import { BookingData } from 'src/app/interfaces/booking-management.interface';
+import { SkeletonContentComponent } from "../skeleton-content/skeleton-content.component";
 
 @Component({
   selector: 'app-bookings-history-form',
@@ -38,8 +39,7 @@ import { BookingData } from 'src/app/interfaces/booking-management.interface';
     IonItem,
     ReactiveFormsModule,
     IonLabel,
-    IonCard
-  ],
+    IonCard, SkeletonContentComponent],
 })
 export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
   @Input() hideUserIdInput: boolean = false; //Inizialmente impostato a true, cambia in base al ruolo
@@ -49,6 +49,8 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
   userBookings: BookingData[] = [];
   userBookingsDisplayed: any[] = [];
   lastFetchedUserId: number | null = null;
+  loading: boolean = true;
+
 
   constructor(
     private authService: AuthService,
@@ -103,16 +105,19 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
           this.userBookingsDisplayed = this.userBookings.filter(
             (booking: any) => booking.status === currentStatus
           );
+          this.loading = false;
         },
         error: (err: any) => {
           this.toastService.presentErrorToast('Errore durante il recupero dei dati');
-          console.error("Errore durante il recupero dei dati: ", err)
+          console.error("Errore durante il recupero dei dati: ", err);
+          this.loading = false;
         },
       });
     } else {
       this.userBookingsDisplayed = this.userBookings.filter(
         (booking: any) => booking.status === currentStatus
       );
+      this.loading = false;
     }
   }
 }

@@ -19,6 +19,7 @@ import {
   IonText,
   IonSelect,
   IonSelectOption,
+  IonSkeletonText
 } from '@ionic/angular/standalone';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -38,6 +39,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
 import { HotelData } from 'src/app/interfaces/hotel.interface';
+import { SkeletonContentComponent } from 'src/app/components/skeleton-content/skeleton-content.component';
 
 @Component({
   selector: 'app-guest-rooms',
@@ -66,7 +68,8 @@ import { HotelData } from 'src/app/interfaces/hotel.interface';
     IonSelect,
     IonSelectOption,
     NoDataComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+    SkeletonContentComponent
   ],
 })
 export class GuestRoomsPage implements OnInit, OnDestroy {
@@ -78,6 +81,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
   userSub!: Subscription;
   currentUser: boolean = false;
+  loading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -122,10 +126,12 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
             this.availabilityForm.get('hotel_id')?.setValue(hotelIdToSet);
             this.onSubmit();
           }
+          this.loading = false;
         }
       },
       error: (err: any) => {
         this.toastService.presentErrorToast('Errore nel recupero degli hotel');
+        this.loading = false;
       },
     });
 
@@ -148,9 +154,11 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.rooms = res.data.available_rooms;
+          this.loading = false;
         },
         error: async (err: any) => {
           console.error("Errore nell'applicazione del filtro: ", err); //Non inseriamo un toast di errore perché dal backend la funzione restituisce 404 se non trova stanze, e non vogliamo che l'utente lo veda
+          this.loading = false;
         },
       });
   }
@@ -187,10 +195,12 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
         this.rooms = this.rooms.filter(
           (room) => room.id !== bookingData.room_id
         );
+        this.loading = false;
       },
       error: (err: any) => {
         this.toastService.presentErrorToast('Prenotazione fallita');
         console.error('Prenotazione fallita: ', err);
+        this.loading = false;
       },
     });
   }

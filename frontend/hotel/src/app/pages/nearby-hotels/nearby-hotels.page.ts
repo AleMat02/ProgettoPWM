@@ -18,6 +18,7 @@ import { NearbyHotelsService } from 'src/app/services/nearby-hotels.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { HotelPositionData } from 'src/app/interfaces/nearby-hotels.interface';
+import { SkeletonContentComponent } from "../../components/skeleton-content/skeleton-content.component";
 
 
 
@@ -25,7 +26,7 @@ import { HotelPositionData } from 'src/app/interfaces/nearby-hotels.interface';
   selector: 'app-map',
   templateUrl: './nearby-hotels.page.html',
   styleUrls: ['./nearby-hotels.page.scss'],
-  imports: [IonItem, IonLabel, 
+  imports: [IonItem, IonLabel,
     IonCard,
     IonContent,
     CommonModule,
@@ -35,8 +36,8 @@ import { HotelPositionData } from 'src/app/interfaces/nearby-hotels.interface';
     RouterLink,
     IonSelectOption,
     IonSelect,
-    IonText
-  ],
+    IonText, 
+    SkeletonContentComponent],
   standalone: true,
 })
 export class NearbyHotelsPage implements OnInit {
@@ -48,6 +49,7 @@ export class NearbyHotelsPage implements OnInit {
 
   isLoggedIn = false;
   hotels: HotelPositionData[] = [];
+  loading: boolean = true;
 
   constructor(
     private http: HttpClient,
@@ -101,11 +103,13 @@ export class NearbyHotelsPage implements OnInit {
         this.hotels = [];
         if (res.data.hotels && Array.isArray(res.data.hotels)) {
           this.hotels = res.data.hotels;
+          this.loading = false;
         }
       },
       error: (error) => {
         this.toastService.presentErrorToast('Errore durante il recupero degli hotel');
         console.error('Errore durante il recupero degli hotel:', error)
+        this.loading = false;
       }
     })
   }

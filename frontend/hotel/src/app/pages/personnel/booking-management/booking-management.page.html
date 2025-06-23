@@ -1,60 +1,87 @@
 <ion-content>
+  @if(loading){
+    <app-skeleton-content></app-skeleton-content>
+   }@else{
+
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
       <ion-label position="floating">Hotel</ion-label>
       <ion-select formControlName="hotel_id" interface="popover" value="single">
-      @for(hotel of hotels; track hotel.id){ 
+        @for(hotel of hotels; track hotel.id){
         <ion-select-option [value]="hotel.id">
-        {{ hotel.name }}
+          {{ hotel.name }}
         </ion-select-option>
-      }
-     </ion-select>
+        }
+      </ion-select>
     </ion-item>
     @if(isFormFieldInvalid("hotel_id")) {
-      <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
+    <ion-text color="danger">{{getFormErrorMessage("hotel_id")}}</ion-text>
     }
 
     <ion-item [class.invalid-item]="isFormFieldInvalid('from_date')">
       <ion-label position="floating">A partire da</ion-label>
-      <ion-input type="date" formControlName="from_date" [max]="today"></ion-input>
+      <ion-input
+        type="date"
+        formControlName="from_date"
+        [max]="today"
+      ></ion-input>
     </ion-item>
     @if(isFormFieldInvalid("from_date")) {
-      <ion-text color="danger">{{getFormErrorMessage("from_date")}}</ion-text>
+    <ion-text color="danger">{{getFormErrorMessage("from_date")}}</ion-text>
     }
   </form>
 
   <ion-list>
-    @if (pendingBookings.length > 0) {
-      @for (booking of pendingBookings; track booking.id) {
-<ion-card class="booking-card">
-  <ion-card-content>
-    <div>
-      <div class="booking-info">
-        <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
-        <div><strong>Hotel:</strong> {{ booking.hotel_name }} (ID: {{ booking.hotel_id }})</div>
-        <div><strong>Numero stanza:</strong> {{ booking.room_number }}</div>
-        <div><strong>Tipo stanza:</strong> {{ booking.room_type }}</div>
-        <div><strong>Data inizio:</strong> {{ booking.check_in  | date}}</div>
-        <div><strong>Data fine:</strong> {{ booking.check_out  | date}}</div>
-        <div><strong>Data creazione:</strong> {{ booking.created_at | date}}</div>
-        <div><strong>Prezzo totale:</strong> {{ booking.total_price }} €</div>
-      </div>
-      <div class="booking-actions">
-        <ion-button fill="clear" color="success" (click)="manageBooking(booking.id, true)" title="Approva">
-          <ion-icon name="checkmark-circle-outline"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" color="danger" (click)="manageBooking(booking.id, false)" title="Rifiuta">
-          <ion-icon name="close-circle-outline"></ion-icon>
-        </ion-button>
-      </div>
-    </div>
-  </ion-card-content>
-</ion-card>
-      }
-    } @else {
-      <ion-item class="empty-booking-item">
-        <ion-label>Nessuna prenotazione in stato di approvazione</ion-label>
-      </ion-item>
+    @if (pendingBookings.length > 0) { @for (booking of pendingBookings; track
+    booking.id) {
+    <ion-card class="booking-card">
+      <ion-card-content>
+        <div>
+          <div class="booking-info">
+            <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
+            <div>
+              <strong>Hotel:</strong> {{ booking.hotel_name }} (ID: {{
+              booking.hotel_id }})
+            </div>
+            <div><strong>Numero stanza:</strong> {{ booking.room_number }}</div>
+            <div><strong>Tipo stanza:</strong> {{ booking.room_type }}</div>
+            <div>
+              <strong>Data inizio:</strong> {{ booking.check_in | date}}
+            </div>
+            <div><strong>Data fine:</strong> {{ booking.check_out | date}}</div>
+            <div>
+              <strong>Data creazione:</strong> {{ booking.created_at | date}}
+            </div>
+            <div>
+              <strong>Prezzo totale:</strong> {{ booking.total_price }} €
+            </div>
+          </div>
+          <div class="booking-actions">
+            <ion-button
+              fill="clear"
+              color="success"
+              (click)="manageBooking(booking.id, true)"
+              title="Approva"
+            >
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button
+              fill="clear"
+              color="danger"
+              (click)="manageBooking(booking.id, false)"
+              title="Rifiuta"
+            >
+              <ion-icon name="close-circle-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    } } @else {
+    <ion-item class="empty-booking-item">
+      <ion-label>Nessuna prenotazione in stato di approvazione</ion-label>
+    </ion-item>
     }
   </ion-list>
+  }
 </ion-content>

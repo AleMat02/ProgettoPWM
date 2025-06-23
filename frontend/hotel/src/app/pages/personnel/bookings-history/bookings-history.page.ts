@@ -6,7 +6,7 @@ import { IonContent } from "@ionic/angular/standalone";
   selector: 'app-bookings',
   templateUrl: './bookings-history.page.html',
   styleUrls: ['./bookings-history.page.scss'],
-  imports:[BookingsHistoryFormComponent, IonContent]
+  imports: [BookingsHistoryFormComponent, IonContent]
 })
 export class BookingsHistoryPage {
   constructor(){};

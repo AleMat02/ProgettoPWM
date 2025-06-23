@@ -1,51 +1,57 @@
-<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-  <ion-item [class.invalid-item]="isFormFieldInvalid('status')">
-    <ion-label position="floating">Status</ion-label>
-    <ion-select formControlName="status" interface="popover" value="single">
-      @for(status of ['confirmed', 'rejected', 'pending']; track status) {
-      <ion-select-option [value]="status">
-        {{ status }}
-      </ion-select-option>
-      }
-    </ion-select>
-  </ion-item>
-  <ion-text color="danger" *ngIf="isFormFieldInvalid('status')">
-    {{ getFormErrorMessage("status") }}
-  </ion-text>
+<ion-content>
+  @if(loading){ 
+    <app-skeleton-content></app-skeleton-content>
+  }@else {
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <ion-item [class.invalid-item]="isFormFieldInvalid('status')">
+      <ion-label position="floating">Status</ion-label>
+      <ion-select formControlName="status" interface="popover" value="single">
+        @for(status of ['confirmed', 'rejected', 'pending']; track status) {
+        <ion-select-option [value]="status">
+          {{ status }}
+        </ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="isFormFieldInvalid('status')">
+      {{ getFormErrorMessage("status") }}
+    </ion-text>
 
-  @if(!hideUserIdInput){
-  <ion-item [class.invalid-item]="isFormFieldInvalid('user_id')">
-    <ion-label position="floating">user_id</ion-label>
-    <ion-input type="number" formControlName="user_id" ngDefaultControl></ion-input>
+    @if(!hideUserIdInput){
+    <ion-item [class.invalid-item]="isFormFieldInvalid('user_id')">
+      <ion-label position="floating">user_id</ion-label>
+      <ion-input
+        type="number"
+        formControlName="user_id"
+        ngDefaultControl
+      ></ion-input>
+    </ion-item>
+    }
+  </form>
 
-  </ion-item>
-  }
-</form>
-
-@if(userBookingsDisplayed.length > 0){ @for(booking of userBookingsDisplayed;
-track booking.id){
-<ion-card class="booking-card">
-  <div class="booking-info">
-    <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
-    <div>
-      <strong>Hotel:</strong> {{ booking.hotel_name }}
+  @if(userBookingsDisplayed.length > 0){ @for(booking of userBookingsDisplayed;
+  track booking.id){
+  <ion-card class="booking-card">
+    <div class="booking-info">
+      <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
+      <div><strong>Hotel:</strong> {{ booking.hotel_name }}</div>
+      <div><strong>Numero stanza:</strong> {{ booking.room_number }}</div>
+      <div><strong>Tipo stanza:</strong> {{ booking.room_type }}</div>
+      <div><strong>Data inizio:</strong> {{ booking.check_in | date }}</div>
+      <div><strong>Data fine:</strong> {{ booking.check_out | date }}</div>
+      <div>
+        <strong>Data creazione:</strong> {{ booking.created_at | date }}
+      </div>
+      <div><strong>Prezzo totale:</strong> {{ booking.total_price }} €</div>
     </div>
-    <div><strong>Numero stanza:</strong> {{ booking.room_number }}</div>
-    <div><strong>Tipo stanza:</strong> {{ booking.room_type }}</div>
-    <div><strong>Data inizio:</strong> {{ booking.check_in | date }}</div>
-    <div><strong>Data fine:</strong> {{ booking.check_out | date }}</div>
-    <div>
-      <strong>Data creazione:</strong> {{ booking.created_at | date }}
-    </div>
-    <div><strong>Prezzo totale:</strong> {{ booking.total_price }} €</div>
-  </div>
-</ion-card>
-}}@else if(isFormFieldInvalid('user_id')) {
-<ion-item class="empty-booking-item">
-  <ion-text color="danger">Campo user_id obligatorio</ion-text>
-</ion-item>
-}@else{
-<ion-item class="empty-booking-item">
-  <ion-label>Nessuna prenotazione in stato di trovata</ion-label>
-</ion-item>
-}
+  </ion-card>
+  }}@else if(isFormFieldInvalid('user_id')) {
+  <ion-item class="empty-booking-item">
+    <ion-text color="danger">Campo user_id obligatorio</ion-text>
+  </ion-item>
+  }@else{
+  <ion-item class="empty-booking-item">
+    <ion-label>Nessuna prenotazione in stato di trovata</ion-label>
+  </ion-item>
+  } }
+</ion-content>

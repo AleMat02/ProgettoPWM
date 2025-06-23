@@ -24,13 +24,14 @@ import { BookingManagementService } from 'src/app/services/booking-management.se
 import { HotelsService } from 'src/app/services/hotels.service';
 import { HotelData } from 'src/app/interfaces/hotel.interface';
 import { BookingData } from 'src/app/interfaces/booking-management.interface';
+import { SkeletonContentComponent } from "../../../components/skeleton-content/skeleton-content.component";
 
 @Component({
   selector: 'app-booking-management',
   templateUrl: './booking-management.page.html',
   styleUrls: ['./booking-management.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardContent, IonCard, 
+  imports: [IonIcon, IonCardContent, IonCard,
     IonContent,
     CommonModule,
     IonItem,
@@ -41,8 +42,7 @@ import { BookingData } from 'src/app/interfaces/booking-management.interface';
     ReactiveFormsModule,
     IonList,
     IonSelectOption,
-    IonSelect
-  ],
+    IonSelect, SkeletonContentComponent],
 })
 export class BookingManagementPage {
   searchForm: FormGroup = new FormGroup({});
@@ -52,6 +52,7 @@ export class BookingManagementPage {
   hotels: HotelData[] = [];
   hotelsName: String[] = [];
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
+  loading: boolean = true;
 
   //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
   constructor(
@@ -73,11 +74,13 @@ export class BookingManagementPage {
         this.hotels = res.data.hotels;
         if (this.hotels.length > 0) {
           this.searchForm.get('hotel_id')?.setValue(this.hotels[0].id);
+          this.loading = false;
         }
       },
       error: (err: any) => {
         this.toastService.presentErrorToast("Errore nel recupero degli hotel");
         console.error("Errore nel recupero degli hotel: ", err)
+        this.loading = false;
       },
     });
 
@@ -89,10 +92,12 @@ export class BookingManagementPage {
     this.bookingManagementService.getPendingBookings(this.searchFormData).subscribe({
       next: (res: any) => {
         this.pendingBookings = res.data.bookings; // Assegna le prenotazioni in attesa
+        this.loading = false;
       },
       error: (err: any) => {
         this.toastService.presentErrorToast("Errore nel recupero delle prenotazioni");
-        console.error("Errore nel recupero delle prenotazioni: ", err)
+        console.error("Errore nel recupero delle prenotazioni: ", err);
+        this.loading = false;
       },
     });
   }
@@ -101,10 +106,12 @@ export class BookingManagementPage {
     this.pendingBookings = []; // Svuota l'array delle prenotazioni in attesa
     this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
       next: (res: any) => {
-        this.pendingBookings = res.data.bookings ;
+        this.pendingBookings = res.data.bookings;
+        this.loading = false;
       },
       error: (err: any) => {
         this.toastService.presentErrorToast(err);
+        this.loading = false;
       },
     });
   }
