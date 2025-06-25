@@ -54,7 +54,7 @@ export class AddRoomPage implements OnInit {
 
         this.addRoomService.addRoom(addRoomData.room_number, addRoomData.room_type, addRoomData.capacity, addRoomData.price_per_night, addRoomData.hotel_id, addRoomData.description).subscribe({
             next: (res: any) => {
-                this.toastService.presentSuccessToast(`Stanza ${addRoomData.room_number} aggiunta con successo!`);
+                this.toastService.presentSuccessToast(`Stanza "${addRoomData.room_number}" aggiunta con successo!`);
 
                 //Resetta il form dopo il successo
                 this.roomForm.reset({

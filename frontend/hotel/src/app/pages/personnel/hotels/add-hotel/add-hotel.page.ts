@@ -44,7 +44,7 @@ export class AddHotelPage {
 
         this.addHotelService.addHotel(hotelFormData).subscribe({
             next: (res: any) => {
-                this.toastService.presentSuccessToast(`Hotel ${hotelFormData.name} aggiunto con successo!`); //Avremmo anche potuto prendere il messaggio dalla response ma preferiamo personalizzarlo
+                this.toastService.presentSuccessToast(`Hotel "${hotelFormData.name}" aggiunto con successo!`); //Avremmo anche potuto prendere il messaggio dalla response ma preferiamo personalizzarlo
 
                 // Resetta il form dopo il successo
                 this.hotelForm.reset({

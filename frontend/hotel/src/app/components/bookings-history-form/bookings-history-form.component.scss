@@ -32,7 +32,6 @@ form {
   border-radius: 12px;
 }
 
-// Responsive: mobile adattamento
 @media (max-width: 767px) {
   form {
     flex-direction: column;
@@ -67,7 +66,6 @@ form {
 
   ion-label {
     text-align: center;
-    color: var(--ion-color-medium, #888);
   }
 
 }

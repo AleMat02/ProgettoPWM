@@ -30,8 +30,6 @@ ion-card-content {
 .booking-card {
   margin-left: 1.2rem;
   margin-right: 16px;
-  border-radius: 12px;
-  box-shadow: var(--ion-box-shadow, 0 4px 8px rgba(0, 0, 0, 0.1));
   background: #fff;
   border: none;
   min-height: 120px;
@@ -130,7 +128,6 @@ ion-content {
 
   ion-label {
     text-align: center;
-    color: var(--ion-color-medium, #888);
   }
 
 }

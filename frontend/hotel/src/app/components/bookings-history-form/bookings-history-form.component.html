@@ -1,6 +1,6 @@
 <ion-content>
-  @if(loading){ 
-    <app-skeleton-content></app-skeleton-content>
+  @if(loading){
+  <app-skeleton-content></app-skeleton-content>
   }@else {
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <ion-item [class.invalid-item]="isFormFieldInvalid('status')">
@@ -13,24 +13,22 @@
         }
       </ion-select>
     </ion-item>
-    <ion-text color="danger" *ngIf="isFormFieldInvalid('status')">
+    @if(isFormFieldInvalid('status')) {
+    <ion-text color="danger">
       {{ getFormErrorMessage("status") }}
     </ion-text>
+    }
 
     @if(!hideUserIdInput){
     <ion-item [class.invalid-item]="isFormFieldInvalid('user_id')">
       <ion-label position="floating">user_id</ion-label>
-      <ion-input
-        type="number"
-        formControlName="user_id"
-        ngDefaultControl
-      ></ion-input>
+      <ion-input type="number" formControlName="user_id"></ion-input>
     </ion-item>
     }
   </form>
 
-  @if(userBookingsDisplayed.length > 0){ @for(booking of userBookingsDisplayed;
-  track booking.id){
+  @if(userBookingsDisplayed.length > 0) {
+  @for(booking of userBookingsDisplayed; track booking.id){
   <ion-card class="booking-card">
     <div class="booking-info">
       <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
@@ -45,13 +43,14 @@
       <div><strong>Prezzo totale:</strong> {{ booking.total_price }} €</div>
     </div>
   </ion-card>
-  }}@else if(isFormFieldInvalid('user_id')) {
+  }
+  }@else if(isFormFieldInvalid('user_id')) {
   <ion-item class="empty-booking-item">
-    <ion-text color="danger">Campo user_id obligatorio</ion-text>
+    <ion-text color="danger">Campo user_id obbligatorio.</ion-text>
   </ion-item>
   }@else{
-  <ion-item class="empty-booking-item">
-    <ion-label>Nessuna prenotazione in stato di trovata</ion-label>
+  <ion-item class="empty-booking-item" color="medium">
+    <ion-label>Nessuna prenotazione trovata.</ion-label>
   </ion-item>
   } }
 </ion-content>

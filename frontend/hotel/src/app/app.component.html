@@ -26,10 +26,12 @@
             <ion-label>Stanze</ion-label>
           </ion-item>
 
+          @if(isAdmin) {
           <ion-item button routerLink="/personnel/add-user" routerLinkActive="active">
             <ion-icon name="person-add-outline" slot="start"></ion-icon>
             <ion-label>Crea Utente</ion-label>
           </ion-item>
+          }
 
         </ion-list>
       </ion-content>

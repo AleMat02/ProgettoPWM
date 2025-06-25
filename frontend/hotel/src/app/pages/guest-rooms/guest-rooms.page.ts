@@ -18,8 +18,7 @@ import {
   IonLabel,
   IonText,
   IonSelect,
-  IonSelectOption,
-  IonSkeletonText
+  IonSelectOption
 } from '@ionic/angular/standalone';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -131,6 +130,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         this.toastService.presentErrorToast('Errore nel recupero degli hotel');
+        console.error('Errore nel recupero degli hotel: ', err)
         this.loading = false;
       },
     });
@@ -149,6 +149,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
       check_out: formData.check_out,
       room_type: formData.room_type,
     };
+
     this.guestRoomsService
       .getAvailableRoomsByHotelId(payload, formData.hotel_id)
       .subscribe({
@@ -157,7 +158,8 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: async (err: any) => {
-          console.error("Errore nell'applicazione del filtro: ", err); //Non inseriamo un toast di errore perché dal backend la funzione restituisce 404 se non trova stanze, e non vogliamo che l'utente lo veda
+          this.toastService.presentErrorToast("Errore nell'applicazione del filtro");
+          console.error("Errore nell'applicazione del filtro: ", err);
           this.loading = false;
         },
       });
@@ -180,6 +182,8 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
       return;
     }
+
+    this.loading = true;
 
     const bookingData: AddBookingData = {
       room_id: room_id,

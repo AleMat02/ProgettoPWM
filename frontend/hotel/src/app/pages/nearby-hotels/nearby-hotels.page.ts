@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonCard,
-  IonCardContent,
-  IonButton, 
-  IonLabel, 
+  IonButton,
+  IonLabel,
   IonItem,
   IonSelect,
-  IonSelectOption, IonText, IonTitle } from '@ionic/angular/standalone';
+  IonSelectOption, 
+  IonText
+} from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -19,8 +20,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { HotelPositionData } from 'src/app/interfaces/nearby-hotels.interface';
 import { SkeletonContentComponent } from "../../components/skeleton-content/skeleton-content.component";
-
-
 
 @Component({
   selector: 'app-map',
@@ -36,7 +35,7 @@ import { SkeletonContentComponent } from "../../components/skeleton-content/skel
     RouterLink,
     IonSelectOption,
     IonSelect,
-    IonText, 
+    IonText,
     SkeletonContentComponent],
   standalone: true,
 })
@@ -65,6 +64,7 @@ export class NearbyHotelsPage implements OnInit {
   ngOnInit(): void {
     this.getCurrentPosition()
       .then((positionData: PositionData) => {
+        console.log(positionData)
         this.fetchNearbyHotels(positionData);
       })
       .catch((error) => {
@@ -86,6 +86,7 @@ export class NearbyHotelsPage implements OnInit {
   }
 
   onRadiusChange(newRadius: number) {
+    this.loading = true;
     this.getCurrentPosition()
       .then((positionData: PositionData) => {
         positionData.radius = newRadius;
@@ -103,8 +104,8 @@ export class NearbyHotelsPage implements OnInit {
         this.hotels = [];
         if (res.data.hotels && Array.isArray(res.data.hotels)) {
           this.hotels = res.data.hotels;
-          this.loading = false;
         }
+        this.loading = false;
       },
       error: (error) => {
         this.toastService.presentErrorToast('Errore durante il recupero degli hotel');

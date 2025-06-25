@@ -15,7 +15,8 @@ import {
   IonText,
   IonList,
   IonSelectOption,
-  IonSelect, IonCard, IonCardContent, IonIcon } from '@ionic/angular/standalone';
+  IonSelect, IonCard, IonCardContent, IonIcon
+} from '@ionic/angular/standalone';
 import { ToastService } from 'src/app/services/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Utils from 'src/app/utils';
@@ -25,13 +26,20 @@ import { HotelsService } from 'src/app/services/hotels.service';
 import { HotelData } from 'src/app/interfaces/hotel.interface';
 import { BookingData } from 'src/app/interfaces/booking-management.interface';
 import { SkeletonContentComponent } from "../../../components/skeleton-content/skeleton-content.component";
+import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserRole } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-booking-management',
   templateUrl: './booking-management.page.html',
   styleUrls: ['./booking-management.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardContent, IonCard,
+  imports: [
+    IonIcon,
+    IonCardContent,
+    IonCard,
     IonContent,
     CommonModule,
     IonItem,
@@ -42,7 +50,9 @@ import { SkeletonContentComponent } from "../../../components/skeleton-content/s
     ReactiveFormsModule,
     IonList,
     IonSelectOption,
-    IonSelect, SkeletonContentComponent],
+    IonSelect,
+    SkeletonContentComponent,
+    NoDataComponent]
 })
 export class BookingManagementPage {
   searchForm: FormGroup = new FormGroup({});
@@ -52,6 +62,8 @@ export class BookingManagementPage {
   hotels: HotelData[] = [];
   hotelsName: String[] = [];
   today: string = new Date().toISOString().split('T')[0]; // Data odierna in formato yyyy-MM-dd
+  userSub!: Subscription
+  isAdmin: boolean = false;
   loading: boolean = true;
 
   //Form Builder permette un'implementazione più rapida della validazione rispetto al solo formGroup
@@ -59,7 +71,8 @@ export class BookingManagementPage {
     private fb: FormBuilder,
     private bookingManagementService: BookingManagementService,
     private toastService: ToastService,
-    private hotelsService: HotelsService
+    private hotelsService: HotelsService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -68,6 +81,9 @@ export class BookingManagementPage {
       from_date: [this.today, []],
     });
 
+    this.userSub = this.authService.user$.subscribe(user =>
+      this.isAdmin = user ? user.role === UserRole.Admin : false
+    );
 
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
@@ -85,13 +101,13 @@ export class BookingManagementPage {
     });
 
     this.searchForm.valueChanges.subscribe(() => {
-        this.onSubmit();  
-      });
+      this.onSubmit();
+    });
 
 
     this.bookingManagementService.getPendingBookings(this.searchFormData).subscribe({
       next: (res: any) => {
-        this.pendingBookings = res.data.bookings; // Assegna le prenotazioni in attesa
+        this.pendingBookings = res.data.bookings;
         this.loading = false;
       },
       error: (err: any) => {
@@ -103,7 +119,7 @@ export class BookingManagementPage {
   }
 
   onSubmit() {
-    this.pendingBookings = []; // Svuota l'array delle prenotazioni in attesa
+    this.pendingBookings = [];
     this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
       next: (res: any) => {
         this.pendingBookings = res.data.bookings;

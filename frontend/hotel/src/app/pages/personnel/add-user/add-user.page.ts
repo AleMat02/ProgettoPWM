@@ -26,7 +26,7 @@ export class AddUserPage {
   createUser(userData: UserData) {
     this.authService.register(userData.username, userData.password, userData.role, userData.full_name, userData.phone, userData.email, userData.hotel_id).subscribe({
       next: (res: any) => {
-        this.toastService.presentSuccessToast(`Utente ${userData.username} aggiunto con successo!`);
+        this.toastService.presentSuccessToast(`Utente "${userData.username}" aggiunto con successo!`);
 
         this.userCreationForm.resetForm()
       },

@@ -8,7 +8,8 @@ import {
   IonSelectOption,
   IonSelect,
   IonText,
-  IonCard
+  IonCard,
+  IonInput
 } from '@ionic/angular/standalone';
 import {
   ReactiveFormsModule,
@@ -29,7 +30,8 @@ import { SkeletonContentComponent } from "../skeleton-content/skeleton-content.c
   templateUrl: './bookings-history-form.component.html',
   styleUrls: ['./bookings-history-form.component.scss'],
   standalone: true,
-  imports: [IonCard,
+  imports: [
+    IonCard,
     IonText,
     IonContent,
     CommonModule,
@@ -39,17 +41,19 @@ import { SkeletonContentComponent } from "../skeleton-content/skeleton-content.c
     IonItem,
     ReactiveFormsModule,
     IonLabel,
-    IonCard, SkeletonContentComponent],
+    IonInput,
+    IonCard, 
+    SkeletonContentComponent],
 })
 export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
-  @Input() hideUserIdInput: boolean = false; //Inizialmente impostato a true, cambia in base al ruolo
+  @Input() hideUserIdInput: boolean = false;
 
   userSub!: Subscription;
   searchForm!: FormGroup;
   userBookings: BookingData[] = [];
   userBookingsDisplayed: any[] = [];
   lastFetchedUserId: number | null = null;
-  loading: boolean = true;
+  loading: boolean = false;
 
 
   constructor(
@@ -64,7 +68,7 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
       if (user) {
         this.searchForm = this.fb.group({
           user_id: [
-            this.hideUserIdInput ? user.id : null,
+            this.hideUserIdInput ? user.id : 1,
             { validators: [Validators.required, Validators.min(0)] },
           ],
           status: ['pending', []],
@@ -95,6 +99,7 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
     const currentUserId = this.searchForm.value.user_id;
     const currentStatus = this.searchForm.value.status;
     this.userBookingsDisplayed = [];
+    this.loading = true;
 
     if (currentUserId !== this.lastFetchedUserId) {
       this.userBookings = [];

@@ -16,7 +16,7 @@ import { SkeletonContentComponent } from 'src/app/components/skeleton-content/sk
   templateUrl: './hotels.page.html',
   styleUrls: ['./hotels.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardHeader, IonSkeletonText, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink, SkeletonContentComponent]
+  imports: [IonIcon, IonCardHeader, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink, SkeletonContentComponent]
 })
 export class HotelsPage implements OnDestroy {
   hotels: HotelData[] = [];

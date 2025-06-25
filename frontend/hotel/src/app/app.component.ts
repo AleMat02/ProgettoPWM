@@ -5,6 +5,8 @@ import { filter, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline, calendarOutline, compassOutline, homeOutline, logOutOutline, menuOutline, peopleOutline, personAddOutline, addOutline, trashOutline, sadOutline, personCircleOutline, lockClosedOutline, albumsOutline, closeCircleOutline } from 'ionicons/icons';
+import { AuthService } from './services/auth.service';
+import { UserRole } from './interfaces/user.interface';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +16,14 @@ import { checkmarkCircleOutline, alertCircleOutline, bedOutline, businessOutline
 })
 export class AppComponent implements OnInit, OnDestroy {
   showPersonnelLayout = false;
+  isAdmin = false;
   private routerSub!: Subscription;
+  private userSub!: Subscription
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {
     //Definiamo le icone utilizzate nell'applicazione tutte in un unico luogo per evitare ridondanze e rendere più pulito il codice
     addIcons({
@@ -44,9 +49,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-      this.routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-        this.showPersonnelLayout = event.urlAfterRedirects.startsWith('/personnel/')
-      })
+    this.routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.showPersonnelLayout = event.urlAfterRedirects.startsWith('/personnel/')
+    })
+
+    this.userSub = this.authService.user$.subscribe(user =>
+      this.isAdmin = user ? user.role === UserRole.Admin : false
+    );
   }
 
   ngOnDestroy() {
