@@ -36,6 +36,7 @@ export class RoomsPage implements OnDestroy {
   }
 
   getRooms() {
+    this.loading = true;
     this.roomsService.getRooms().subscribe({
       next: (res: any) => {
         this.rooms = res.data;
@@ -50,11 +51,12 @@ export class RoomsPage implements OnDestroy {
   }
 
   deleteRoom(id: number) {
+    this.loading = true;
     this.roomsService.deleteRoom(id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(res.message)
-        this.loading = false;
         this.getRooms(); //aggiorniamo le stanze disponibili dopo la cancellazione
+        //loading viene impostato a false dentro this.getHotels()
       },
       error: async (err: any) => {
         this.toastService.presentErrorToast("Errore durante la cancellazione delle stanze");

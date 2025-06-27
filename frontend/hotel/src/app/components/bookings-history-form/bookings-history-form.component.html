@@ -31,7 +31,7 @@
   @for(booking of userBookingsDisplayed; track booking.id){
   <ion-card class="booking-card">
     <div class="booking-info">
-      <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
+      <div><strong>ID Prenotazione:</strong> {{ booking.id }}</div>
       <div><strong>Hotel:</strong> {{ booking.hotel_name }}</div>
       <div><strong>Numero stanza:</strong> {{ booking.room_number }}</div>
       <div><strong>Tipo stanza:</strong> {{ booking.room_type }}</div>
@@ -40,7 +40,7 @@
       <div>
         <strong>Data creazione:</strong> {{ booking.created_at | date }}
       </div>
-      <div><strong>Prezzo totale:</strong> {{ booking.total_price }} €</div>
+      <div><strong>Prezzo totale:</strong> {{ booking.total_price | currency:'EUR' }}</div>
     </div>
   </ion-card>
   }

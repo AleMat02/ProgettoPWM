@@ -108,7 +108,6 @@ export class BookingManagementPage {
 
   onSubmit() {
     this.loading = true;
-    this.pendingBookings = [];
     this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
       next: (res: any) => {
         this.pendingBookings = res.data.bookings;

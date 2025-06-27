@@ -4,7 +4,7 @@ export function isFormFieldInvalid(form: FormGroup<any>, field: string): boolean
     const control = form.get(field);
     if (!control) { return false; }
 
-    // Considera il campo non valido se il controllo stesso è non valido E toccato/sporco
+    // Considera il campo non valido se il controllo stesso è non valido e toccato/sporco
     let isInvalid = control.invalid && (control.dirty || control.touched);
 
     // Caso speciale per 'confirmPassword': lo consideriamo non valido anche se c'è un errore di 'passwordMismatch'

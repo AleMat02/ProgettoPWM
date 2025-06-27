@@ -62,5 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.routerSub) {
       this.routerSub.unsubscribe();
     }
+    
+    this.userSub.unsubscribe()
   }
 }

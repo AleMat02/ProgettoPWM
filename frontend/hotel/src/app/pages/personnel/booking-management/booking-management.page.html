@@ -36,7 +36,7 @@
       <ion-card-content>
         <div>
           <div class="booking-info">
-            <div><strong>Prenotazione ID:</strong> {{ booking.id }}</div>
+            <div><strong>ID Prenotazione:</strong> {{ booking.id }}</div>
             <div>
               <strong>Hotel:</strong> {{ booking.hotel_name }} (ID: {{
               booking.hotel_id }})
@@ -51,7 +51,7 @@
               <strong>Data creazione:</strong> {{ booking.created_at | date}}
             </div>
             <div>
-              <strong>Prezzo totale:</strong> {{ booking.total_price }} €
+              <strong>Prezzo totale:</strong> {{ booking.total_price | currency:'EUR' }}
             </div>
           </div>
           <div class="booking-actions">

@@ -35,6 +35,7 @@ export class HotelsPage implements OnDestroy {
   }
 
   getHotels() {
+    this.loading = true;
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
         this.hotels = res.data.hotels;
@@ -48,12 +49,13 @@ export class HotelsPage implements OnDestroy {
     })
   }
 
-  deleteHotel(id: number) { //* in caso mettere un modal di conferma
+  deleteHotel(id: number) {
+    this.loading = true;
     this.hotelsService.deleteHotel(id).subscribe({
       next: (res: any) => {
         this.toastService.presentSuccessToast(res.message)
-        this.loading = false;
         this.getHotels(); //aggiorniamo gli hotel disponibili dopo la cancellazione
+        //loading viene impostato a false dentro this.getHotels()
       },
       error: async (err: any) => {
         this.toastService.presentErrorToast("Errore durante la cancellazione degli hotel")

@@ -12,11 +12,6 @@ import { BookingsHistoryFormComponent } from "../../components/bookings-history-
   standalone: true,
   imports: [CommonModule, FormsModule, BookingsHistoryFormComponent, IonContent]
 })
-export class UserBookingHistoryPage implements OnInit {
-
+export class UserBookingHistoryPage {
   constructor() { }
-
-  ngOnInit() {
-  }
-
 }
