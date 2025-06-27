@@ -81,7 +81,7 @@ export class UserCreationFormComponent implements OnInit {
         full_name: ['', [Validators.required, Validators.minLength(3)]],
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]], //il campo deve contenere solo numeri, ed avere una lunghezza di 10 numeri
         role: [UserRole.Guest, [Validators.required]],
-        hotel_id: [null, this.hotelIdRequiredIfReception()]
+        hotel_id: [null, [this.hotelIdRequiredIfReception(), Validators.min(0), Validators.max(20)]]
       },
       {
         validators: this.matchPasswords('password', 'confirmPassword')
@@ -91,16 +91,6 @@ export class UserCreationFormComponent implements OnInit {
     this.userForm.get('role')?.valueChanges.subscribe(() => {
       this.userForm.get('hotel_id')?.updateValueAndValidity();
     });
-
-    this.hotelService.getHotels().subscribe({
-      next: (res: any) => {
-        this.hotels = res.data.hotels;
-      },
-      error: (err : any) => {
-        this.toastService.presentErrorToast("Errore nel recupero degli hotel");
-        console.error("Errore nel recupero degli hotel: ", err);
-      }
-    });
   }
 
   onSubmit() {
@@ -109,9 +99,7 @@ export class UserCreationFormComponent implements OnInit {
       this.toastService.presentErrorToast('Per favore, compila tutti i campi obbligatori in maniera corretta.');
       return;
     }
-
     const { confirmPassword, ...userFormData } = this.userForm.value;
-
     this.formSubmit.emit(userFormData as UserData)
   }
 
@@ -131,7 +119,8 @@ export class UserCreationFormComponent implements OnInit {
       email: '',
       full_name: '',
       phone: '',
-      role: this.showRoleSelection ? UserRole.Guest : null
+      role: this.showRoleSelection ? UserRole.Guest : null,
+      hotel_id: null
     });
   }
 }

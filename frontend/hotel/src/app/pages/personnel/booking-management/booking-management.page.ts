@@ -18,9 +18,7 @@ import {
   IonSelect, IonCard, IonCardContent, IonIcon
 } from '@ionic/angular/standalone';
 import { ToastService } from 'src/app/services/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as Utils from 'src/app/utils';
-import { SearchData } from 'src/app/interfaces/booking-management.interface';
 import { BookingManagementService } from 'src/app/services/booking-management.service';
 import { HotelsService } from 'src/app/services/hotels.service';
 import { HotelData } from 'src/app/interfaces/hotel.interface';
@@ -76,21 +74,36 @@ export class BookingManagementPage {
 
   ngOnInit() {
     this.searchForm = this.fb.group({
-      hotel_id: [0, { validators: [Validators.required, Validators.min(0)] }],
+      hotel_id: [1, { validators: [Validators.required, Validators.min(1)] }],
       from_date: [this.today, []],
     });
+  
+    this.loadHotels();
 
     this.userSub = this.authService.user$.subscribe(user =>
       this.isAdmin = user ? user.role === UserRole.Admin : false
     );
 
+    this.searchForm.valueChanges.subscribe(() => {
+      this.onSubmit();
+    });
+
+    this.onSubmit()
+  }
+
+  ionViewWillEnter() {
+    this.loadHotels();
+  }
+
+  loadHotels() {
+    this.loading = true;
     this.hotelsService.getHotels().subscribe({
       next: (res: any) => {
         this.hotels = res.data.hotels;
         if (this.hotels.length > 0) {
           this.searchForm.get('hotel_id')?.setValue(this.hotels[0].id);
-          this.loading = false;
         }
+        this.loading = false;
       },
       error: (err: any) => {
         this.toastService.presentErrorToast("Errore nel recupero degli hotel");
@@ -98,12 +111,6 @@ export class BookingManagementPage {
         this.loading = false;
       },
     });
-
-    this.searchForm.valueChanges.subscribe(() => {
-      this.onSubmit();
-    });
-
-    this.onSubmit()
   }
 
   onSubmit() {

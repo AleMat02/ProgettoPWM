@@ -75,13 +75,8 @@
       
       @if(userForm.get('role')?.value === roles[1]){
       <ion-item [class.invalid-item]="isFormFieldInvalid('hotel_id')">
-        <ion-label position="floating">Hotel di appartenenza</ion-label>
-        <ion-select formControlName="hotel_id" interface="popover" value="guest">
-          @for(hotel of hotels; track hotel)
-          {
-          <ion-select-option [value]="hotel.id">{{hotel.name | titlecase}}</ion-select-option>
-          }
-        </ion-select>
+        <ion-label position="floating">hotel_id</ion-label>
+        <ion-input formControlName="hotel_id"></ion-input>
       </ion-item>
       @if(isFormFieldInvalid("hotel_id"))
       {
