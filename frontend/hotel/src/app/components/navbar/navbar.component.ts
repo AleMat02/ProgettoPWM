@@ -12,8 +12,8 @@ import { PopoverController } from '@ionic/angular/standalone';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   imports: [
-    IonIcon, 
-    IonButton, 
+    IonIcon,
+    IonButton,
     IonButtons,
     CommonModule,
     RouterModule,
@@ -22,7 +22,7 @@ import { PopoverController } from '@ionic/angular/standalone';
     IonMenuButton,
   ]
 })
-export class NavbarComponent implements OnInit, OnDestroy{
+export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   userSub!: Subscription
 
@@ -55,7 +55,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
     }
   };
 
-    ngOnInit() {
+  ngOnInit() {
     window.addEventListener('scrollToTop', this.scrollContentToTop);
   }
 

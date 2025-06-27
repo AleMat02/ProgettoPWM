@@ -56,7 +56,6 @@ import { UserRole } from 'src/app/interfaces/user.interface';
 })
 export class BookingManagementPage {
   searchForm: FormGroup = new FormGroup({});
-  searchFormData!: SearchData;
   pendingBookings: BookingData[] = []; // Array per memorizzare le prenotazioni in attesa
   availabilityForm: FormGroup = new FormGroup({}); // Inizializzazione vuota per evitare undefined
   hotels: HotelData[] = [];
@@ -104,21 +103,11 @@ export class BookingManagementPage {
       this.onSubmit();
     });
 
-
-    this.bookingManagementService.getPendingBookings(this.searchFormData).subscribe({
-      next: (res: any) => {
-        this.pendingBookings = res.data.bookings;
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.toastService.presentErrorToast("Errore nel recupero delle prenotazioni");
-        console.error("Errore nel recupero delle prenotazioni: ", err);
-        this.loading = false;
-      },
-    });
+    this.onSubmit()
   }
 
   onSubmit() {
+    this.loading = true;
     this.pendingBookings = [];
     this.bookingManagementService.getPendingBookings(this.searchForm.value).subscribe({
       next: (res: any) => {
@@ -126,7 +115,8 @@ export class BookingManagementPage {
         this.loading = false;
       },
       error: (err: any) => {
-        this.toastService.presentErrorToast(err);
+        this.toastService.presentErrorToast("Errore nel recupero delle prenotazioni");
+        console.error("Errore nel recupero delle prenotazioni: ", err);
         this.loading = false;
       },
     });
@@ -151,9 +141,7 @@ export class BookingManagementPage {
             } else {
               this.toastService.presentSuccessToast('Prenotazione rifiutata con successo');
             }
-            this.pendingBookings = this.pendingBookings.filter(
-              (booking) => booking.id !== bookingId
-            );
+            this.onSubmit()
           },
           error: (err: any) => {
             this.toastService.presentErrorToast("Errore nella gestione della prenotazione");

@@ -774,6 +774,9 @@ def get_pending_bookings():
         if user_hotel_id:
             query += ' AND r.hotel_id = ?'
             params.append(user_hotel_id)
+        elif hotel_id:
+            query += ' AND r.hotel_id = ?'
+            params.append(hotel_id)
         
 
         if from_date:

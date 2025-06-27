@@ -142,7 +142,7 @@ export class GuestRoomsPage implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.rooms = [];
+    this.loading = true;
     const formData = this.availabilityForm.value;
     const payload = {
       check_in: formData.check_in,

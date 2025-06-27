@@ -10,13 +10,14 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserRole } from 'src/app/interfaces/user.interface';
 import { SkeletonContentComponent } from 'src/app/components/skeleton-content/skeleton-content.component';
+import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
 
 @Component({
   selector: 'app-hotels',
   templateUrl: './hotels.page.html',
   styleUrls: ['./hotels.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonCardHeader, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink, SkeletonContentComponent]
+  imports: [IonIcon, IonCardHeader, IonLabel, IonChip, IonButtons, IonButton, IonCardTitle, IonCardSubtitle, IonCard, IonCardContent, IonItem, IonContent, IonFab, IonList, CommonModule, FormsModule, RouterLink, SkeletonContentComponent, NoDataComponent]
 })
 export class HotelsPage implements OnDestroy {
   hotels: HotelData[] = [];

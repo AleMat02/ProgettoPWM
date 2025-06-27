@@ -42,7 +42,7 @@ import { SkeletonContentComponent } from "../skeleton-content/skeleton-content.c
     ReactiveFormsModule,
     IonLabel,
     IonInput,
-    IonCard, 
+    IonCard,
     SkeletonContentComponent],
 })
 export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
@@ -81,9 +81,6 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
     });
 
   }
-  ngOnDestroy() {
-    this.userSub.unsubscribe();
-  }
 
   isFormFieldInvalid(field: string) {
     return Utils.isFormFieldInvalid(this.searchForm, field);
@@ -92,8 +89,6 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
   getFormErrorMessage(field: string) {
     return Utils.getFormErrorMessage(this.searchForm, field);
   }
-
-
 
   onSubmit() {
     const currentUserId = this.searchForm.value.user_id;
@@ -124,5 +119,9 @@ export class BookingsHistoryFormComponent implements OnInit, OnDestroy {
       );
       this.loading = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 }

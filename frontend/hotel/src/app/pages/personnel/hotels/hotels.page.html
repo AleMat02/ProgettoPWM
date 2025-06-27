@@ -11,11 +11,9 @@
   <app-skeleton-content></app-skeleton-content>
   } @else {
   @if (!hotels || hotels.length === 0) {
-  <div class="empty-state">
-    <ion-icon name="sad-outline" color="medium"></ion-icon>
-    <h1>Nessun hotel trovato</h1>
-    <p>Inizia creandone uno.</p>
-  </div>
+   <app-no-data [icon]="'sad-outline'" [title]="'Nessuna hotel trovato'" [subtitle]="'Inizia creandone uno.'"
+    [isAdmin]="isAdmin">
+  </app-no-data>
   } @else {
   <ion-list>
     @for (hotel of hotels; track hotel.id) {

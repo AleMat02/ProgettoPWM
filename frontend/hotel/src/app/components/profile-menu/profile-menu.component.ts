@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonList, IonItem, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { PopoverController } from '@ionic/angular/standalone';
@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
     styleUrls: ['./profile-menu.component.scss'],
     imports: [IonIcon, IonList, IonItem],
 })
-export class ProfileMenuComponent {
+export class ProfileMenuComponent implements OnDestroy {
     isGuest: boolean = true;
     userSub!: Subscription;
 
@@ -40,5 +40,9 @@ export class ProfileMenuComponent {
         this.authService.logout();
         this.router.navigate(['/login']);
         this.popoverController.dismiss();
+    }
+
+    ngOnDestroy(): void {
+        this.userSub.unsubscribe();
     }
 }

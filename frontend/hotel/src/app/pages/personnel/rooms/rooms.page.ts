@@ -24,7 +24,6 @@ export class RoomsPage implements OnDestroy {
   loading: boolean = true;
   userSub!: Subscription
   isAdmin: boolean = false;
-  
 
   constructor(private roomsService: RoomsService, private toastService: ToastService, private authService: AuthService) {
     this.userSub = this.authService.user$.subscribe(user => 
